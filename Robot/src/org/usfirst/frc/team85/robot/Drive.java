@@ -4,20 +4,24 @@ import edu.wpi.first.wpilibj.*;
 
 public class Drive {
 
-    private RobotDrive _drive;
-    private Joystick _controller;
+    //private RobotDrive _drive;
+    
+    private Joystick _controller; 
+    
     private CANTalon _frontLeftMotor;
-    private CANTalon _frontRightMotor;
     private CANTalon _midLeftMotor;
-    private CANTalon _midRightMotor;
     private CANTalon _backLeftMotor;
+    
+    private CANTalon _frontRightMotor;
+    private CANTalon _midRightMotor;
     private CANTalon _backRightMotor;
 
     private Encoder _frontLeftEncoder;
-    private Encoder _frontRightEncoder;
-    private Encoder _midLeftEncoder;
-    private Encoder _midRightEncoder;
+    private Encoder _midLeftEncoder;  
     private Encoder _backLeftEncoder;
+    
+    private Encoder _frontRightEncoder;
+    private Encoder _midRightEncoder;
     private Encoder _backRightEncoder;
 
     public Drive(Joystick drivecontroller) {
@@ -42,6 +46,23 @@ public class Drive {
         _backRightEncoder = new Encoder(Addresses.BACK_RIGHT_ENCODER_CHANNEL_A,
                     Addresses.BACK_RIGHT_ENCODER_CHANNEL_B);
 
-        _drive = new RobotDrive(_frontLeftMotor, _midLeftMotor, _backLeftMotor, _frontRightMotor, _midRightMotor, _backRightMotor);
+        //_drive = new RobotDrive(_frontLeftMotor, _midLeftMotor, _backLeftMotor, _frontRightMotor, _midRightMotor, _backRightMotor);
+    }
+    
+    public void drive() {
+        double controllerR = _controller.getRawAxis(4);
+        double controllerL = _controller.getRawAxis(1);
+        // // Adjustment of values
+        setMotors(controllerR, controllerL);
+    }
+    
+    private void setMotors(double rSpeed, double lSpeed) {
+        _frontLeftMotor.set(lSpeed);
+        _midLeftMotor.set(lSpeed);
+        _backLeftMotor.set(lSpeed);
+        
+        _frontRightMotor.set(rSpeed);
+        _midRightMotor.set(rSpeed);
+        _backRightMotor.set(rSpeed);
     }
 }
