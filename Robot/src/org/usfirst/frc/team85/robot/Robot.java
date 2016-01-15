@@ -11,12 +11,18 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * directory.
  */
 public class Robot extends IterativeRobot {
+    
+    private Joystick _driveStick;
+    
+    private Drive _drive;
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-
+        _driveStick = new Joystick(Adddresses.DRIVESTICK);
+        _drive = new Drive(_driveStick);
     }
 
     /**
@@ -30,7 +36,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        
+        _drive.drive(/*lol*/);
     }
     
     /**
