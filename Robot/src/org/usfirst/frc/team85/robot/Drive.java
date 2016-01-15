@@ -41,5 +41,7 @@ public class Drive {
                     Addresses.BACK_LEFT_ENCODER_CHANNEL_B);
         _backRightEncoder = new Encoder(Addresses.BACK_RIGHT_ENCODER_CHANNEL_A,
                     Addresses.BACK_RIGHT_ENCODER_CHANNEL_B);
+
+        _drive = new RobotDrive(_frontLeftMotor, _midLeftMotor, _backLeftMotor, _frontRightMotor, _midRightMotor, _backRightMotor);
     }
 }
