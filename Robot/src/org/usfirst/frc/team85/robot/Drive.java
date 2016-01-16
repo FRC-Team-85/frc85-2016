@@ -6,7 +6,8 @@ public class Drive {
 
     //private RobotDrive _drive;
     
-    private Joystick _controller; 
+    private Joystick _controllerLeft; 
+    private Joystick _controllerRight;
     
     private CANTalon _frontLeftMotor;
     private CANTalon _midLeftMotor;
@@ -20,7 +21,8 @@ public class Drive {
     private Encoder _RightEncoder;
 
     public Drive(Joystick drivecontroller) {
-        _controller = drivecontroller;
+        _controllerLeft = drivecontroller;
+        _controllerRight = drivecontroller;
         _frontLeftMotor = new CANTalon(Addresses.LEFT_FRONT_MOTOR);
         _midLeftMotor = new CANTalon(Addresses.LEFT_MID_MOTOR);
         _backLeftMotor = new CANTalon(Addresses.LEFT_BACK_MOTOR);
@@ -37,8 +39,8 @@ public class Drive {
     }
     
     public void drive() {
-        double controllerL = _controller.getRawAxis(1);
-        double controllerR = _controller.getRawAxis(3);
+        double controllerL = _controllerLeft.getRawAxis(2);
+        double controllerR = _controllerRight.getRawAxis(2);
         // // Adjustment of values
         if (controllerL <= .2 && controllerL >= -.2) {
         	controllerL = 0;
