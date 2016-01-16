@@ -40,16 +40,10 @@ public class Drive {
         double controllerL = _controller.getRawAxis(1);
         double controllerR = _controller.getRawAxis(3);
         // // Adjustment of values
-        if (controllerL == .1) {
+        if (controllerL < .2) {
         	controllerL = 0;
         }
-        if (controllerR == .1) {
-        	controllerR = 0;
-        }
-        if (controllerL == -.1) {
-        	controllerL = 0;
-        }
-        if (controllerR == -.1) {
+        if (controllerR < .2) {
         	controllerR = 0;
         }
         // Dead bands above
