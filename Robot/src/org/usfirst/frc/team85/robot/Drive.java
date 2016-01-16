@@ -38,7 +38,7 @@ public class Drive {
     
     public void drive() {
         double controllerL = _controller.getRawAxis(1);
-        double controllerR = _controller.getRawAxis(4);
+        double controllerR = _controller.getRawAxis(3);
         // // Adjustment of values
         setMotors(controllerL, controllerR);
     }
