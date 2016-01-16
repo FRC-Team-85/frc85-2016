@@ -41,7 +41,7 @@ public class Drive {
     public void drive() {
         double controllerL = _controllerLeft.getRawAxis(2);
         double controllerR = _controllerRight.getRawAxis(2);
-        // // Adjustment of values
+        // Adjustment of values
         if (controllerL <= .2 && controllerL >= -.2) {
         	controllerL = 0;
         }
@@ -49,9 +49,17 @@ public class Drive {
         	controllerR = 0;
         }
         // Dead bands above
-        setMotors(controllerL * -1, controllerR * -1);
         
-        if (_controllerLeft.getRawButton(1) == true) {
+        
+        //Halve speeds if corresponding trigger is pressed
+        double adjustedL = (_controllerLeft.getRawButton(1)) ? controllerL / 2 : controllerL;
+        
+        double adjustedR = (_controllerRight.getRawButton(1)) ? controllerR / 2 : controllerR;
+        
+        
+        setMotors(adjustedL * -1, adjustedR * -1);
+        
+        /*if (_controllerLeft.getRawButton(1) == true) {
             //Trigger 1 on left controller sets left wheels to half speed
             _frontLeftMotor.set(_frontLeftMotor.getSpeed() / 2);
             _midLeftMotor.set(_midLeftMotor.getSpeed() / 2);
@@ -63,7 +71,7 @@ public class Drive {
             _frontRightMotor.set(_frontRightMotor.getSpeed() / 2);
             _midRightMotor.set(_midRightMotor.getSpeed() / 2);
             _backRightMotor.set(_backRightMotor.getSpeed() / 2);
-        }
+        }*/
     }
     
     private void setMotors(double lSpeed, double rSpeed) {
