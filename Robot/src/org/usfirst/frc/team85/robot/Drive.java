@@ -40,7 +40,14 @@ public class Drive {
         double controllerL = _controller.getRawAxis(1);
         double controllerR = _controller.getRawAxis(3);
         // // Adjustment of values
-        setMotors(controllerL, controllerR);
+        if (controllerL < .2) {
+        	controllerL = 0;
+        }
+        if (controllerR < .2) {
+        	controllerR = 0;
+        }
+        // Dead bands above
+        setMotors(controllerL * -1, controllerR * -1);
     }
     
     private void setMotors(double lSpeed, double rSpeed) {
