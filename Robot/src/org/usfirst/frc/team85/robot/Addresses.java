@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.*;
 
 public class Addresses {
 
-        // Controllers
+        //Controllers
     
     public static final int DRIVESTICK = 0;
     
-        // Drive
+        //Drive
 
     public static final int LEFT_FRONT_MOTOR = 1;
     public static final int LEFT_MID_MOTOR = 2;
