@@ -11,7 +11,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mattmichielsen/wpilib/java/current/lib/NetworkTables.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mattmichielsen/wpilib/java/current/lib/WPILib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Brian/wpilib/java/current/lib/NetworkTables.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Brian/wpilib/java/current/lib/WPILib.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
