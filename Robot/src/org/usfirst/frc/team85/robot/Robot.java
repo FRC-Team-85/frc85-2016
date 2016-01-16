@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-        _driveStick = new Joystick(Adddresses.DRIVESTICK);
+        _driveStick = new Joystick(Addresses.DRIVESTICK);
         _drive = new Drive(_driveStick);
     }
 
