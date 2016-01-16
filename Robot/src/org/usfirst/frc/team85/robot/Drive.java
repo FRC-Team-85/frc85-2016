@@ -20,7 +20,7 @@ public class Drive {
     private Encoder _RightEncoder;
 
     public Drive(Joystick drivecontroller) {
-        _controller = drivecontroller
+        _controller = drivecontroller;
         _frontLeftMotor = new CANTalon(Addresses.LEFT_FRONT_MOTOR);
         _midLeftMotor = new CANTalon(Addresses.LEFT_MID_MOTOR);
         _backLeftMotor = new CANTalon(Addresses.LEFT_BACK_MOTOR);
