@@ -50,6 +50,20 @@ public class Drive {
         }
         // Dead bands above
         setMotors(controllerL * -1, controllerR * -1);
+        
+        if (_controllerLeft.getRawButton(1) == true) {
+            //Trigger 1 on left controller sets left wheels to half speed
+            _frontLeftMotor.set(_frontLeftMotor.getSpeed() / 2);
+            _midLeftMotor.set(_midLeftMotor.getSpeed() / 2);
+            _backLeftMotor.set(_backLeftMotor.getSpeed() /2);
+        }
+
+        if (_controllerRight.getRawButton(1) == true) {
+            //Trigger 1 on right controller sets right wheels to half speed
+            _frontRightMotor.set(_frontRightMotor.getSpeed() / 2);
+            _midRightMotor.set(_midRightMotor.getSpeed() / 2);
+            _backRightMotor.set(_backRightMotor.getSpeed() / 2);
+        }
     }
     
     private void setMotors(double lSpeed, double rSpeed) {
