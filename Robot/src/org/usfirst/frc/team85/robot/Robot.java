@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.*;
  */
 public class Robot extends IterativeRobot {
     
-    private Joystick _driveStick;
+	//Defines two controllers
+    private Joystick _driveStickLeft;
+    private Joystick _driveStickRight;
     
     private Drive _drive;
     
@@ -21,8 +23,10 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-        _driveStick = new Joystick(Addresses.DRIVESTICK);
-        _drive = new Drive(_driveStick);
+    	//Sets up left controller
+        _driveStickLeft = new Joystick(Addresses.DRIVESTICKLEFT);
+        _driveStickRight = new Joystick(Addresses.DRIVESTICKRIGHT);
+        _drive = new Drive(_driveStickLeft, _driveStickRight);
     }
 
     /**
