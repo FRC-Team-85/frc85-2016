@@ -3,9 +3,6 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.*;
 
 public class Drive {
-
-    //private RobotDrive _drive;
-    
     private Joystick _controllerLeft; 
     private Joystick _controllerRight;
     
@@ -23,6 +20,7 @@ public class Drive {
     public Drive(Joystick leftDriveController, Joystick rightDriveController) {
         _controllerLeft = leftDriveController;
         _controllerRight = rightDriveController;
+        
         _frontLeftMotor = new CANTalon(Addresses.LEFT_FRONT_MOTOR);
         _midLeftMotor = new CANTalon(Addresses.LEFT_MID_MOTOR);
         _backLeftMotor = new CANTalon(Addresses.LEFT_BACK_MOTOR);
@@ -34,44 +32,27 @@ public class Drive {
                     Addresses.LEFT_ENCODER_CHANNEL_B);
         _RightEncoder = new Encoder(Addresses.RIGHT_ENCODER_CHANNEL_A,
                     Addresses.RIGHT_ENCODER_CHANNEL_B);
-
-        //_drive = new RobotDrive(_frontLeftMotor, _midLeftMotor, _backLeftMotor, _frontRightMotor, _midRightMotor, _backRightMotor);
     }
     
     public void drive() {
         double controllerL = _controllerLeft.getRawAxis(2);
         double controllerR = _controllerRight.getRawAxis(2);
-        // Adjustment of values
+        
+        //Deadbands of +/- 0.2 for both controllers
         if (controllerL <= .2 && controllerL >= -.2) {
         	controllerL = 0;
         }
         if (controllerR <= .2 && controllerR >= -.2) {
         	controllerR = 0;
         }
-        // Dead bands above
         
         
         //Halve speeds if corresponding trigger is pressed
         double adjustedL = (_controllerLeft.getRawButton(1)) ? controllerL / 2 : controllerL;
-        
         double adjustedR = (_controllerRight.getRawButton(1)) ? controllerR / 2 : controllerR;
         
-        
-        setMotors(adjustedL * -1, adjustedR * -1);
-        
-        /*if (_controllerLeft.getRawButton(1) == true) {
-            //Trigger 1 on left controller sets left wheels to half speed
-            _frontLeftMotor.set(_frontLeftMotor.getSpeed() / 2);
-            _midLeftMotor.set(_midLeftMotor.getSpeed() / 2);
-            _backLeftMotor.set(_backLeftMotor.getSpeed() /2);
-        }
-
-        if (_controllerRight.getRawButton(1) == true) {
-            //Trigger 1 on right controller sets right wheels to half speed
-            _frontRightMotor.set(_frontRightMotor.getSpeed() / 2);
-            _midRightMotor.set(_midRightMotor.getSpeed() / 2);
-            _backRightMotor.set(_backRightMotor.getSpeed() / 2);
-        }*/
+        //Negative because we are using motors made of antimatter
+        setMotors(-adjustedL, -adjustedR);
     }
     
     private void setMotors(double lSpeed, double rSpeed) {
