@@ -8,6 +8,8 @@ public class Addresses {
     
     public static final int DRIVESTICKLEFT = 0;
     public static final int DRIVESTICKRIGHT = 1;
+
+    public static final int OPERATORSTICK = 2;
     
         //Drive
 
