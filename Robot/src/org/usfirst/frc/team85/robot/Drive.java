@@ -38,7 +38,7 @@ public class Drive {
         double controllerL = _controllerLeft.getRawAxis(2);
         double controllerR = _controllerRight.getRawAxis(2);
         
-        //Deadbands of +/- 0.2 for both controllers
+        //Dead-bands of +/- 0.2 for both controllers
         if (controllerL <= .2 && controllerL >= -.2) {
         	controllerL = 0;
         }
@@ -51,7 +51,7 @@ public class Drive {
         double adjustedL = (_controllerLeft.getRawButton(1)) ? controllerL / 2 : controllerL;
         double adjustedR = (_controllerRight.getRawButton(1)) ? controllerR / 2 : controllerR;
         
-        //Negative because we are using motors made of antimatter
+        //Negative because we are using motors made of anti-matter
         setMotors(-adjustedL, -adjustedR);
     }
     
