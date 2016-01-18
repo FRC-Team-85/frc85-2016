@@ -38,18 +38,21 @@ public class Drive {
         double controllerL = _controllerLeft.getRawAxis(2);
         double controllerR = _controllerRight.getRawAxis(2);
         
+        boolean lTrigger = _controllerLeft.getRawButton(1);
+        boolean rTrigger = _controllerLeft.getRawButton(1);
+        
         //Deadbands of +/- 0.2 for both controllers
-        if (controllerL <= .2 && controllerL >= -.2) {
+        if (!lTrigger && controllerL <= .2 && controllerL >= -.2) {
         	controllerL = 0;
         }
-        if (controllerR <= .2 && controllerR >= -.2) {
+        if (!rTrigger && controllerR <= .2 && controllerR >= -.2) {
         	controllerR = 0;
         }
         
         
         //Halve speeds if corresponding trigger is pressed
-        double adjustedL = (_controllerLeft.getRawButton(1)) ? controllerL / 2 : controllerL;
-        double adjustedR = (_controllerRight.getRawButton(1)) ? controllerR / 2 : controllerR;
+        double adjustedL = lTrigger ? controllerL / 2 : controllerL;
+        double adjustedR = rTrigger ? controllerR / 2 : controllerR;
         
         //Negative because we are using motors made of antimatter
         setMotors(-adjustedL, -adjustedR);
