@@ -12,4 +12,3 @@ public class Auto {
         rSpeed = 0;
     }
 }
-		// Colton you suck
