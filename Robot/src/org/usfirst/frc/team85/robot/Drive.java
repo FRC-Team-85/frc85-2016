@@ -41,7 +41,7 @@ public class Drive {
         boolean lTrigger = _controllerLeft.getRawButton(1);
         boolean rTrigger = _controllerLeft.getRawButton(1);
         
-        //Deadbands of +/- 0.2 for both controllers
+        //Dead-bands of +/- 0.2 for both controllers
         if (!lTrigger && controllerL <= .2 && controllerL >= -.2) {
         	controllerL = 0;
         }
@@ -54,7 +54,7 @@ public class Drive {
         double adjustedL = lTrigger ? controllerL / 2 : controllerL;
         double adjustedR = rTrigger ? controllerR / 2 : controllerR;
         
-        //Negative because we are using motors made of antimatter
+        //Negative because we are using motors made of anti-matter
         setMotors(-adjustedL, -adjustedR);
     }
     
