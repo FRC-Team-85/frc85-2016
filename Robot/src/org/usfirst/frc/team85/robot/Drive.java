@@ -28,10 +28,10 @@ public class Drive {
         _midRightMotor = new CANTalon(Addresses.RIGHT_MID_MOTOR);
         _backRightMotor = new CANTalon(Addresses.RIGHT_BACK_MOTOR);
 
-        _LeftEncoder = new Encoder(Addresses.LEFT_ENCODER_CHANNEL_A,
-                    Addresses.LEFT_ENCODER_CHANNEL_B);
-        _RightEncoder = new Encoder(Addresses.RIGHT_ENCODER_CHANNEL_A,
-                    Addresses.RIGHT_ENCODER_CHANNEL_B);
+        _LeftEncoder = new Encoder(Addresses.LEFT_ENCODER_CH1,
+                    Addresses.LEFT_ENCODER_CH2);
+        _RightEncoder = new Encoder(Addresses.RIGHT_ENCODER_CH1,
+                    Addresses.RIGHT_ENCODER_CH2);
     }
     
     public void drive() {
