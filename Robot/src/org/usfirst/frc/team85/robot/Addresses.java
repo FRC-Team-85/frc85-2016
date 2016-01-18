@@ -25,7 +25,7 @@ public class Addresses {
     public static final int RIGHT_ENCODER_CH1 = 2;
     public static final int RIGHT_ENCODER_CH2 = 3;
     
-    	// Cannon
+    	//Cannon
 
     public static final int OUTER_MOTOR_TOP = 7;
     public static final int OUTER_MOTOR_BOTTOM = 8;
@@ -35,7 +35,7 @@ public class Addresses {
     
     public static final int ARM_MOTOR = 11;
     
-    	// Encoders for cannon rotational speed
+    	//Encoders for cannon rotational speed
     public static final int CANNON_ENCODER_TOP_CH1 = 4;
     public static final int CANNON_ENCODER_TOP_CH2 = 5;
     
@@ -46,8 +46,16 @@ public class Addresses {
     public static final int ARM_LIMIT_TOP = 8;
     public static final int ARM_LIMIT_BOTTOM = 9;
     
-    	// Potentiometer for arm position (analog)
-    	
-    public static final int POT = 0;
+    	//Potentiometer for arm position (analog)
+    public static final int CANNON_POT = 0;
+    
+    	//Intake
+    
+    public static final int INTAKE_MOTOR = 12;
+    
+    public static final int INTAKE_ARM_MOTOR = 13;
+    
+    	//Another analog for intake position
+    public static final int INTAKE_POT = 1;
     
 }
