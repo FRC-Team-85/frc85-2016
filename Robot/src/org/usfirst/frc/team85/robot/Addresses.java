@@ -25,4 +25,18 @@ public class Addresses {
     public static final int RIGHT_ENCODER_CHANNEL_A = 2;
     public static final int RIGHT_ENCODER_CHANNEL_B = 3;
 
+    public static final int OUTER_MOTOR_A = 7;
+    public static final int OUTER_MOTOR_B = 8;
+    
+    public static final int INNER_MOTOR_A = 9;
+    public static final int INNER_MOTOR_B = 10;
+    
+    public static final int ARM_MOTOR = 11;
+    
+    public static final int CANNON_ENCODER_A = 4;
+    public static final int CANNON_ENCODER_B = 5;
+    
+    //Potentiometer, probably will have to change (Analog Input)
+    public static final int POT = 0;
+    
 }
