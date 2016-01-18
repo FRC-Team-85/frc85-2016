@@ -3,19 +3,13 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.*;
 
 public class Drive {
-    private Joystick _controllerLeft; 
-    private Joystick _controllerRight;
+	
+    private Joystick _controllerLeft, _controllerRight;
     
-    private CANTalon _frontLeftMotor;
-    private CANTalon _midLeftMotor;
-    private CANTalon _backLeftMotor;
-    
-    private CANTalon _frontRightMotor;
-    private CANTalon _midRightMotor;
-    private CANTalon _backRightMotor;
+    private CANTalon _frontLeftMotor, _midLeftMotor, _backLeftMotor,
+    				_frontRightMotor, _midRightMotor, _backRightMotor;
 
-    private Encoder _LeftEncoder;
-    private Encoder _RightEncoder;
+    private Encoder _LeftEncoder, _RightEncoder;
 
     public Drive(Joystick leftDriveController, Joystick rightDriveController) {
         _controllerLeft = leftDriveController;

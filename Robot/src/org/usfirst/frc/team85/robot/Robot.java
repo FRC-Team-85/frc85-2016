@@ -16,7 +16,10 @@ public class Robot extends IterativeRobot {
     private Joystick _driveStickLeft;
     private Joystick _driveStickRight;
     
+    private Joystick _operatorStick;
+    
     private Drive _drive;
+    private TatorCannon _tatorCannon;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -26,7 +29,10 @@ public class Robot extends IterativeRobot {
     	//Sets up left controller
         _driveStickLeft = new Joystick(Addresses.DRIVESTICKLEFT);
         _driveStickRight = new Joystick(Addresses.DRIVESTICKRIGHT);
+        _operatorStick = new Joystick(Addresses.OPERATORSTICK);
+        
         _drive = new Drive(_driveStickLeft, _driveStickRight);
+        _tatorCannon = new TatorCannon(_operatorStick);
     }
 
     /**
