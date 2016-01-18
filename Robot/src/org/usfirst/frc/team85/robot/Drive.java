@@ -49,7 +49,6 @@ public class Drive {
         	controllerR = 0;
         }
         
-        
         //Halve speeds if corresponding trigger is pressed
         double adjustedL = lTrigger ? controllerL / 2 : controllerL;
         double adjustedR = rTrigger ? controllerR / 2 : controllerR;
