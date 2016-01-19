@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.*;
  */
 public class Robot extends IterativeRobot {
     
-	//Defines two controllers
+	//Defines three controllers: Two for tank drive, one for operator
     private Joystick _driveStickLeft;
     private Joystick _driveStickRight;
     
@@ -34,6 +34,10 @@ public class Robot extends IterativeRobot {
         _drive = new Drive(_driveStickLeft, _driveStickRight);
         _tatorCannon = new TatorCannon(_operatorStick);
     }
+    
+    public void autonomousInit() {
+    	
+    }
 
     /**
      * This function is called periodically during autonomous
@@ -41,19 +45,16 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     		
     }
+    
+    public void teleopInit() {
+    	_drive.setBreakMode(False);
+    }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
         _drive.drive(/*lol*/);
-    }
-    
-    /**
-     * This function is called periodically during test mode
-     */
-    public void testPeriodic() {
-    
     }
     
 }
