@@ -18,7 +18,7 @@ public class Robot extends IterativeRobot {
     
     private Joystick _operatorStick;
     
-    private Drive _drive;
+    private TankDrive _drive;
     private TatorCannon _tatorCannon;
     
     /**
@@ -31,7 +31,7 @@ public class Robot extends IterativeRobot {
         _driveStickRight = new Joystick(Addresses.DRIVESTICKRIGHT);
         _operatorStick = new Joystick(Addresses.OPERATORSTICK);
         
-        _drive = new Drive(_driveStickLeft, _driveStickRight);
+        _drive = new TankDrive(_driveStickLeft, _driveStickRight);
         _tatorCannon = new TatorCannon(_operatorStick);
     }
     
