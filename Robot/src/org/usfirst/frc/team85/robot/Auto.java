@@ -3,10 +3,10 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.*;
 
 public class Auto {
-	private Drive _drive;
+	private TankDrive _drive;
 	private double lSpeed, rSpeed;
     
-    public Auto(Drive drive) {        
+    public Auto(TankDrive drive) {        
         _drive = drive;
         lSpeed = 0;
         rSpeed = 0;

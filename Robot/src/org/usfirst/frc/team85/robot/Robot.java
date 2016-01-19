@@ -47,7 +47,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopInit() {
-    	_drive.setBreakMode(False);
+
     }
 
     /**
