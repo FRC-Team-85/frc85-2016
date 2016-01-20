@@ -33,6 +33,14 @@ public class Robot extends IterativeRobot {
         
         _drive = new TankDrive(_driveStickLeft, _driveStickRight);
         _tatorCannon = new TatorCannon(_operatorStick);
+        
+        try {	//camera stream
+        	CameraServer server = CameraServer.getInstance();
+        	server.setQuality(50);
+        	server.startAutomaticCapture();
+    	} catch (Exception ex) {
+    		System.out.println(ex);
+    	}
     }
     
     public void autonomousInit() {

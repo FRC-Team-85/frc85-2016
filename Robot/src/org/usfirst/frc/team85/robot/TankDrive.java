@@ -18,10 +18,12 @@ public class TankDrive {
         
         _masterLeftMotor = new CANTalon(Addresses.LEFT_FRONT_MOTOR);
         _masterLeftMotor.enableBrakeMode(false);
+        
         _slaveLeftMotorA = new CANTalon(Addresses.LEFT_MID_MOTOR);
         _slaveLeftMotorA.changeControlMode(TalonControlMode.Follower);
         _slaveLeftMotorA.set(Addresses.LEFT_FRONT_MOTOR);
         _slaveLeftMotorA.enableBrakeMode(false);
+        
         _slaveLeftMotorB = new CANTalon(Addresses.LEFT_BACK_MOTOR);
         _slaveLeftMotorB.changeControlMode(TalonControlMode.Follower);
         _slaveLeftMotorB.set(Addresses.LEFT_FRONT_MOTOR);
@@ -29,10 +31,12 @@ public class TankDrive {
         
         _masterRightMotor = new CANTalon(Addresses.RIGHT_FRONT_MOTOR);
         _masterRightMotor.enableBrakeMode(false);
+        
         _slaveRightMotorA = new CANTalon(Addresses.RIGHT_MID_MOTOR);
         _slaveRightMotorA.changeControlMode(TalonControlMode.Follower);
         _slaveRightMotorA.set(Addresses.RIGHT_FRONT_MOTOR);
         _slaveRightMotorA.enableBrakeMode(false);
+        
         _slaveRightMotorB = new CANTalon(Addresses.RIGHT_BACK_MOTOR);
         _slaveRightMotorB.changeControlMode(TalonControlMode.Follower);
         _slaveRightMotorB.set(Addresses.RIGHT_FRONT_MOTOR);
