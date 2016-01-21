@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class TatorCannon {
 	
+	private Boolean firstCheck;
+		
 	private Joystick _operatorStick;
 	
 	private CANTalon _outerTopMotor, _outerBottomMotor,
@@ -56,21 +58,13 @@ public class TatorCannon {
 			_armLimitBottom.get();
 		}
 
+		//When robot starts up, moves cannon all the way down 
+		public void armCheck(){  
+			if (!firstCheck && !_armLimitBottom.get()) {
+				_armMotor.set (_armMotor.get()-5);
+			} else {
+				_armMotor.set(0);		
+			}
+		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+	}
