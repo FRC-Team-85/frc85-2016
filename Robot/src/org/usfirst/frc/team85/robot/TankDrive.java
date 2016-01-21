@@ -54,11 +54,7 @@ public class TankDrive {
         
         controllerL = _controllerLeft.getRawButton(1) ? controllerL / 2 : controllerL;
         controllerR = _controllerRight.getRawButton(1) ? controllerR / 2 : controllerR;
-        
-        if (_controllerLeft.getRawButton(1)) {
-        	controllerL *= 0.5;
-        }
-       	
+               	
         setMotors(controllerL, controllerR);
     }
     
