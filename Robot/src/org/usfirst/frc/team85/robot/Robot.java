@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    		
+    	_tatorCannon.armCheck();
     }
     
     public void teleopInit() {
@@ -62,7 +62,10 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        _drive.drive(/*lol*/);
+    	_tatorCannon.armCheck();
+    	
+    	_drive.drive(/*lol*/);
+        
     }
     
 }
