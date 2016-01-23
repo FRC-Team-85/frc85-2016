@@ -1,7 +1,8 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.CANTalon.ControlMode;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 
 public class TatorCannon {
 
@@ -37,13 +38,13 @@ public class TatorCannon {
 		_armLimitTop = new DigitalInput(Addresses.ARM_LIMIT_TOP);
 		_armLimitBottom = new DigitalInput(Addresses.ARM_LIMIT_BOTTOM);
 
-		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
-		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
-		_armMotor.changeControlMode(TalonControlMode.Position);
+		_outerTopMotor.changeControlMode(ControlMode.Speed);
+		_outerBottomMotor.changeControlMode(ControlMode.Speed);
+		_armMotor.changeControlMode(ControlMode.Position);
 
 		_outerTopMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
+		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);		
 
 		_outerTopMotor.reverseSensor(true); //TODO: set to real value
 		_outerBottomMotor.reverseSensor(true);
