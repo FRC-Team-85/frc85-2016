@@ -5,76 +5,82 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class TatorCannon {
 
-	private Boolean firstCheck = false;
+    private Boolean firstCheck = false;
 
-	private Joystick _operatorStick;
+    private Joystick _operatorStick;
 
-	private CANTalon _outerTopMotor, _outerBottomMotor,
-					_innerTopMotor, _innerBottomMotor, _armMotor;
+    private CANTalon _outerTopMotor, _outerBottomMotor,
+                    _innerTopMotor, _innerBottomMotor, _armMotor;
 
-	private Encoder _tatorCannonEncoderTop, _tatorCannonEncoderBottom;
+    private Encoder _tatorCannonEncoderTop, _tatorCannonEncoderBottom;
 
-	private AnalogInput _cannonPOT;
+    private AnalogInput _cannonPOT;
 
-	private DigitalInput _armLimitTop, _armLimitBottom;
+    private DigitalInput _armLimitTop, _armLimitBottom;
 
-	public TatorCannon(Joystick operatorStick) {
-		_operatorStick = operatorStick;
+    public TatorCannon(Joystick operatorStick) {
+        _operatorStick = operatorStick;
 
-		_outerTopMotor = new CANTalon(Addresses.OUTER_MOTOR_TOP);
-		_outerBottomMotor = new CANTalon(Addresses.OUTER_MOTOR_BOTTOM);
-		_innerTopMotor = new CANTalon(Addresses.INNER_MOTOR_TOP);
-		_innerBottomMotor = new CANTalon(Addresses.INNER_MOTOR_BOTTOM);
-		_armMotor = new CANTalon(Addresses.ARM_MOTOR);
+        _outerTopMotor = new CANTalon(Addresses.OUTER_MOTOR_TOP);
+        _outerBottomMotor = new CANTalon(Addresses.OUTER_MOTOR_BOTTOM);
+        _innerTopMotor = new CANTalon(Addresses.INNER_MOTOR_TOP);
+        _innerBottomMotor = new CANTalon(Addresses.INNER_MOTOR_BOTTOM);
+        _armMotor = new CANTalon(Addresses.ARM_MOTOR);
 
-		_tatorCannonEncoderTop = new Encoder(Addresses.CANNON_ENCODER_TOP_CH1,
+        _tatorCannonEncoderTop = new Encoder(Addresses.CANNON_ENCODER_TOP_CH1,
                 Addresses.CANNON_ENCODER_TOP_CH2);
-		_tatorCannonEncoderBottom = new Encoder(Addresses.CANNON_ENCODER_BOTTOM_CH1,
+        _tatorCannonEncoderBottom = new Encoder(Addresses.CANNON_ENCODER_BOTTOM_CH1,
                 Addresses.CANNON_ENCODER_BOTTOM_CH2);
 
-		_cannonPOT = new AnalogInput(Addresses.CANNON_POT);
+        _cannonPOT = new AnalogInput(Addresses.CANNON_POT);
 
-		_armLimitTop = new DigitalInput(Addresses.ARM_LIMIT_TOP);
-		_armLimitBottom = new DigitalInput(Addresses.ARM_LIMIT_BOTTOM);
+        _armLimitTop = new DigitalInput(Addresses.ARM_LIMIT_TOP);
+        _armLimitBottom = new DigitalInput(Addresses.ARM_LIMIT_BOTTOM);
 
-		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
-		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
-		_armMotor.changeControlMode(TalonControlMode.Position);
+        _outerTopMotor.changeControlMode(TalonControlMode.Speed);
+        _outerTopMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 
-		_outerTopMotor.enableBrakeMode(false);
-		_outerBottomMotor.enableBrakeMode(false);
-		_innerTopMotor.enableBrakeMode(false);
-		_innerBottomMotor.enableBrakeMode(false);
-		_armMotor.enableBrakeMode(false);
-	}
+        _outerBottomMotor.changeControlMode(TalonControlMode.Speed);
+		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 
 
-		public void run() {
-			_operatorStick.getY();
-		}
+        _armMotor.changeControlMode(TalonControlMode.Position);
+        _armMotor.enableLimitSwitch(true, true); //Turn on limit switches connected directly to controller
+        _armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); //Use directly connected potentiometer for feedback
+		//We *could* put in soft limits here, but that would require tuning and be redundant with the limit switches
 
+        _outerTopMotor.enableBrakeMode(false);
+        _outerBottomMotor.enableBrakeMode(false);
+        _innerTopMotor.enableBrakeMode(false);
+        _innerBottomMotor.enableBrakeMode(false);
+        _armMotor.enableBrakeMode(false);
+    }
 
-		private void checkLimits() {
-			_armLimitTop.get();
-			_armLimitBottom.get();
-		}
+    public void run() {
+        _operatorStick.getY();
+    }
 
-		//When robot starts up, moves cannon all the way down
-		public void armCheck(){
-			if (!firstCheck){
-				_armMotor.enableForwardSoftLimit(false);
-				_armMotor.enableReverseSoftLimit(false);
-				if (!_armLimitBottom.get()) {
-					_armMotor.set (_armMotor.get() - 0.1);	//Rotations????
-				} else {
-					firstCheck = true;
-					_armMotor.setPosition(0);
-					_armMotor.enableForwardSoftLimit(true);
-					_armMotor.setForwardSoftLimit(0.25);	//rotations
-					_armMotor.enableReverseSoftLimit(true);
-					_armMotor.setReverseSoftLimit(0.0);		//rotations
-				}
-			}
-		}
+    private void checkLimits() {
+        _armLimitTop.get();
+        _armLimitBottom.get();
+    }
 
-	}
+    //When robot starts up, moves cannon all the way down
+    public void armCheck(){
+        if (!firstCheck){
+            _armMotor.enableForwardSoftLimit(false);
+            _armMotor.enableReverseSoftLimit(false);
+            if (!_armLimitBottom.get()) {
+                _armMotor.set (_armMotor.get() - 0.1);    //Rotations????
+            } else {
+                firstCheck = true;
+                _armMotor.setPosition(0);
+                _armMotor.enableForwardSoftLimit(true);
+                _armMotor.setForwardSoftLimit(0.25);    //rotations
+                _armMotor.enableReverseSoftLimit(true);
+                _armMotor.setReverseSoftLimit(0.0);        //rotations
+            }
+        }
+    }
+
+    }
