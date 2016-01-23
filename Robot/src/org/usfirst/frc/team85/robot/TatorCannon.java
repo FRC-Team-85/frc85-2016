@@ -65,12 +65,14 @@ public class TatorCannon {
     }
 
     private boolean armAtTop() {
-		boolean softLimited = _armMotor.isForwardSoftLimitEnabled() && _armMotor.get() >= _armMotor.getForwardSoftLimit();
+		boolean softLimited = _armMotor.isForwardSoftLimitEnabled() &&
+							_armMotor.get() >= _armMotor.getForwardSoftLimit();
 		return _armMotor.isFwdLimitSwitchClosed() || softLimited;
 	}
 
 	private boolean armAtBottom() {
-		boolean softLimited = _armMotor.isReverseSoftLimitEnabled() && _armMotor.get() <= _armMotor.getReverseSoftLimit();
+		boolean softLimited = _armMotor.isReverseSoftLimitEnabled() &&
+							_armMotor.get() <= _armMotor.getReverseSoftLimit();
 		return _armMotor.isRevLimitSwitchClosed() || softLimited;
 	}
 
