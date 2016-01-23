@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot {
         _driveStickLeft = new Joystick(Addresses.DRIVESTICKLEFT);
         _driveStickRight = new Joystick(Addresses.DRIVESTICKRIGHT);
         _operatorStick = new Joystick(Addresses.OPERATORSTICK);
-        
+
         _table = NetworkTable.getTable("GRIP/myContoursReport");
 
         _drive = new TankDrive(_driveStickLeft, _driveStickRight);
@@ -49,6 +49,7 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
     	_drive.setVoltageRamp(2.0); //Limits controllers to 2V/sec
+        _drive.setBrakeMode(true);
     }
 
     /**
@@ -60,6 +61,7 @@ public class Robot extends IterativeRobot {
 
     public void teleopInit() {
         _drive.setVoltageRamp(0.0); //Removes voltage ramp limit
+        _drive.setBrakeMode(false);
     }
 
     /**
