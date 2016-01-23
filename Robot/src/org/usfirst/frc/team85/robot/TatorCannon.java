@@ -47,12 +47,12 @@ public class TatorCannon {
 		_outerBottomMotor.setSensorDirection(true);
 		_armMotor.setSensorDirection(true);
 
-		_outerTopMotor.ConfigNominalOutputVoltage(0.0, -0.0);
-		_outerTopMotor.ConfigPeakOutputVoltage(12.0, -12.0);
-		_outerBottomMotor.ConfigNominalOutputVoltage(0.0, -0.0);
-		_outerBottomMotor.ConfigPeakOutputVoltage(-12.0, 12.0);
-		_armMotor.ConfigNominalOutputVoltage(0.0, -0.0);
-		_armMotor.ConfigPeakOutputVoltage(12.0, -12.0);
+		_outerTopMotor.configNominalOutputVoltage(0.0, -0.0);
+		_outerTopMotor.configPeakOutputVoltage(12.0, -12.0);
+		_outerBottomMotor.configNominalOutputVoltage(0.0, -0.0);
+		_outerBottomMotor.configPeakOutputVoltage(-12.0, 12.0);
+		_armMotor.configNominalOutputVoltage(0.0, -0.0);
+		_armMotor.configPeakOutputVoltage(12.0, -12.0);
 
 			//Set closed-loop coefficients
 		_outerTopMotor.setProfile(0);
