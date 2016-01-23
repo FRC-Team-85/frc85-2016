@@ -28,23 +28,13 @@ public class TatorCannon {
 		_innerBottomMotor = new CANTalon(Addresses.INNER_MOTOR_BOTTOM);
 		_armMotor = new CANTalon(Addresses.ARM_MOTOR);
 
-		_tatorCannonEncoderTop = new Encoder(Addresses.CANNON_ENCODER_TOP_CH1,
-                Addresses.CANNON_ENCODER_TOP_CH2);
-		_tatorCannonEncoderBottom = new Encoder(Addresses.CANNON_ENCODER_BOTTOM_CH1,
-                Addresses.CANNON_ENCODER_BOTTOM_CH2);
-
-		_cannonPOT = new AnalogInput(Addresses.CANNON_POT);
-
-		_armLimitTop = new DigitalInput(Addresses.ARM_LIMIT_TOP);
-		_armLimitBottom = new DigitalInput(Addresses.ARM_LIMIT_BOTTOM);
-
 		_outerTopMotor.changeControlMode(ControlMode.Speed);
 		_outerBottomMotor.changeControlMode(ControlMode.Speed);
 		_armMotor.changeControlMode(ControlMode.Position);
 
-		_outerTopMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);		
+		_outerTopMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder); 		//Native units of 1/4096th of a revolution, so
+		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder); 	//Speed will be in units of 0.1465rpm
+		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); //Native units of 1/1024th of full range
 
 		_outerTopMotor.reverseSensor(true); //TODO: set to real value
 		_outerBottomMotor.reverseSensor(true);
@@ -63,25 +53,39 @@ public class TatorCannon {
         _operatorStick.getY();
     }
 
-    private void checkLimits() {
-        _armLimitTop.get();
-        _armLimitBottom.get();
-    }
+    private boolean armAtTop() {
+		boolean softLimited = _armMotor.isForwardSoftLimitEnabled() && _armMotor.get() >= _armMotor.getForwardSoftLimit();
+		return _armMotor.isFwdLimitSwitchClosed() || softLimited;
+	}
+
+	private boolean armAtBottom() {
+		boolean softLimited = _armMotor.isReverseSoftLimitEnabled() && _armMotor.get() <= _armMotor.getReverseSoftLimit();
+		return _armMotor.isRevLimitSwitchClosed() || softLimited;
+	}
+
+	private void setRpmTop(double speed) {
+		_outerTopMotor.set(speed * 0.1465);
+	}
+
+	private void setRpmBottom(double speed) {
+		_outerBottomMotor.set(speed * 0.1465);
+	}
+
 
     //When robot starts up, moves cannon all the way down
     public void armCheck(){
         if (!firstCheck){
             _armMotor.enableForwardSoftLimit(false);
             _armMotor.enableReverseSoftLimit(false);
-            if (!_armLimitBottom.get()) {
-                _armMotor.set (_armMotor.get() - 1);    //Rotations????
+            if (!armAtBottom()) {
+                _armMotor.set (_armMotor.get() - 5);
             } else {
                 firstCheck = true;
                 _armMotor.setPosition(0);
                 _armMotor.enableForwardSoftLimit(true);
-                _armMotor.setForwardSoftLimit(0.25);    //rotations
+                _armMotor.setForwardSoftLimit(0.25); //Tuning required
                 _armMotor.enableReverseSoftLimit(true);
-                _armMotor.setReverseSoftLimit(0.0);        //rotations
+                _armMotor.setReverseSoftLimit(0.0);
             }
         }
     }
