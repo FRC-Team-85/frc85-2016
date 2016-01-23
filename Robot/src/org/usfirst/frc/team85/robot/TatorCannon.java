@@ -43,9 +43,9 @@ public class TatorCannon {
 
 		_armMotor.configPotentiometerTurns(1); //TODO: set to real value
 
-		_outerTopMotor.setSensorDirection(true); //TODO: set to real value
-		_outerBottomMotor.setSensorDirection(true);
-		_armMotor.setSensorDirection(true);
+		_outerTopMotor.reverseSensor(true); //TODO: set to real value
+		_outerBottomMotor.reverseSensor(true);
+		_armMotor.reverseSensor(true);
 
 		_outerTopMotor.configNominalOutputVoltage(0.0, -0.0);
 		_outerTopMotor.configPeakOutputVoltage(12.0, -12.0);
