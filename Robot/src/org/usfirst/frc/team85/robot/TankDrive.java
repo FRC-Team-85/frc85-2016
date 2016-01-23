@@ -21,12 +21,10 @@ public class TankDrive {
         _slaveLeftMotorA = new CANTalon(Addresses.LEFT_MID_MOTOR);
         _slaveLeftMotorA.changeControlMode(TalonControlMode.Follower);
         _slaveLeftMotorA.set(Addresses.LEFT_FRONT_MOTOR);
-        _slaveLeftMotorA.enableBrakeMode(false);
 
         _slaveLeftMotorB = new CANTalon(Addresses.LEFT_BACK_MOTOR);
         _slaveLeftMotorB.changeControlMode(TalonControlMode.Follower);
         _slaveLeftMotorB.set(Addresses.LEFT_FRONT_MOTOR);
-        _slaveLeftMotorB.enableBrakeMode(false);
 
         _masterRightMotor = new CANTalon(Addresses.RIGHT_FRONT_MOTOR);	//MASTER RIGHT
         _masterRightMotor.enableBrakeMode(false);
@@ -34,12 +32,10 @@ public class TankDrive {
         _slaveRightMotorA = new CANTalon(Addresses.RIGHT_MID_MOTOR);
         _slaveRightMotorA.changeControlMode(TalonControlMode.Follower);
         _slaveRightMotorA.set(Addresses.RIGHT_FRONT_MOTOR);
-        _slaveRightMotorA.enableBrakeMode(false);
 
         _slaveRightMotorB = new CANTalon(Addresses.RIGHT_BACK_MOTOR);
         _slaveRightMotorB.changeControlMode(TalonControlMode.Follower);
         _slaveRightMotorB.set(Addresses.RIGHT_FRONT_MOTOR);
-        _slaveRightMotorB.enableBrakeMode(false);
 
         _LeftEncoder = new Encoder(Addresses.LEFT_ENCODER_CH1,
                     Addresses.LEFT_ENCODER_CH2);
@@ -50,14 +46,28 @@ public class TankDrive {
     }
 
 	public void setVoltageRamp(double rate) {
-		_masterLeftMotor.setVoltageRampRate(rate);
-		_slaveLeftMotorA.setVoltageRampRate(rate);
-		_slaveLeftMotorB.setVoltageRampRate(rate);
-
-		_masterRightMotor.setVoltageRampRate(rate);
-		_slaveRightMotorA.setVoltageRampRate(rate);
-		_slaveRightMotorB.setVoltageRampRate(rate);
+		setVoltageRamp(rate, _masterLeftMotor, _slaveLeftMotorA,
+                            _slaveLeftMotorB, _masterRightMotor,
+                            _slaveRightMotorA, _slaveRightMotorB);
 	}
+
+    private void setVoltageRamp(double rate, CANTalon... motors) {
+        for (CANTalon motor : motors) {
+            motor.setVoltageRampRate(rate);
+        }
+    }
+
+    public void setBrakeMode(boolean enabled) {
+        setBrakeMode(enabled, _masterLeftMotor, _slaveLeftMotorA,
+                            _slaveLeftMotorB, _masterRightMotor,
+                            _slaveRightMotorA, _slaveRightMotorB);
+    }
+
+    private void setBrakeMode(boolean enabled, CANTalon... motors) {
+        for (CANTalon motor : motors) {
+            motor.enableBrakeMode(enabled);
+        }
+    }
 
     public void drive() {
         double thrust = _controller.getY();
