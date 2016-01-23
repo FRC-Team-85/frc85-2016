@@ -41,40 +41,48 @@ public class TatorCannon {
 		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
 		_armMotor.changeControlMode(TalonControlMode.Position);
 
-		_outerTopMotor.enableBrakeMode(false);
-		_outerBottomMotor.enableBrakeMode(false);
-		_innerTopMotor.enableBrakeMode(false);
-		_innerBottomMotor.enableBrakeMode(false);
-		_armMotor.enableBrakeMode(false);
-	}
+		_outerTopMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
 
+		_outerTopMotor.reverseSensor(true); //TODO: set to real value
+		_outerBottomMotor.reverseSensor(true);
+		_armMotor.reverseSensor(true);
 
-		public void run() {
-			_operatorStick.getY();
-		}
+		_armMotor.enableLimitSwitch(true, true);
 
+        _outerTopMotor.enableBrakeMode(false);
+        _outerBottomMotor.enableBrakeMode(false);
+        _innerTopMotor.enableBrakeMode(false);
+        _innerBottomMotor.enableBrakeMode(false);
+        _armMotor.enableBrakeMode(false);
+    }
 
-		private void checkLimits() {
-			_armLimitTop.get();
-			_armLimitBottom.get();
-		}
+    public void run() {
+        _operatorStick.getY();
+    }
 
-		//When robot starts up, moves cannon all the way down
-		public void armCheck(){
-			if (!firstCheck){
-				_armMotor.enableForwardSoftLimit(false);
-				_armMotor.enableReverseSoftLimit(false);
-				if (!_armLimitBottom.get()) {
-					_armMotor.set (_armMotor.get() - 0.1);	//Rotations????
-				} else {
-					firstCheck = true;
-					_armMotor.setPosition(0);
-					_armMotor.enableForwardSoftLimit(true);
-					_armMotor.setForwardSoftLimit(0.25);	//rotations
-					_armMotor.enableReverseSoftLimit(true);
-					_armMotor.setReverseSoftLimit(0.0);		//rotations
-				}
-			}
-		}
+    private void checkLimits() {
+        _armLimitTop.get();
+        _armLimitBottom.get();
+    }
 
-	}
+    //When robot starts up, moves cannon all the way down
+    public void armCheck(){
+        if (!firstCheck){
+            _armMotor.enableForwardSoftLimit(false);
+            _armMotor.enableReverseSoftLimit(false);
+            if (!_armLimitBottom.get()) {
+                _armMotor.set (_armMotor.get() - 1);    //Rotations????
+            } else {
+                firstCheck = true;
+                _armMotor.setPosition(0);
+                _armMotor.enableForwardSoftLimit(true);
+                _armMotor.setForwardSoftLimit(0.25);    //rotations
+                _armMotor.enableReverseSoftLimit(true);
+                _armMotor.setReverseSoftLimit(0.0);        //rotations
+            }
+        }
+    }
+
+}
