@@ -13,12 +13,6 @@ public class TatorCannon {
 	private CANTalon _outerTopMotor, _outerBottomMotor,
 					_innerTopMotor, _innerBottomMotor, _armMotor;
 
-	private Encoder _tatorCannonEncoderTop, _tatorCannonEncoderBottom;
-
-	private AnalogInput _cannonPOT;
-
-	private DigitalInput _armLimitTop, _armLimitBottom;
-
 	public TatorCannon(Joystick operatorStick) {
 		_operatorStick = operatorStick;
 
