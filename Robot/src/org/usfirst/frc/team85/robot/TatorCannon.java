@@ -71,6 +71,14 @@ public class TatorCannon {
 		_outerBottomMotor.set(speed * 0.1465);
 	}
 
+	private double getRpmTop() {
+		_outerTopMotor.get() / 0.1465;
+	}
+
+	private double getRpmBottom() {
+		_outerBottomMotor.get() / 0.1465;
+	}
+
 
     //When robot starts up, moves cannon all the way down
     public void armCheck(){
