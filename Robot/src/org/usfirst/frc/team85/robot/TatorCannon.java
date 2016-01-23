@@ -55,8 +55,8 @@ public class TatorCannon {
 
         _outerTopMotor.enableBrakeMode(false);
         _outerBottomMotor.enableBrakeMode(false);
-        _innerTopMotor.enableBrakeMode(false);
-        _innerBottomMotor.enableBrakeMode(false);
+        _innerTopMotor.enableBrakeMode(true); //For precise control of ballfeeding
+        _innerBottomMotor.enableBrakeMode(true);
         _armMotor.enableBrakeMode(false);
     }
 
@@ -85,9 +85,9 @@ public class TatorCannon {
                 firstCheck = true;
                 _armMotor.setPosition(0);
                 _armMotor.enableForwardSoftLimit(true);
-                _armMotor.setForwardSoftLimit(0.25); //Tuning required (rotations)
+                _armMotor.setForwardSoftLimit(0.25); //Tuning required (rotations (probably))
                 _armMotor.enableReverseSoftLimit(true);
-                _armMotor.setReverseSoftLimit(0.0); //Rotations
+                _armMotor.setReverseSoftLimit(0.0); //Rotations (probably)
             }
         }
     }
