@@ -2,6 +2,8 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.networktables.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,12 +23,18 @@ public class Robot extends IterativeRobot {
     private TankDrive _drive;
     private TatorCannon _tatorCannon;
 
+	private NetworkTable table;
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+    
     public void robotInit() {
-    	//Sets up left controller
+    	
+    	table = NetworkTable.getTable("GRIP/myContoursReport");
+    	
+		//Sets up left controller
         _driveStickLeft = new Joystick(Addresses.DRIVESTICKLEFT);
         _driveStickRight = new Joystick(Addresses.DRIVESTICKRIGHT);
         _operatorStick = new Joystick(Addresses.OPERATORSTICK);
@@ -65,7 +73,17 @@ public class Robot extends IterativeRobot {
     	_tatorCannon.armCheck();
 
     	_drive.drive(/*lol*/);
-
+    	
+    	try {
+			double area = table.getNumber("area", 0);
+			if (area>0) {
+				System.out.println("Area: " + area);
+			} else {
+				System.out.println("No Contour Found");
+			}
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
     }
 
 }

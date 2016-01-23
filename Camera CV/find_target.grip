@@ -9,8 +9,8 @@
       <grip:Input step="0" socket="0"/>
       <grip:Input step="0" socket="1">
         <value>
-          <double>72.84172661870504</double>
-          <double>110.88737201365188</double>
+          <double>80.93525179856117</double>
+          <double>106.27986348122867</double>
         </value>
       </grip:Input>
       <grip:Input step="0" socket="2">
