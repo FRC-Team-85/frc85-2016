@@ -13,16 +13,6 @@ public class TatorCannon {
 	private CANTalon _outerTopMotor, _outerBottomMotor,
 					_innerTopMotor, _innerBottomMotor, _armMotor;
 
-	double shooterP = 0.0;
-	double shooterI = 0.0;
-	double shooterD = 0.0;
-	double shooterF = 0.0;
-
-	double armP = 0.0;
-	double armI = 0.0;
-	double armD = 0.0;
-	double armF = 0.0;
-
 	public TatorCannon(Joystick operatorStick) {
 
 
@@ -46,20 +36,20 @@ public class TatorCannon {
 		_outerBottomMotor.reverseSensor(true);
 		_armMotor.reverseSensor(true);
 
-		_outerTopMotor.setP(shooterP);
-		_outerTopMotor.setI(shooterI);
-		_outerTopMotor.setD(shooterD);
-		_outerTopMotor.setF(shooterF);
+		_outerTopMotor.setP(Constants.shooterP);
+		_outerTopMotor.setI(Constants.shooterI);
+		_outerTopMotor.setD(Constants.shooterD);
+		_outerTopMotor.setF(Constants.shooterF);
 
-		_outerBottomMotor.setP(shooterP);
-		_outerBottomMotor.setI(shooterI);
-		_outerBottomMotor.setD(shooterD);
-		_outerBottomMotor.setF(shooterF);
+		_outerBottomMotor.setP(Constants.shooterP);
+		_outerBottomMotor.setI(Constants.shooterI);
+		_outerBottomMotor.setD(Constants.shooterD);
+		_outerBottomMotor.setF(Constants.shooterF);
 
-		_armMotor.setP(armP);
-		_armMotor.setI(armI);
-		_armMotor.setD(armD);
-		_armMotor.setF(armF);
+		_armMotor.setP(Constants.armP);
+		_armMotor.setI(Constants.armI);
+		_armMotor.setD(Constants.armD);
+		_armMotor.setF(Constants.armF);
 
 		_armMotor.enableLimitSwitch(true, true);
 
