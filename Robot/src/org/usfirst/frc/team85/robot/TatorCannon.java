@@ -28,8 +28,8 @@ public class TatorCannon {
 		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
 		_armMotor.changeControlMode(TalonControlMode.Position);
 
-		_outerTopMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder); 		//Native units of 1/4096th of a revolution, so
-		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder); 	//Adjusted units of revolutions
+		_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
+		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 	//Adjusted units of revolutions
 		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); //Native units of 1/1024th of full range
 
 		_outerTopMotor.reverseSensor(true); //TODO: set to real value
