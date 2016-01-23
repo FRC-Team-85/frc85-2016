@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class TatorCannon {
+	double armP, armI, armD, armF, shooterP, shooterI, shooterD, shooterF;
 
     private Boolean firstCheck = false;
 
@@ -12,13 +13,17 @@ public class TatorCannon {
     private CANTalon _outerTopMotor, _outerBottomMotor,
                     _innerTopMotor, _innerBottomMotor, _armMotor;
 
-    private Encoder _tatorCannonEncoderTop, _tatorCannonEncoderBottom;
-
-    private AnalogInput _cannonPOT;
-
-    private DigitalInput _armLimitTop, _armLimitBottom;
-
     public TatorCannon(Joystick operatorStick) {
+		shooterP = 0.0;
+		shooterI = 0.0;
+		shooterD = 0.0;
+		shooterF = 0.0;
+
+		armP = 0.0;
+		armI = 0.0;
+		armD = 0.0;
+		armF = 0.0;
+
         _operatorStick = operatorStick;
 
         _outerTopMotor = new CANTalon(Addresses.OUTER_MOTOR_TOP);
@@ -27,27 +32,47 @@ public class TatorCannon {
         _innerBottomMotor = new CANTalon(Addresses.INNER_MOTOR_BOTTOM);
         _armMotor = new CANTalon(Addresses.ARM_MOTOR);
 
-        _tatorCannonEncoderTop = new Encoder(Addresses.CANNON_ENCODER_TOP_CH1,
-                Addresses.CANNON_ENCODER_TOP_CH2);
-        _tatorCannonEncoderBottom = new Encoder(Addresses.CANNON_ENCODER_BOTTOM_CH1,
-                Addresses.CANNON_ENCODER_BOTTOM_CH2);
-
-        _cannonPOT = new AnalogInput(Addresses.CANNON_POT);
-
-        _armLimitTop = new DigitalInput(Addresses.ARM_LIMIT_TOP);
-        _armLimitBottom = new DigitalInput(Addresses.ARM_LIMIT_BOTTOM);
-
         _outerTopMotor.changeControlMode(TalonControlMode.Speed);
-        _outerTopMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-
         _outerBottomMotor.changeControlMode(TalonControlMode.Speed);
-		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		_armMotor.changeControlMode(TalonControlMode.Position);
 
+		_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
 
-        _armMotor.changeControlMode(TalonControlMode.Position);
-        _armMotor.enableLimitSwitch(true, true); //Turn on limit switches connected directly to controller
-        _armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); //Use directly connected potentiometer for feedback
-		//We *could* put in soft limits here, but that would require tuning and be redundant with the limit switches
+		_armMotor.configPotentiometerTurns(1); //TODO: set to real value
+
+		_outerTopMotor.setSensorDirection(true); //TODO: set to real value
+		_outerBottomMotor.setSensorDirection(true);
+		_armMotor.setSensorDirection(true);
+
+		_outerTopMotor.ConfigNominalOutputVoltage(0.0, -0.0);
+		_outerTopMotor.ConfigPeakOutputVoltage(12.0, -12.0);
+		_outerBottomMotor.ConfigNominalOutputVoltage(0.0, -0.0);
+		_outerBottomMotor.ConfigPeakOutputVoltage(-12.0, 12.0);
+		_armMotor.ConfigNominalOutputVoltage(0.0, -0.0);
+		_armMotor.ConfigPeakOutputVoltage(12.0, -12.0);
+
+			//Set closed-loop coefficients
+		_outerTopMotor.setProfile(0);
+		_outerTopMotor.setP(shooterP);
+		_outerTopMotor.setI(shooterI);
+		_outerTopMotor.setD(shooterD);
+		_outerTopMotor.setD(shooterF);
+
+		_outerBottomMotor.setProfile(0);
+		_outerBottomMotor.setP(shooterP);
+		_outerBottomMotor.setI(shooterI);
+		_outerBottomMotor.setD(shooterD);
+		_outerBottomMotor.setF(shooterF);
+
+		_armMotor.setProfile(0);
+		_armMotor.setP(armP);
+		_armMotor.setI(armI);
+		_armMotor.setD(armD);
+		_armMotor.setF(armF);
+
+		_armMotor.enableLimitSwitch(true, true);
 
         _outerTopMotor.enableBrakeMode(false);
         _outerBottomMotor.enableBrakeMode(false);
@@ -71,7 +96,7 @@ public class TatorCannon {
             _armMotor.enableForwardSoftLimit(false);
             _armMotor.enableReverseSoftLimit(false);
             if (!_armLimitBottom.get()) {
-                _armMotor.set (_armMotor.get() - 0.1);    //Rotations????
+                _armMotor.set (_armMotor.get() - 1);    //Rotations????
             } else {
                 firstCheck = true;
                 _armMotor.setPosition(0);
