@@ -14,8 +14,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class Robot extends IterativeRobot {
 
 	//Defines three controllers: Two for tank drive, one for operator
-    private Joystick _driveStickLeft;
-    private Joystick _driveStickRight;
+    private Joystick _driveStick;
 
     private Joystick _operatorStick;
 
@@ -29,13 +28,12 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
     	//Sets up left controller
-        _driveStickLeft = new Joystick(Addresses.DRIVESTICKLEFT);
-        _driveStickRight = new Joystick(Addresses.DRIVESTICKRIGHT);
+        _driveStick = new Joystick(Addresses.DRIVESTICK);
         _operatorStick = new Joystick(Addresses.OPERATORSTICK);
         
         _table = NetworkTable.getTable("GRIP/myContoursReport");
 
-        _drive = new TankDrive(_driveStickLeft, _driveStickRight);
+        _drive = new TankDrive(_driveStick);
         _tatorCannon = new TatorCannon(_operatorStick);
 
         try {	//camera stream

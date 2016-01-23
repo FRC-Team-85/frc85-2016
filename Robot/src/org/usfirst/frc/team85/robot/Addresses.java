@@ -6,10 +6,9 @@ public class Addresses {
 
         //Controllers
     
-    public static final int DRIVESTICKLEFT = 0;
-    public static final int DRIVESTICKRIGHT = 1;
+    public static final int DRIVESTICK = 0;
 
-    public static final int OPERATORSTICK = 2;
+    public static final int OPERATORSTICK = 1;
     
         //Drive
 

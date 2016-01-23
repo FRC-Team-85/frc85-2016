@@ -5,18 +5,17 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class TankDrive {
 
-    private Joystick _controllerLeft, _controllerRight;
+    private Joystick _controller;
 
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
 
     private Encoder _LeftEncoder, _RightEncoder;
 
-    public TankDrive(Joystick leftDriveController, Joystick rightDriveController) {
-        _controllerLeft = leftDriveController;
-        _controllerRight = rightDriveController;
+    public TankDrive(Joystick DriveController) {
+        _controller = DriveController;
 
-        _masterLeftMotor = new CANTalon(Addresses.LEFT_FRONT_MOTOR);
+        _masterLeftMotor = new CANTalon(Addresses.LEFT_FRONT_MOTOR);	//MASTER LEFT
         _masterLeftMotor.enableBrakeMode(false);
 
         _slaveLeftMotorA = new CANTalon(Addresses.LEFT_MID_MOTOR);
@@ -29,7 +28,7 @@ public class TankDrive {
         _slaveLeftMotorB.set(Addresses.LEFT_FRONT_MOTOR);
         _slaveLeftMotorB.enableBrakeMode(false);
 
-        _masterRightMotor = new CANTalon(Addresses.RIGHT_FRONT_MOTOR);
+        _masterRightMotor = new CANTalon(Addresses.RIGHT_FRONT_MOTOR);	//MASTER RIGHT
         _masterRightMotor.enableBrakeMode(false);
 
         _slaveRightMotorA = new CANTalon(Addresses.RIGHT_MID_MOTOR);
@@ -46,6 +45,8 @@ public class TankDrive {
                     Addresses.LEFT_ENCODER_CH2);
         _RightEncoder = new Encoder(Addresses.RIGHT_ENCODER_CH1,
                     Addresses.RIGHT_ENCODER_CH2);
+        
+        setVoltageRamp(1.0);
     }
 
 	public void setVoltageRamp(double rate) {
@@ -59,23 +60,32 @@ public class TankDrive {
 	}
 
     public void drive() {
-        double controllerL = _controllerLeft.getY();
-        double controllerR = _controllerRight.getY();
+        double thrust = _controller.getY();
+        double turn = -0.75*Math.sin(0.5*Math.PI*Math.pow(_controller.getZ(), 3));
 
-        controllerL = _controllerLeft.getRawButton(1) ? controllerL / 2 : controllerL;
-        controllerR = _controllerRight.getRawButton(1) ? controllerR / 2 : controllerR;
+        double left = thrust + turn;
+        double right = thrust - turn;
+    	
+        setMotors((left + skim(right)), (right + skim(left)));
+    }
+    
+    double skim(double v) {
 
-        setMotors(controllerL, controllerR);
+    	  if (v > 1.0) {
+    		  return -(v - 1.0);
+    	  } else if (v < -1.0) {
+    		  return -(v + 1.0);
+    	  } else {
+    		  return 0.0;
+    	  }
     }
 
+
     private void setMotors(double lSpeed, double rSpeed) {
+    	
+    	//deadbands
         lSpeed = (Math.abs(lSpeed) <= .2) ? 0.0 : lSpeed;
         rSpeed = (Math.abs(rSpeed) <= .2) ? 0.0 : rSpeed;
-
-        if (_controllerLeft.getRawButton(3)||_controllerRight.getRawButton(3)) {
-        	lSpeed = 0.0;
-        	rSpeed = 0.0;
-        }
 
         _masterLeftMotor.set(lSpeed);
         _masterRightMotor.set(rSpeed);
