@@ -1,6 +1,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class TankDrive {
 
@@ -19,12 +20,12 @@ public class TankDrive {
         _masterLeftMotor.enableBrakeMode(false);
 
         _slaveLeftMotorA = new CANTalon(Addresses.LEFT_MID_MOTOR);
-        _slaveLeftMotorA.changeControlMode(CANTalon.ControlMode.Follower);
+        _slaveLeftMotorA.changeControlMode(TalonControlMode.Follower);
         _slaveLeftMotorA.set(Addresses.LEFT_FRONT_MOTOR);
         _slaveLeftMotorA.enableBrakeMode(false);
 
         _slaveLeftMotorB = new CANTalon(Addresses.LEFT_BACK_MOTOR);
-        _slaveLeftMotorB.changeControlMode(CANTalon.ControlMode.Follower);
+        _slaveLeftMotorB.changeControlMode(TalonControlMode.Follower);
         _slaveLeftMotorB.set(Addresses.LEFT_FRONT_MOTOR);
         _slaveLeftMotorB.enableBrakeMode(false);
 
@@ -32,12 +33,12 @@ public class TankDrive {
         _masterRightMotor.enableBrakeMode(false);
 
         _slaveRightMotorA = new CANTalon(Addresses.RIGHT_MID_MOTOR);
-        _slaveRightMotorA.changeControlMode(CANTalon.ControlMode.Follower);
+        _slaveRightMotorA.changeControlMode(TalonControlMode.Follower);
         _slaveRightMotorA.set(Addresses.RIGHT_FRONT_MOTOR);
         _slaveRightMotorA.enableBrakeMode(false);
 
         _slaveRightMotorB = new CANTalon(Addresses.RIGHT_BACK_MOTOR);
-        _slaveRightMotorB.changeControlMode(CANTalon.ControlMode.Follower);
+        _slaveRightMotorB.changeControlMode(TalonControlMode.Follower);
         _slaveRightMotorB.set(Addresses.RIGHT_FRONT_MOTOR);
         _slaveRightMotorB.enableBrakeMode(false);
 

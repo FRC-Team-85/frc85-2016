@@ -1,6 +1,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class TatorCannon {
 
@@ -36,9 +37,9 @@ public class TatorCannon {
 		_armLimitTop = new DigitalInput(Addresses.ARM_LIMIT_TOP);
 		_armLimitBottom = new DigitalInput(Addresses.ARM_LIMIT_BOTTOM);
 
-		_outerTopMotor.changeControlMode(CANTalon.ControlMode.Speed);
-		_outerBottomMotor.changeControlMode(CANTalon.ControlMode.Speed);
-		_armMotor.changeControlMode(CANTalon.ControlMode.Position);
+		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
+		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
+		_armMotor.changeControlMode(TalonControlMode.Position);
 
 		_outerTopMotor.enableBrakeMode(false);
 		_outerBottomMotor.enableBrakeMode(false);
@@ -69,9 +70,9 @@ public class TatorCannon {
 					firstCheck = true;
 					_armMotor.setPosition(0);
 					_armMotor.enableForwardSoftLimit(true);
-					_armMotor.setForwardSoftLimit(1);	//rotations
+					_armMotor.setForwardSoftLimit(0.25);	//rotations
 					_armMotor.enableReverseSoftLimit(true);
-					_armMotor.setReverseSoftLimit(0);		//rotations
+					_armMotor.setReverseSoftLimit(0.0);		//rotations
 				}
 			}
 		}
