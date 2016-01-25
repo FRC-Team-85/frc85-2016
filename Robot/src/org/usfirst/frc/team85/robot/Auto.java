@@ -13,7 +13,7 @@ public class Auto {
 	public Auto(TankDrive drive) {
         _drive = drive;
         
-        /*if (controller2.getRawButton(1) == true) {
+        /* if (controller2.getRawButton(1) == true) {
         	LowBar.AutonomousLowBar();
 		} else if (controller2.getRawButton(2) == true) {
 			Portcullis.main();
@@ -30,7 +30,7 @@ public class Auto {
 		} else if (controller2.getRawButton(8) == true) {
 			RockWall.main();
 		} else if (controller2.getRawButton(9) == true) {
-			RoughTerrain.main();
+			RoughTerrain.main(); 
 		} */
 	}
 }
