@@ -43,20 +43,6 @@ public class Auto {
             
             break;
         
-        switch(_procedure) {
-        case 1 {
-        	_leftFrontMotor.set(fast);
-        	_rightFrontMotor.set(fast);
-        	_leftBackMotor.set(fast);
-        	_rightBackMotor.set(fast);
-        }
-        }
-        
-        
-        
-        
-        
-        // all of this is wrong and you should feel ashamed. senpai disapproves
         /* if (controller2.getRawButton(1) == true) {
         	LowBar.AutonomousLowBar();
 		} else if (controller2.getRawButton(2) == true) {
