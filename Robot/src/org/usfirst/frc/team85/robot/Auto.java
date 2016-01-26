@@ -7,41 +7,52 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class Auto {
 	private TankDrive _drive;
 	
-	/* private JoystickButton _controller2;
+	/*private JoystickButton _controller2;
 		_controller2 = Button; */
+	
+	private int obstacle /*= button.get*/;
 	
 	public Auto(TankDrive drive) {
         _drive = drive;
-        /*switch (obstacle) {
-        case 0://LowBar
-            
-            
-            break;
-        case 1://Portcullis
         
-            break;
-        case 2://Cheval de Frise
+        switch (obstacle) {
+        case 0: //LowBar
             
+        	//Drive(Fast)
+        	
             break;
-        case 3://Moat
+        case 1: //Portcullis
         
+        	
             break;
+        case 2: //Cheval de Frise
             
-        case 4://Ramparts
+        	
+            break;
+        case 3: //Moat
         
+        	
             break;
-            
-        case 5://Drawbridge
-            
+        case 4: //Ramparts
+        
+        	
             break;
-        case 6://Sally Port
-            
+        case 5: //Drawbridge
+           
+        	
             break;
-        case 7://Rock Wall
+        case 6: //Sally Port
             
+        	
             break;
-        case 8://Rough Terrain
+        case 7: //Rock Wall
             
-            break;*/
+        	
+            break;
+        case 8: //Rough Terrain
+            
+        	
+            break;
+        }
 	}
 }
