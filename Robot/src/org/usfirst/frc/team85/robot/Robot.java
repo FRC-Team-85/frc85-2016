@@ -22,6 +22,8 @@ public class Robot extends IterativeRobot {
     private TatorCannon _tatorCannon;
 
     private NetworkTable _table;
+    
+    CameraServer _server;
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -37,9 +39,9 @@ public class Robot extends IterativeRobot {
         _tatorCannon = new TatorCannon(_operatorStick);
 
         try {	//camera stream
-        	CameraServer server = CameraServer.getInstance();
-        	server.setQuality(50);
-        	server.startAutomaticCapture();
+        	_server = CameraServer.getInstance();
+        	_server.setQuality(50);
+        	_server.startAutomaticCapture();
     	} catch (Exception ex) {
     		System.out.println(ex);
     	}
