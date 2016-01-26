@@ -37,9 +37,9 @@ public class Addresses {
 
     	//Intake
 
-    public static final int INTAKE_MOTOR = 12;
+    public static final int INTAKE_LOAD_MOTOR = 12;
 
-    public static final int INTAKE_ARM_MOTOR = 13;
+    public static final int INTAKE_ANGLE_MOTOR = 13;
 
     	//Another analog for intake position
     public static final int INTAKE_POT = 1;

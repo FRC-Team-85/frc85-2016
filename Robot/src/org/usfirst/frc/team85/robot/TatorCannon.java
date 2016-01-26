@@ -9,6 +9,11 @@ public class TatorCannon {
 	
 	private double LOADPOS;
 	private double ARMTOL;
+	
+	private double FIRERPM;
+	private double RPMTOL;
+	
+	private double LIGHT;
 
 	private Boolean firstCheck = false;
 
@@ -16,8 +21,10 @@ public class TatorCannon {
 
 	private CANTalon _outerTopMotor, _outerBottomMotor,
 					_innerTopMotor, _innerBottomMotor, _armMotor;
+	
+	private Intake _intake;
 
-	public TatorCannon(Joystick operatorStick) {
+	public TatorCannon(Joystick operatorStick, Intake intake) {
 
 
 		_operatorStick = operatorStick;
@@ -28,6 +35,8 @@ public class TatorCannon {
 		_innerBottomMotor = new CANTalon(Addresses.INNER_MOTOR_BOTTOM);
 		_armMotor = new CANTalon(Addresses.ARM_MOTOR);
 
+		_intake = intake;
+		
 		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
 		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
 		_armMotor.changeControlMode(TalonControlMode.Position);
@@ -64,13 +73,42 @@ public class TatorCannon {
         _armMotor.enableBrakeMode(false);
     }
 
-    public void run() {
+    public void run() {	//main method
         _operatorStick.getY();
         /*
+        
+        fire();
+        
         if (button) {
+        	if(_intake.loadCannon(armMove(LOADPOS))) {	//then intake is trying to load cannon w/motor
         	
+        	load possibly with timer
+        	then stop
+        	
+        	}
+        } else {
+        	move based on getY()
         }
+        
+        
          */
+    }
+    
+    private void fire() {
+    	/*
+    	if (button) {
+    		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
+    		(Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) ) {
+    			_innerTopMotor.set(LIGHT);
+    			_innerBottomMotor.set(LIGHT);
+    		} else {
+    			_outerTopMotor.set(FIRERPM);
+    			_outerBottomMotor.set(FIRERPM);
+    			_innerTopMotor.set(0.0);
+    			_innerBottomMotor.set(0.0);
+    		}
+    	}
+    	 */
     }
 
     private boolean armAtTop() {
