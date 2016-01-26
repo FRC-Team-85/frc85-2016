@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 
 public class TatorCannon {
+	
+	private double LOADPOS;
+	private double ARMTOL;
 
 	private Boolean firstCheck = false;
 
@@ -63,6 +66,11 @@ public class TatorCannon {
 
     public void run() {
         _operatorStick.getY();
+        /*
+        if (button) {
+        	
+        }
+         */
     }
 
     private boolean armAtTop() {
@@ -94,5 +102,16 @@ public class TatorCannon {
             }
         }
     }
-
+    
+    private boolean armMove(double target) {
+    	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) {
+    		return true;
+    	} else {
+    		_armMotor.set(target);
+    		return false;
+    	}
+    }
+    
+    
+    
 }
