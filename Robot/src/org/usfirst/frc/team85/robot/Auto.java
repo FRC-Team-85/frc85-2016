@@ -12,8 +12,9 @@ public class Auto {
 	
 	public Auto(TankDrive drive) {
         _drive = drive;
-        switch (obstacle) {
+        /*switch (obstacle) {
         case 0://LowBar
+            
             
             break;
         case 1://Portcullis
@@ -41,26 +42,6 @@ public class Auto {
             break;
         case 8://Rough Terrain
             
-            break;
-        
-        /* if (controller2.getRawButton(1) == true) {
-        	LowBar.AutonomousLowBar();
-		} else if (controller2.getRawButton(2) == true) {
-			Portcullis.main();
-		} else if (controller2.getRawButton(3) == true) {
-			ChevalDeFrise.main();
-		} else if (controller2.getRawButton(4) == true) {
-			Moat.main();
-		} else if (controller2.getRawButton(5) == true) {
-			Ramparts.main();
-		} else if (controller2.getRawButton(6) == true) {
-			Drawbridge.main();
-		} else if (controller2.getRawButton(7) == true) {
-			SallyPort.main();
-		} else if (controller2.getRawButton(8) == true) {
-			RockWall.main();
-		} else if (controller2.getRawButton(9) == true) {
-			RoughTerrain.main(); 
-		} */
+            break;*/
 	}
 }
