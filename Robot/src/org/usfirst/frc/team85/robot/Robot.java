@@ -68,7 +68,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	_tatorCannon.armCheck();
 
-    	_drive.drive(/*lol*/);
+    	_drive.drive();
 
     	try {
 			double area = _table.getNumber("area", 0);
