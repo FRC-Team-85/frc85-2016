@@ -1,7 +1,7 @@
 <grip:Pipeline>
   <sources>
     <grip:Camera>
-      <property name="deviceNumber" value="0"/>
+      <property name="address" value="http://10.0.85.11/mjpg/video.mjpg"/>
     </grip:Camera>
   </sources>
   <steps>
@@ -74,13 +74,13 @@
         <value>true</value>
       </grip:Input>
       <grip:Input step="3" socket="4">
-        <value>false</value>
+        <value>true</value>
       </grip:Input>
       <grip:Input step="3" socket="5">
         <value>false</value>
       </grip:Input>
       <grip:Input step="3" socket="6">
-        <value>false</value>
+        <value>true</value>
       </grip:Input>
       <grip:Input step="3" socket="7">
         <value>true</value>
@@ -89,20 +89,20 @@
   </steps>
   <connections>
     <grip:Connection>
-      <grip:Output step="0" socket="0" previewed="true"/>
-      <grip:Input step="1" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output step="1" socket="0" previewed="true"/>
-      <grip:Input step="2" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
       <grip:Output source="0" socket="0" previewed="true"/>
       <grip:Input step="0" socket="0"/>
     </grip:Connection>
     <grip:Connection>
+      <grip:Output step="0" socket="0" previewed="true"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
       <grip:Output step="2" socket="0" previewed="true"/>
       <grip:Input step="3" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="1" socket="0" previewed="true"/>
+      <grip:Input step="2" socket="0"/>
     </grip:Connection>
   </connections>
   <settings>
