@@ -90,8 +90,8 @@ public class TankDrive {
     	  }
     }
 
-
-    private void setMotors(double lSpeed, double rSpeed) {
+    //public for use in auto
+    public void setMotors(double lSpeed, double rSpeed) {
     	
     	//deadbands
         lSpeed = (Math.abs(lSpeed) <= .2) ? 0.0 : lSpeed;
