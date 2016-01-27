@@ -12,13 +12,26 @@ public class Auto {
 	
 	private int obstacle /*= button.get*/;
 	
+	private int FORWARD = 0;
+	
+	private double RATE = 1; //"1" is a place holder
+	
+	public Timer _timer;
+	
+	
 	public Auto(TankDrive drive) {
         _drive = drive;
+        _timer.start();
+        _drive.setVoltageRamp(RATE);
         
         switch (obstacle) {
         case 0: //LowBar
-            
-        	//Drive(Fast)
+        	
+        	if (_timer.get() <= 15) {
+        		_drive.setMotors(FORWARD, FORWARD);
+        	} else {
+        		_drive.setBrakeMode(true);
+        	}
         	
             break;
         case 1: //Portcullis
@@ -30,15 +43,25 @@ public class Auto {
         	
             break;
         case 3: //Moat
-        
+        	
+        	if (_timer.get() <= 15) {
+        		_drive.setMotors(FORWARD, FORWARD);
+        	} else {
+        		_drive.setBrakeMode(true);
+        	}
         	
             break;
         case 4: //Ramparts
-        
         	
-            break;
+        	if (_timer.get() <= 15) {
+        		_drive.setMotors(FORWARD, FORWARD);
+        	} else {
+        		_drive.setBrakeMode(true);
+        	}
+            
+        	break;
         case 5: //Drawbridge
-           
+        	
         	
             break;
         case 6: //Sally Port
@@ -47,10 +70,20 @@ public class Auto {
             break;
         case 7: //Rock Wall
             
+        	if (_timer.get() <= 15) {
+        		_drive.setMotors(FORWARD, FORWARD);
+        	} else {
+        		_drive.setBrakeMode(true);
+        	}
         	
             break;
         case 8: //Rough Terrain
             
+        	if (_timer.get() <= 15) {
+        		_drive.setMotors(FORWARD, FORWARD);
+        	} else {
+        		_drive.setBrakeMode(true);
+        	}
         	
             break;
         }
