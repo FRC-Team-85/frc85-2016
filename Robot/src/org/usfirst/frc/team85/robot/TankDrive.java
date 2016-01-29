@@ -98,7 +98,7 @@ public class TankDrive {
         rSpeed = (Math.abs(rSpeed) <= .2) ? 0.0 : rSpeed;
 
         _masterLeftMotor.set(lSpeed);
-        _masterRightMotor.set(rSpeed);
+        _masterRightMotor.set(-rSpeed);
     }
 
 }
