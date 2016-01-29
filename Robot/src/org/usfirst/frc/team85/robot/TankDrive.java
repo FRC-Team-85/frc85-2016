@@ -74,14 +74,7 @@ public class TankDrive {
         //double turn = -0.75*Math.sin(0.5*/*Math.PI**/Math.pow(_controller.getZ(), 3));
         double turn;
         
-        if(_controller.getRawButton(4) == true) {
-        	turn = -0.75*Math.sin(0.5*Math.PI*Math.pow(_controller.getZ(), 3));
-        }
-        else {
-        	turn = -0.75*Math.sin(0.5*/*Math.PI**/Math.pow(_controller.getZ(), 3));
-    	}
-
-        if(_controller.getRawButton(5) == true) {
+        if(_controller.getRawButton(7) == true) {
         	turn = -0.75*Math.sin(0.5*Math.PI*Math.pow(_controller.getZ(), 3));
         }
         else {
