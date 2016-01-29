@@ -71,7 +71,7 @@ public class TankDrive {
 
     public void drive() {
         double thrust = _controller.getY();
-        double turn = -0.75*Math.sin(0.5*Math.PI*Math.pow(_controller.getZ(), 3));
+        double turn = -0.75*Math.sin(0.5*/*Math.PI**/Math.pow(_controller.getZ(), 3));
 
         double left = thrust + turn;
         double right = thrust - turn;
