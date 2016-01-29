@@ -11,7 +11,7 @@ public class TankDrive {
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
 
     private Encoder _LeftEncoder, _RightEncoder;
-
+    
     public TankDrive(Joystick DriveController) {
         _controller = DriveController;
 
@@ -42,7 +42,7 @@ public class TankDrive {
         _RightEncoder = new Encoder(Addresses.RIGHT_ENCODER_CH1,
                     Addresses.RIGHT_ENCODER_CH2);
         
-        setVoltageRamp(1.0);
+        setVoltageRamp(0.5);
     }
 
 	public void setVoltageRamp(double rate) {

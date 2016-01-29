@@ -16,18 +16,17 @@ public class Auto {
 	
 	private double RATE = 1; //"1" is a place holder
 	
-	public Timer _timer;
-	
+	private double _driveQuadEncoderPos;
 	
 	public Auto(TankDrive drive) {
         _drive = drive;
-        _timer.start();
         _drive.setVoltageRamp(RATE);
+        _driveQuadEncoderPos = _talons[1].getEncPosition();
         
         switch (obstacle) {
         case 0: //LowBar
         	
-        	if (_timer.get() <= 15) {
+        	if (_driveQuadEncoderPos <= 3000) {
         		_drive.setMotors(FORWARD, FORWARD);
         	} else {
         		_drive.setBrakeMode(true);
@@ -43,21 +42,11 @@ public class Auto {
         	
             break;
         case 3: //Moat
-        	
-        	if (_timer.get() <= 15) {
-        		_drive.setMotors(FORWARD, FORWARD);
-        	} else {
-        		_drive.setBrakeMode(true);
-        	}
+
         	
             break;
         case 4: //Ramparts
-        	
-        	if (_timer.get() <= 15) {
-        		_drive.setMotors(FORWARD, FORWARD);
-        	} else {
-        		_drive.setBrakeMode(true);
-        	}
+    
             
         	break;
         case 5: //Drawbridge
@@ -70,20 +59,10 @@ public class Auto {
             break;
         case 7: //Rock Wall
             
-        	if (_timer.get() <= 15) {
-        		_drive.setMotors(FORWARD, FORWARD);
-        	} else {
-        		_drive.setBrakeMode(true);
-        	}
         	
             break;
         case 8: //Rough Terrain
             
-        	if (_timer.get() <= 15) {
-        		_drive.setMotors(FORWARD, FORWARD);
-        	} else {
-        		_drive.setBrakeMode(true);
-        	}
         	
             break;
         }
