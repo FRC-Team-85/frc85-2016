@@ -21,7 +21,7 @@ public class Auto {
 	public Auto(TankDrive drive) {
         _drive = drive;
         _drive.setVoltageRamp(RATE);
-        _driveQuadEncoderPos = _talons[1].getEncPosition();
+        //_driveQuadEncoderPos = _talons[1].getEncPosition();
         
         switch (obstacle) {
         case 0: //LowBar
