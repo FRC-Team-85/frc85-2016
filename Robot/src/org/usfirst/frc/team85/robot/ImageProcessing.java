@@ -6,7 +6,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ImageProcessing {
 	
-	NetworkTable _table;
+	public ImageProcessing() {
+	
+	int d; //actual distance away from target, inches
+	int w = 20; //width of target, inches
+	int f = 0; //focal length of lense on camera (temp value for now)
+	int p = 0;//number of pixels, would need to retrieve from GRIP (temp value for now)
+
+	d = (w*f) / p; //find the distance of the target based on the actual width and focal length divided by number of pixels 
+	
+	}
+	/*NetworkTable _table;
 	CameraServer _server;
 	SmartDashboard _dashboard;
 	
@@ -29,5 +39,6 @@ public class ImageProcessing {
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
-	}
+	}*/
 }
+
