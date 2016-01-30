@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team85.robot.Addresses.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -37,8 +39,8 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
     	//Sets up left controller
-        _driveStick = new Joystick(Addresses.DRIVESTICK);
-        _operatorStick = new Joystick(Addresses.OPERATORSTICK);
+        _driveStick = new Joystick(CONTROLLERS.DRIVESTICK);
+        _operatorStick = new Joystick(CONTROLLERS.OPERATORSTICK);
 
         _table = NetworkTable.getTable("GRIP/myContoursReport");
 

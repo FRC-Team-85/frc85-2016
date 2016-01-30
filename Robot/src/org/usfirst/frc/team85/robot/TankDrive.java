@@ -3,6 +3,8 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
+import org.usfirst.frc.team85.robot.Addresses.*;
+
 public class TankDrive {
 
     private Joystick _controller;
@@ -15,32 +17,32 @@ public class TankDrive {
     public TankDrive(Joystick DriveController) {
         _controller = DriveController;
 
-        _masterLeftMotor = new CANTalon(Addresses.LEFT_FRONT_MOTOR);	//MASTER LEFT
+        _masterLeftMotor = new CANTalon(DRIVE.LEFT_FRONT_MOTOR);	//MASTER LEFT
         _masterLeftMotor.enableBrakeMode(false);
 
-        _slaveLeftMotorA = new CANTalon(Addresses.LEFT_MID_MOTOR);
+        _slaveLeftMotorA = new CANTalon(DRIVE.LEFT_MID_MOTOR);
         _slaveLeftMotorA.changeControlMode(TalonControlMode.Follower);
-        _slaveLeftMotorA.set(Addresses.LEFT_FRONT_MOTOR);
+        _slaveLeftMotorA.set(DRIVE.LEFT_FRONT_MOTOR);
 
-        _slaveLeftMotorB = new CANTalon(Addresses.LEFT_BACK_MOTOR);
+        _slaveLeftMotorB = new CANTalon(DRIVE.LEFT_BACK_MOTOR);
         _slaveLeftMotorB.changeControlMode(TalonControlMode.Follower);
-        _slaveLeftMotorB.set(Addresses.LEFT_FRONT_MOTOR);
+        _slaveLeftMotorB.set(DRIVE.LEFT_FRONT_MOTOR);
 
-        _masterRightMotor = new CANTalon(Addresses.RIGHT_FRONT_MOTOR);	//MASTER RIGHT
+        _masterRightMotor = new CANTalon(DRIVE.RIGHT_FRONT_MOTOR);	//MASTER RIGHT
         _masterRightMotor.enableBrakeMode(false);
 
-        _slaveRightMotorA = new CANTalon(Addresses.RIGHT_MID_MOTOR);
+        _slaveRightMotorA = new CANTalon(DRIVE.RIGHT_MID_MOTOR);
         _slaveRightMotorA.changeControlMode(TalonControlMode.Follower);
-        _slaveRightMotorA.set(Addresses.RIGHT_FRONT_MOTOR);
+        _slaveRightMotorA.set(DRIVE.RIGHT_FRONT_MOTOR);
 
-        _slaveRightMotorB = new CANTalon(Addresses.RIGHT_BACK_MOTOR);
+        _slaveRightMotorB = new CANTalon(DRIVE.RIGHT_BACK_MOTOR);
         _slaveRightMotorB.changeControlMode(TalonControlMode.Follower);
-        _slaveRightMotorB.set(Addresses.RIGHT_FRONT_MOTOR);
+        _slaveRightMotorB.set(DRIVE.RIGHT_FRONT_MOTOR);
 
-        _LeftEncoder = new Encoder(Addresses.LEFT_ENCODER_CH1,
-                    Addresses.LEFT_ENCODER_CH2);
-        _RightEncoder = new Encoder(Addresses.RIGHT_ENCODER_CH1,
-                    Addresses.RIGHT_ENCODER_CH2);
+        _LeftEncoder = new Encoder(DRIVE.LEFT_ENCODER_CH1,
+                    DRIVE.LEFT_ENCODER_CH2);
+        _RightEncoder = new Encoder(DRIVE.RIGHT_ENCODER_CH1,
+                    DRIVE.RIGHT_ENCODER_CH2);
 
         setVoltageRamp(0.5);
     }

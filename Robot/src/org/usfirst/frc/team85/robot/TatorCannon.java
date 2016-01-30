@@ -1,6 +1,8 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+
+import org.usfirst.frc.team85.robot.Addresses.*;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
@@ -27,11 +29,11 @@ public class TatorCannon {
 
 		_operatorStick = operatorStick;
 
-		_outerTopMotor = new CANTalon(Addresses.OUTER_MOTOR_TOP);
-		_outerBottomMotor = new CANTalon(Addresses.OUTER_MOTOR_BOTTOM);
-		_innerTopMotor = new CANTalon(Addresses.INNER_MOTOR_TOP);
-		_innerBottomMotor = new CANTalon(Addresses.INNER_MOTOR_BOTTOM);
-		_armMotor = new CANTalon(Addresses.ARM_MOTOR);
+		_outerTopMotor = new CANTalon(CANNON.OUTER_MOTOR_TOP);
+		_outerBottomMotor = new CANTalon(CANNON.OUTER_MOTOR_BOTTOM);
+		_innerTopMotor = new CANTalon(CANNON.INNER_MOTOR_TOP);
+		_innerBottomMotor = new CANTalon(CANNON.INNER_MOTOR_BOTTOM);
+		_armMotor = new CANTalon(CANNON.ARM_MOTOR);
 
 		_intake = intake;
 
