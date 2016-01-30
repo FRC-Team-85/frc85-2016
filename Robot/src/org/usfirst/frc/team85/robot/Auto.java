@@ -6,15 +6,15 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class Auto {
 	private TankDrive _drive;
-	
-	/*private JoystickButton _controller2;
-		_controller2 = Button; */
-	
+/*
+	private JoystickButton _controller2;
+		_controller2 = Button; 
+*/
 	private int obstacle /*= button.get*/;
 	
 	private int FORWARD = 0;
 	
-	private double RATE = 1; //"1" is a place holder
+	private double RATE = 1; //1 is a place holder
 	
 	private double _driveQuadEncoderPos;
 	
@@ -67,4 +67,5 @@ public class Auto {
             break;
         }
 	}
+	
 }

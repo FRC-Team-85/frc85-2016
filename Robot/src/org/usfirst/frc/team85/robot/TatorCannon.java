@@ -25,7 +25,6 @@ public class TatorCannon {
 
 	public TatorCannon(Joystick operatorStick, Intake intake) {
 
-
 		_operatorStick = operatorStick;
 
 		_outerTopMotor = new CANTalon(Addresses.OUTER_MOTOR_TOP);
@@ -74,27 +73,27 @@ public class TatorCannon {
 
     public void run() {	//main method
         _operatorStick.getY();
-        /*
-        
+/*       
         fire();
         
         if (button) {
-        	if(_intake.loadCannon(armMove(LOADPOS))) {	//then intake is trying to load cannon w/motor
+        	if (_intake.loadCannon(armMove(LOADPOS))) {	//then intake is trying to load cannon w/motor
         	
         	load possibly with timer
         	then stop
         	
         	}
+        
         } else {
         	move based on getY()
         }
+*/        
         
         
-         */
     }
     
     private void fire() {
-    	/*
+ /*   	
     	if (button) {
     		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
     		(Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) ) {
@@ -106,8 +105,7 @@ public class TatorCannon {
     			_innerTopMotor.set(0.0);
     			_innerBottomMotor.set(0.0);
     		}
-    	}
-    	 */
+    	}  	*/
     }
 
     private boolean armAtTop() {
@@ -148,7 +146,5 @@ public class TatorCannon {
     		return false;
     	}
     }
-    
-    
     
 }

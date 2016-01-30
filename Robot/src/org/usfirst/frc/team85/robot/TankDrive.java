@@ -71,14 +71,12 @@ public class TankDrive {
 
     public void drive() {
         double thrust = _controller.getY();
-        //double turn = -0.75*Math.sin(0.5*/*Math.PI**/Math.pow(_controller.getZ(), 3));
         double turn;
         
-        if(_controller.getRawButton(7) && _controller.getRawButton(8) == true) {
+        if (_controller.getRawButton(7) && _controller.getRawButton(8) == true) {
         	turn = -0.75*Math.sin(0.5*3.14*Math.pow(_controller.getZ(), 3));
-        }
-        else {
-        	turn = -0.75*Math.sin(0.5*/*Math.PI**/Math.pow(_controller.getZ(), 3));
+        } else {
+        	turn = -0.75*Math.sin(0.5*Math.pow(_controller.getZ(), 3));
     	}
         
         double left = thrust + turn;
@@ -108,5 +106,5 @@ public class TankDrive {
         _masterLeftMotor.set(lSpeed);
         _masterRightMotor.set(-rSpeed);
     }
-
+    
 }

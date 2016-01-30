@@ -68,6 +68,7 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
     	_tatorCannon.armCheck();
+    	//add the getpos for quadRatureEncoder here? -Matthew
     }
 
     public void teleopInit() {
@@ -85,7 +86,6 @@ public class Robot extends IterativeRobot {
     	_tatorCannon.run();
 
     	_imageProcessing.process();
-    	
     }
 
 }

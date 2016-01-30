@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj.*;
 public class Addresses {
 
         //Controllers
-    public static final int DRIVESTICK = 0;
+    
+	public static final int DRIVESTICK = 0;
 
     public static final int OPERATORSTICK = 1;
 
@@ -42,6 +43,7 @@ public class Addresses {
     public static final int INTAKE_ANGLE_MOTOR = 13;
 
     	//Another analog for intake position
+    
     public static final int INTAKE_POT = 1;
 
 }
