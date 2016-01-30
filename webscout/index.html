@@ -1,0 +1,20 @@
+<html manifest="webApp.manifest">
+<head>
+    <title>Proof of Concept</title>
+    <script>
+        function set() {
+            localStorage.setItem(document.getElementById("k").value, document.getElementById("v").value);
+        }
+        function get() {
+            document.getElementById("v").value = localStorage.getItem(document.getElementById("k").value);
+        }
+    </script>
+</head>
+<body>
+    Screw Formatting<br>
+    Key: <input id="k" type="text" name="key"><br>
+    Value: <input id="v" type="text" name="value"><br>
+    <button type="button" id="set" onclick="set();">Set</button>
+    <button type="button" id="get" onclick="get();">Get</button>
+</body>
+</html>
