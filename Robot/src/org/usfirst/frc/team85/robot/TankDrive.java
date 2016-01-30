@@ -72,11 +72,15 @@ public class TankDrive {
     public void drive() {
         double thrust = _controller.getY();
         double turn;
+        double turnControl = _controller.getZ();
+        double turnControlCubed = turnControl * turnControl * turnControl; //Faster than Math.pow
+                                                                           //Could be made faster
 
         if (_controller.getRawButton(7) && _controller.getRawButton(8)) {
-        	turn = -0.75*Math.sin(0.5*3.14*Math.pow(_controller.getZ(), 3));
+        	turn = -.375 * turnControlCubed; // -0.375x^3
         } else {
-        	turn = -0.75*Math.sin(0.5*Math.pow(_controller.getZ(), 3));
+        	turn = -1.15 * turnControlCubed +
+                0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified (-1.15x^3+0.38x^9)
     	}
 
         double left = thrust + turn;
