@@ -49,20 +49,20 @@ public class TatorCannon {
 		_outerBottomMotor.reverseSensor(true);
 		_armMotor.reverseSensor(true);
 /*
-		_outerTopMotor.setP(Constants.shooterP);
-		_outerTopMotor.setI(Constants.shooterI);
-		_outerTopMotor.setD(Constants.shooterD);
-		_outerTopMotor.setF(Constants.shooterF);
+		_outerTopMotor.setP(Constants.CANNON.P);
+		_outerTopMotor.setI(Constants.CANNON.I);
+		_outerTopMotor.setD(Constants.CANNON.D);
+		_outerTopMotor.setF(Constants.CANNON.F);
 
-		_outerBottomMotor.setP(Constants.shooterP);
-		_outerBottomMotor.setI(Constants.shooterI);
-		_outerBottomMotor.setD(Constants.shooterD);
-		_outerBottomMotor.setF(Constants.shooterF);
+		_outerBottomMotor.setP(Constants.CANNON.P);
+		_outerBottomMotor.setI(Constants.CANNON.I);
+		_outerBottomMotor.setD(Constants.CANNON.D);
+		_outerBottomMotor.setF(Constants.CANNON.F);
 
-		_armMotor.setP(Constants.armP);
-		_armMotor.setI(Constants.armI);
-		_armMotor.setD(Constants.armD);
-		_armMotor.setF(Constants.armF);
+		_armMotor.setP(Constants.ARM_CANNON.P);
+		_armMotor.setI(Constants.ARM_CANNON.I);
+		_armMotor.setD(Constants.ARM_CANNON.D);
+		_armMotor.setF(Constants.ARM_CANNON.F);
 */
 		_armMotor.enableLimitSwitch(true, true);
 

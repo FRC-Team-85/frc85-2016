@@ -10,8 +10,8 @@ public class Addresses {
 
 		public static final int OPERATORSTICK = 1;
 	}
-    
-	
+
+
 
         //Drive
 	public class DRIVE {
@@ -43,13 +43,9 @@ public class Addresses {
 
     	//Intake
 	public class INTAKE {
-		public static final int INTAKE_LOAD_MOTOR = 12;
+		public static final int LOAD_MOTOR = 12;
 
-		public static final int INTAKE_ANGLE_MOTOR = 13;
-
-    	//Another analog for intake position
-    
-		public static final int INTAKE_POT = 1;
+		public static final int ANGLE_MOTOR = 13;
 	}
 
 }
