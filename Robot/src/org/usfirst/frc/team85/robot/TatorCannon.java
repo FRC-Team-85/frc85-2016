@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class TatorCannon {
-	
+
 	private double LOADPOS;
 	private double ARMTOL;
-	
+
 	private double FIRERPM;
 	private double RPMTOL;
-	
+
 	private double LIGHT;
 
 	private Boolean firstCheck = false;
@@ -20,7 +20,7 @@ public class TatorCannon {
 
 	private CANTalon _outerTopMotor, _outerBottomMotor,
 					_innerTopMotor, _innerBottomMotor, _armMotor;
-	
+
 	private Intake _intake;
 
 	public TatorCannon(Joystick operatorStick, Intake intake) {
@@ -34,7 +34,7 @@ public class TatorCannon {
 		_armMotor = new CANTalon(Addresses.ARM_MOTOR);
 
 		_intake = intake;
-		
+
 		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
 		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
 		_armMotor.changeControlMode(TalonControlMode.Position);
@@ -73,27 +73,27 @@ public class TatorCannon {
 
     public void run() {	//main method
         _operatorStick.getY();
-/*       
+/*
         fire();
-        
+
         if (button) {
         	if (_intake.loadCannon(armMove(LOADPOS))) {	//then intake is trying to load cannon w/motor
-        	
+
         	load possibly with timer
         	then stop
-        	
+
         	}
-        
+
         } else {
         	move based on getY()
         }
-*/        
-        
-        
+*/
+
+
     }
-    
+
     private void fire() {
- /*   	
+ /*
     	if (button) {
     		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
     		(Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) ) {
@@ -137,14 +137,14 @@ public class TatorCannon {
             }
         }
     }
-    
+
     private boolean armMove(double target) {
-    	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) {
-    		return true;
+    	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
+    		return true;									 //this entire if-block is probably unnecessary
     	} else {
     		_armMotor.set(target);
     		return false;
     	}
     }
-    
+
 }

@@ -11,7 +11,7 @@ public class TankDrive {
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
 
     private Encoder _LeftEncoder, _RightEncoder;
-    
+
     public TankDrive(Joystick DriveController) {
         _controller = DriveController;
 
@@ -41,7 +41,7 @@ public class TankDrive {
                     Addresses.LEFT_ENCODER_CH2);
         _RightEncoder = new Encoder(Addresses.RIGHT_ENCODER_CH1,
                     Addresses.RIGHT_ENCODER_CH2);
-        
+
         setVoltageRamp(0.5);
     }
 
@@ -72,19 +72,19 @@ public class TankDrive {
     public void drive() {
         double thrust = _controller.getY();
         double turn;
-        
-        if (_controller.getRawButton(7) && _controller.getRawButton(8) == true) {
+
+        if (_controller.getRawButton(7) && _controller.getRawButton(8)) {
         	turn = -0.75*Math.sin(0.5*3.14*Math.pow(_controller.getZ(), 3));
         } else {
         	turn = -0.75*Math.sin(0.5*Math.pow(_controller.getZ(), 3));
     	}
-        
+
         double left = thrust + turn;
         double right = thrust - turn;
-    	
+
         setMotors((left + skim(right)), (right + skim(left)));
     }
-    
+
     double skim(double v) {
 
     	  if (v > 1.0) {
@@ -98,13 +98,13 @@ public class TankDrive {
 
     //public for use in auto
     public void setMotors(double lSpeed, double rSpeed) {
-    	
+
     	//deadbands
-        lSpeed = (Math.abs(lSpeed) <= .2) ? 0.0 : lSpeed;
-        rSpeed = (Math.abs(rSpeed) <= .2) ? 0.0 : rSpeed;
+        lSpeed = (Math.abs(lSpeed) <= 0.2) ? 0.0 : lSpeed;
+        rSpeed = (Math.abs(rSpeed) <= 0.2) ? 0.0 : rSpeed;
 
         _masterLeftMotor.set(lSpeed);
         _masterRightMotor.set(-rSpeed);
     }
-    
+
 }
