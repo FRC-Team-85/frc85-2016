@@ -82,11 +82,11 @@ public class TankDrive {
         double left = thrust + turn;
         double right = thrust - turn;
 
-        setMotors((left + skim(right)), (right + skim(left)));
+        setMotors(left + skim(right), right + skim(left));
     }
 
-    double skim(double v) {
-
+    double skim(double v) { // Sets adjustments to the right side if the left
+                            // motor is at maximum and vice versa
     	  if (v > 1.0) {
     		  return -(v - 1.0);
     	  } else if (v < -1.0) {
