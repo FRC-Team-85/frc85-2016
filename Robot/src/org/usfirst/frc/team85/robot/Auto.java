@@ -15,22 +15,24 @@ public class Auto {
 	private int FORWARD = 0;
 
 	private double _driveQuadEncoderPos;
-
+	
+	private double target;
+	
 	public Auto(TankDrive drive) {
         _drive = drive;
         //_driveQuadEncoderPos = _talons[1].getEncPosition();
 		//Note: if we are not using the PID loops for driving, we can
 		//connect the encoder directly to the roboRIO
-
         switch (obstacle) {
         case 0: //LowBar
-
+/*
         	if (_driveQuadEncoderPos <= 3000) {
         		_drive.setMotors(FORWARD, FORWARD);
         	} else {
         		_drive.setBrakeMode(true);
         	}
-
+*/
+        	target = 1000;
             break;
         case 1: //Portcullis
 
@@ -67,4 +69,15 @@ public class Auto {
         }
 	}
 
+	public void resetAutoDriveDist() {
+		
+	}
+	
+	public boolean autoDrive(double target) {
+		if (target >= distance) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

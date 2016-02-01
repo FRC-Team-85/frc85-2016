@@ -74,30 +74,23 @@ public class TatorCannon {
     }
 
     public void run() {	//main method
-        _operatorStick.getY();
-/*
+
         fire();
 
-        if (button) {
-        	if (_intake.loadCannon(armMove(LOADPOS))) {	//then intake is trying to load cannon w/motor
-
-        	load possibly with timer
-        	then stop
-
-        	}
-
-        } else {
-        	move based on getY()
+        if(_intake.run(readyToLoad())) {
+        	//load for timer
         }
-*/
 
-
+    }
+    
+    private boolean readyToLoad(){
+    	return (Math.abs(_armMotor.get() - LOADPOS) <= ARMTOL);
     }
 
     private void fire() {
- /*
-    	if (button) {
-    		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
+ 
+    	if (_operatorStick.getRawButton(1)) { //Uses button X
+/*    		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
     		(Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) ) {
     			_innerTopMotor.set(LIGHT);
     			_innerBottomMotor.set(LIGHT);
@@ -106,8 +99,8 @@ public class TatorCannon {
     			_outerBottomMotor.set(FIRERPM);
     			_innerTopMotor.set(0.0);
     			_innerBottomMotor.set(0.0);
-    		}
-    	}  	*/
+    		}	*/
+    	}  
     }
 
     private boolean armAtTop() {
