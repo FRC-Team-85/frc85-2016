@@ -73,10 +73,9 @@ public class Intake {
 	private boolean intakeMove(double target) {
 		if (Math.abs(angleMotor.get()-target) <= INTAKETOL) {
 			return true;
-		} else {
-			angleMotor.set(target);
-			return false;
 		}
+		angleMotor.set(target);
+		return false;
 	}
-	 
+	
 }

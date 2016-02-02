@@ -94,12 +94,11 @@ public class TatorCannon {
     		(Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) ) {
     			_innerTopMotor.set(LIGHT);
     			_innerBottomMotor.set(LIGHT);
-    		} else {
-    			_outerTopMotor.set(FIRERPM);
-    			_outerBottomMotor.set(FIRERPM);
-    			_innerTopMotor.set(0.0);
-    			_innerBottomMotor.set(0.0);
-    		}	*/
+    		}
+    		_outerTopMotor.set(FIRERPM);
+    		_outerBottomMotor.set(FIRERPM);
+    		_innerTopMotor.set(0.0);
+    		_innerBottomMotor.set(0.0);	*/
     	}  
     }
 
@@ -122,24 +121,22 @@ public class TatorCannon {
             _armMotor.enableReverseSoftLimit(false);
             if (!armAtBottom()) {
                 _armMotor.set (_armMotor.get() - 0.01);
-            } else {
-                firstCheck = true;
-                _armMotor.setPosition(0);
-                _armMotor.enableForwardSoftLimit(true);
-                _armMotor.setForwardSoftLimit(0.25); //Tuning required (rotations (probably))
-                _armMotor.enableReverseSoftLimit(true);
-                _armMotor.setReverseSoftLimit(0.0); //Rotations (probably), but still 0 even if it isn't
             }
+            firstCheck = true;
+            _armMotor.setPosition(0);
+            _armMotor.enableForwardSoftLimit(true);
+            _armMotor.setForwardSoftLimit(0.25); //Tuning required (rotations (probably))
+            _armMotor.enableReverseSoftLimit(true);
+            _armMotor.setReverseSoftLimit(0.0); //Rotations (probably), but still 0 even if it isn't
         }
     }
 
     private boolean armMove(double target) {
     	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
     		return true;									 //this entire if-block is probably unnecessary
-    	} else {
+    		}
     		_armMotor.set(target);
     		return false;
     	}
-    }
 
 }

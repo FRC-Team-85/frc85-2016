@@ -28,12 +28,12 @@ public class Auto {
 /*
         	if (_driveQuadEncoderPos <= 3000) {
         		_drive.setMotors(FORWARD, FORWARD);
-        	} else {
-        		_drive.setBrakeMode(true);
         	}
+        	_drive.setBrakeMode(true);
 */
         	target = 1000;
-            break;
+            
+        	break;
         case 1: //Portcullis
 
 
@@ -76,9 +76,8 @@ public class Auto {
 	public boolean autoDrive(double target) {
 		if (target >= distance) {
 			return true;
-		} else {
-			return false;
-		}
+		} 
+		return false;
 	}
 	
 }
