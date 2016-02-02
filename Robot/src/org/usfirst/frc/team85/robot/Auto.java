@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class Auto {
+	
 	private TankDrive _drive;
 /*
 	private JoystickButton _controller2;

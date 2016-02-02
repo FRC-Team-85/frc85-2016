@@ -16,15 +16,12 @@ public class ImageProcessing {
 	int pixelToAngle = fov/320; //each pixel equals X degrees
 	
 	public ImageProcessing(NetworkTable table, CameraServer server, SmartDashboard dashboard) {
-		
 		_table = table;
 		_server = server;
 		_dashboard = dashboard;
-		
 	}
 	
 	public void process() {
-
     	try {
 			double area = _table.getNumber("area", 0);
 			contourFound = (area>0) ? true : false;
@@ -41,21 +38,16 @@ public class ImageProcessing {
 	}
 	
 	public void center() {
-		
 		if (contourFound /*&& button pressed*/) {
-		
-			if(centerX < 10) {
+			if (centerX < 10) {
 				//move robot (to the right?) until centerX is less than 10  
-			}
-		
-			else if(centerX > -10) {
+			} else if (centerX > -10) {
 				//move robot (to the left?) until centerX is more than -10
 			}
-		
-			if(centerX > -10 && centerX < 10 /*and if the ball is in possession*/) {
+			
+			if (centerX > -10 && centerX < 10 /*and if the ball is in possession*/) {
 				//Shoot the ball
 			}
-		
 		}
 	}
 

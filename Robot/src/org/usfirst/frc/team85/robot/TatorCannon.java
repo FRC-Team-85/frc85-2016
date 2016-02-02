@@ -88,7 +88,6 @@ public class TatorCannon {
     }
 
     private void fire() {
- 
     	if (_operatorStick.getRawButton(1)) { //Uses button X
 /*    		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
     		(Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) ) {
