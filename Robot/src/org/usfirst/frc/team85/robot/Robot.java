@@ -26,15 +26,15 @@ public class Robot extends IterativeRobot {
     private TatorCannon _tatorCannon;
 
     private NetworkTable _table;
-    
+
     private CameraServer _server;
-    
+
     private SmartDashboard _dashboard;
-    
+
     ImageProcessing _imageProcessing;
-    
+
     private AnalogInput a;
-    
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -53,14 +53,14 @@ public class Robot extends IterativeRobot {
     	} catch (Exception ex) {
     		System.out.println(ex);
     	}
-        
+
         _dashboard = new SmartDashboard();
-        
+
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick, _intake);
         _imageProcessing = new ImageProcessing(_table, _server, _dashboard);
-        
+
         a = new AnalogInput(0);
     }
 
@@ -91,12 +91,12 @@ public class Robot extends IterativeRobot {
     	_drive.drive();
     	_tatorCannon.run();
 
-    	_imageProcessing.process();
+    	//_imageProcessing.process();
 
 
     	SmartDashboard.putNumber("Value: ", a.getValue());
     	SmartDashboard.putNumber("Voltage: ", a.getVoltage());
-    	
+
     	System.out.println("Value: " + a.getValue());
     	System.out.println("Voltage: " + a.getVoltage());
     	System.out.println();
