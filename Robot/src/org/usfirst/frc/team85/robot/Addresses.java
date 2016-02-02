@@ -11,8 +11,6 @@ public class Addresses {
 		public static final int OPERATORSTICK = 1;
 	}
 
-
-
         //Drive
 	public class DRIVE {
 		public static final int LEFT_FRONT_MOTOR = 1;

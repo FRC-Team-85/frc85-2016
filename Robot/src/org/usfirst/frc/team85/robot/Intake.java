@@ -40,7 +40,6 @@ public class Intake {
 
 		angleMotor.enableBrakeMode(true);
 		loadMotor.enableBrakeMode(true); // Or not?
-		
 	}
 
 	public boolean run(boolean cannonReady) {
