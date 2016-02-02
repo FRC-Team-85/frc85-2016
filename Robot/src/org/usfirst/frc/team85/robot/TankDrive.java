@@ -3,6 +3,8 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
+import org.usfirst.frc.team85.robot.Addresses.*;
+
 public class TankDrive {
 
     private Joystick _controller;
@@ -15,34 +17,34 @@ public class TankDrive {
     public TankDrive(Joystick DriveController) {
         _controller = DriveController;
 
-        _masterLeftMotor = new CANTalon(Addresses.LEFT_FRONT_MOTOR);	//MASTER LEFT
+        _masterLeftMotor = new CANTalon(DRIVE.LEFT_FRONT_MOTOR);	//MASTER LEFT
         _masterLeftMotor.enableBrakeMode(false);
 
-        _slaveLeftMotorA = new CANTalon(Addresses.LEFT_MID_MOTOR);
+        _slaveLeftMotorA = new CANTalon(DRIVE.LEFT_MID_MOTOR);
         _slaveLeftMotorA.changeControlMode(TalonControlMode.Follower);
-        _slaveLeftMotorA.set(Addresses.LEFT_FRONT_MOTOR);
+        _slaveLeftMotorA.set(DRIVE.LEFT_FRONT_MOTOR);
 
-        _slaveLeftMotorB = new CANTalon(Addresses.LEFT_BACK_MOTOR);
+        _slaveLeftMotorB = new CANTalon(DRIVE.LEFT_BACK_MOTOR);
         _slaveLeftMotorB.changeControlMode(TalonControlMode.Follower);
-        _slaveLeftMotorB.set(Addresses.LEFT_FRONT_MOTOR);
+        _slaveLeftMotorB.set(DRIVE.LEFT_FRONT_MOTOR);
 
-        _masterRightMotor = new CANTalon(Addresses.RIGHT_FRONT_MOTOR);	//MASTER RIGHT
+        _masterRightMotor = new CANTalon(DRIVE.RIGHT_FRONT_MOTOR);	//MASTER RIGHT
         _masterRightMotor.enableBrakeMode(false);
 
-        _slaveRightMotorA = new CANTalon(Addresses.RIGHT_MID_MOTOR);
+        _slaveRightMotorA = new CANTalon(DRIVE.RIGHT_MID_MOTOR);
         _slaveRightMotorA.changeControlMode(TalonControlMode.Follower);
-        _slaveRightMotorA.set(Addresses.RIGHT_FRONT_MOTOR);
+        _slaveRightMotorA.set(DRIVE.RIGHT_FRONT_MOTOR);
 
-        _slaveRightMotorB = new CANTalon(Addresses.RIGHT_BACK_MOTOR);
+        _slaveRightMotorB = new CANTalon(DRIVE.RIGHT_BACK_MOTOR);
         _slaveRightMotorB.changeControlMode(TalonControlMode.Follower);
-        _slaveRightMotorB.set(Addresses.RIGHT_FRONT_MOTOR);
+        _slaveRightMotorB.set(DRIVE.RIGHT_FRONT_MOTOR);
 
-        _LeftEncoder = new Encoder(Addresses.LEFT_ENCODER_CH1,
-                    Addresses.LEFT_ENCODER_CH2);
-        _RightEncoder = new Encoder(Addresses.RIGHT_ENCODER_CH1,
-                    Addresses.RIGHT_ENCODER_CH2);
-        
-        setVoltageRamp(1.0);
+        _LeftEncoder = new Encoder(DRIVE.LEFT_ENCODER_CH1,
+                    DRIVE.LEFT_ENCODER_CH2);
+        _RightEncoder = new Encoder(DRIVE.RIGHT_ENCODER_CH1,
+                    DRIVE.RIGHT_ENCODER_CH2);
+
+        setVoltageRamp(0.5);
     }
 
 	public void setVoltageRamp(double rate) {
@@ -71,16 +73,26 @@ public class TankDrive {
 
     public void drive() {
         double thrust = _controller.getY();
-        double turn = -0.75*Math.sin(0.5*Math.PI*Math.pow(_controller.getZ(), 3));
+        double turn;
+        double turnControl = _controller.getZ();
+        double turnControlCubed = turnControl * turnControl * turnControl; //Faster than Math.pow
+                                                                           //Could be made faster
+
+        if (_controller.getRawButton(7) && _controller.getRawButton(8)) {
+        	turn = -.375 * turnControlCubed; // -0.375x^3
+        } else {
+        	turn = -1.15 * turnControlCubed +
+                0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified (-1.15x^3+0.38x^9)
+    	}
 
         double left = thrust + turn;
         double right = thrust - turn;
-    	
-        setMotors((left + skim(right)), (right + skim(left)));
-    }
-    
-    double skim(double v) {
 
+        setMotors(left + skim(right), right + skim(left));
+    }
+
+    double skim(double v) { // Sets adjustments to the right side if the left
+                            // motor is at maximum and vice versa
     	  if (v > 1.0) {
     		  return -(v - 1.0);
     	  } else if (v < -1.0) {
@@ -92,13 +104,13 @@ public class TankDrive {
 
     //public for use in auto
     public void setMotors(double lSpeed, double rSpeed) {
-    	
+
     	//deadbands
-        lSpeed = (Math.abs(lSpeed) <= .2) ? 0.0 : lSpeed;
-        rSpeed = (Math.abs(rSpeed) <= .2) ? 0.0 : rSpeed;
+        lSpeed = (Math.abs(lSpeed) <= 0.2) ? 0.0 : lSpeed;
+        rSpeed = (Math.abs(rSpeed) <= 0.2) ? 0.0 : rSpeed;
 
         _masterLeftMotor.set(lSpeed);
-        _masterRightMotor.set(rSpeed);
+        _masterRightMotor.set(-rSpeed);
     }
 
 }

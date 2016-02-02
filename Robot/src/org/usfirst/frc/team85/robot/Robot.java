@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team85.robot.Addresses.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -39,8 +41,8 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
     	//Sets up left controller
-        _driveStick = new Joystick(Addresses.DRIVESTICK);
-        _operatorStick = new Joystick(Addresses.OPERATORSTICK);
+        _driveStick = new Joystick(CONTROLLERS.DRIVESTICK);
+        _operatorStick = new Joystick(CONTROLLERS.OPERATORSTICK);
 
         _table = NetworkTable.getTable("GRIP/myContoursReport");
 
@@ -55,7 +57,7 @@ public class Robot extends IterativeRobot {
         _dashboard = new SmartDashboard();
         
         _drive = new TankDrive(_driveStick);
-        _intake = new Intake();
+        _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick, _intake);
         _imageProcessing = new ImageProcessing(_table, _server, _dashboard);
         
@@ -72,6 +74,7 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
     	_tatorCannon.armCheck();
+    	//add the getpos for quadRatureEncoder here? -Matthew
     }
 
     public void teleopInit() {
@@ -90,12 +93,14 @@ public class Robot extends IterativeRobot {
 
     	_imageProcessing.process();
 
+
     	SmartDashboard.putNumber("Value: ", a.getValue());
     	SmartDashboard.putNumber("Voltage: ", a.getVoltage());
     	
     	System.out.println("Value: " + a.getValue());
     	System.out.println("Voltage: " + a.getVoltage());
     	System.out.println();
+
     }
 
 }

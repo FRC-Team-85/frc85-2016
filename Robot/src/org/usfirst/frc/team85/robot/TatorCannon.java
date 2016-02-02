@@ -1,18 +1,19 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+
+import org.usfirst.frc.team85.robot.Addresses.*;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
-import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 
 public class TatorCannon {
-	
+
 	private double LOADPOS;
 	private double ARMTOL;
-	
+
 	private double FIRERPM;
 	private double RPMTOL;
-	
+
 	private double LIGHT;
 
 	private Boolean firstCheck = false;
@@ -21,22 +22,21 @@ public class TatorCannon {
 
 	private CANTalon _outerTopMotor, _outerBottomMotor,
 					_innerTopMotor, _innerBottomMotor, _armMotor;
-	
+
 	private Intake _intake;
 
 	public TatorCannon(Joystick operatorStick, Intake intake) {
 
-
 		_operatorStick = operatorStick;
 
-		_outerTopMotor = new CANTalon(Addresses.OUTER_MOTOR_TOP);
-		_outerBottomMotor = new CANTalon(Addresses.OUTER_MOTOR_BOTTOM);
-		_innerTopMotor = new CANTalon(Addresses.INNER_MOTOR_TOP);
-		_innerBottomMotor = new CANTalon(Addresses.INNER_MOTOR_BOTTOM);
-		_armMotor = new CANTalon(Addresses.ARM_MOTOR);
+		_outerTopMotor = new CANTalon(CANNON.OUTER_MOTOR_TOP);
+		_outerBottomMotor = new CANTalon(CANNON.OUTER_MOTOR_BOTTOM);
+		_innerTopMotor = new CANTalon(CANNON.INNER_MOTOR_TOP);
+		_innerBottomMotor = new CANTalon(CANNON.INNER_MOTOR_BOTTOM);
+		_armMotor = new CANTalon(CANNON.ARM_MOTOR);
 
 		_intake = intake;
-		
+
 		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
 		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
 		_armMotor.changeControlMode(TalonControlMode.Position);
@@ -49,20 +49,20 @@ public class TatorCannon {
 		_outerBottomMotor.reverseSensor(true);
 		_armMotor.reverseSensor(true);
 /*
-		_outerTopMotor.setP(Constants.shooterP);
-		_outerTopMotor.setI(Constants.shooterI);
-		_outerTopMotor.setD(Constants.shooterD);
-		_outerTopMotor.setF(Constants.shooterF);
+		_outerTopMotor.setP(Constants.CANNON.P);
+		_outerTopMotor.setI(Constants.CANNON.I);
+		_outerTopMotor.setD(Constants.CANNON.D);
+		_outerTopMotor.setF(Constants.CANNON.F);
 
-		_outerBottomMotor.setP(Constants.shooterP);
-		_outerBottomMotor.setI(Constants.shooterI);
-		_outerBottomMotor.setD(Constants.shooterD);
-		_outerBottomMotor.setF(Constants.shooterF);
+		_outerBottomMotor.setP(Constants.CANNON.P);
+		_outerBottomMotor.setI(Constants.CANNON.I);
+		_outerBottomMotor.setD(Constants.CANNON.D);
+		_outerBottomMotor.setF(Constants.CANNON.F);
 
-		_armMotor.setP(Constants.armP);
-		_armMotor.setI(Constants.armI);
-		_armMotor.setD(Constants.armD);
-		_armMotor.setF(Constants.armF);
+		_armMotor.setP(Constants.ARM_CANNON.P);
+		_armMotor.setI(Constants.ARM_CANNON.I);
+		_armMotor.setD(Constants.ARM_CANNON.D);
+		_armMotor.setF(Constants.ARM_CANNON.F);
 */
 		_armMotor.enableLimitSwitch(true, true);
 
@@ -74,41 +74,31 @@ public class TatorCannon {
     }
 
     public void run() {	//main method
-        _operatorStick.getY();
-        /*
-        
+
         fire();
-        
-        if (button) {
-        	if(_intake.loadCannon(armMove(LOADPOS))) {	//then intake is trying to load cannon w/motor
-        	
-        	load possibly with timer
-        	then stop
-        	
-        	}
-        } else {
-        	move based on getY()
+
+        if(_intake.run(readyToLoad())) {
+        	//load for timer
         }
-        
-        
-         */
+
     }
     
+    private boolean readyToLoad(){
+    	return (Math.abs(_armMotor.get() - LOADPOS) <= ARMTOL);
+    }
+
     private void fire() {
-    	/*
-    	if (button) {
-    		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
+    	if (_operatorStick.getRawButton(1)) { //Uses button X
+/*    		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
     		(Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) ) {
     			_innerTopMotor.set(LIGHT);
     			_innerBottomMotor.set(LIGHT);
-    		} else {
-    			_outerTopMotor.set(FIRERPM);
-    			_outerBottomMotor.set(FIRERPM);
-    			_innerTopMotor.set(0.0);
-    			_innerBottomMotor.set(0.0);
     		}
-    	}
-    	 */
+    		_outerTopMotor.set(FIRERPM);
+    		_outerBottomMotor.set(FIRERPM);
+    		_innerTopMotor.set(0.0);
+    		_innerBottomMotor.set(0.0);	*/
+    	}  
     }
 
     private boolean armAtTop() {
@@ -130,26 +120,22 @@ public class TatorCannon {
             _armMotor.enableReverseSoftLimit(false);
             if (!armAtBottom()) {
                 _armMotor.set (_armMotor.get() - 0.01);
-            } else {
-                firstCheck = true;
-                _armMotor.setPosition(0);
-                _armMotor.enableForwardSoftLimit(true);
-                _armMotor.setForwardSoftLimit(0.25); //Tuning required (rotations (probably))
-                _armMotor.enableReverseSoftLimit(true);
-                _armMotor.setReverseSoftLimit(0.0); //Rotations (probably), but still 0 even if it isn't
             }
+            firstCheck = true;
+            _armMotor.setPosition(0);
+            _armMotor.enableForwardSoftLimit(true);
+            _armMotor.setForwardSoftLimit(0.25); //Tuning required (rotations (probably))
+            _armMotor.enableReverseSoftLimit(true);
+            _armMotor.setReverseSoftLimit(0.0); //Rotations (probably), but still 0 even if it isn't
         }
     }
-    
+
     private boolean armMove(double target) {
-    	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) {
-    		return true;
-    	} else {
+    	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
+    		return true;									 //this entire if-block is probably unnecessary
+    		}
     		_armMotor.set(target);
     		return false;
     	}
-    }
-    
-    
-    
+
 }
