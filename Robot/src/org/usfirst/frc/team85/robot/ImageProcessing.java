@@ -6,31 +6,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ImageProcessing {
 	
-	public ImageProcessing() {
+	private NetworkTable _table;
+	private CameraServer _server;
+	private SmartDashboard _dashboard;
 	
-	int d; //actual distance away from target, inches
-	int w = 20; //width of target, inches
-	int f = 0; //focal length of lense on camera (temp value for now)
-	int p = 0;//number of pixels, would need to retrieve from GRIP (temp value for now)
-
-	d = (w*f) / p; //find the distance of the target based on the actual width and focal length divided by number of pixels 
-	
-	}
-	/*NetworkTable _table;
-	CameraServer _server;
-	SmartDashboard _dashboard;
+	private boolean contourFound;
+	private double centerX, centerY;
+	private int fov = 180;
+	int pixelToAngle = fov/320; //each pixel equals X degrees
 	
 	public ImageProcessing(NetworkTable table, CameraServer server, SmartDashboard dashboard) {
+		
 		_table = table;
 		_server = server;
 		_dashboard = dashboard;
-
+		
 	}
 	
 	public void process() {
 
     	try {
 			double area = _table.getNumber("area", 0);
+			contourFound = (area>0) ? true : false;
+			centerX = _table.getNumber("centerX", 160) - 160;
+			centerY = _table.getNumber("centerX", 120) - 120;
 			if (area>0) {
 				System.out.println("Area: " + area);
 			} else {
@@ -39,6 +38,26 @@ public class ImageProcessing {
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
-	}*/
+	}
+	
+	public void center() {
+		
+		if (contourFound /*&& button pressed*/) {
+		
+			if(centerX < 10) {
+				//move robot (to the right?) until centerX is less than 10  
+			}
+		
+			else if(centerX > -10) {
+				//move robot (to the left?) until centerX is more than -10
+			}
+		
+			if(centerX > -10 && centerX < 10 /*and if the ball is in possession*/) {
+				//Shoot the ball
+			}
+		
+		}
+	}
+
 }
 
