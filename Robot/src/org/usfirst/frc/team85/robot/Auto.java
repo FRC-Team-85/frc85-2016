@@ -75,7 +75,7 @@ public class Auto {
 	}
 	
 	public boolean autoDrive(double target) {
-		if (target >= distance) {
+		if (/*target >= distance*/true) {
 			return true;
 		} 
 		return false;
