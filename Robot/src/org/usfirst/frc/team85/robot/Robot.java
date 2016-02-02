@@ -31,6 +31,8 @@ public class Robot extends IterativeRobot {
     
     ImageProcessing _imageProcessing;
     
+    private AnalogInput a;
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -56,6 +58,8 @@ public class Robot extends IterativeRobot {
         _intake = new Intake();
         _tatorCannon = new TatorCannon(_operatorStick, _intake);
         _imageProcessing = new ImageProcessing(_table, _server, _dashboard);
+        
+        a = new AnalogInput(0);
     }
 
     public void autonomousInit() {
@@ -85,7 +89,13 @@ public class Robot extends IterativeRobot {
     	_tatorCannon.run();
 
     	_imageProcessing.process();
+
+    	SmartDashboard.putNumber("Value: ", a.getValue());
+    	SmartDashboard.putNumber("Voltage: ", a.getVoltage());
     	
+    	System.out.println("Value: " + a.getValue());
+    	System.out.println("Voltage: " + a.getVoltage());
+    	System.out.println();
     }
 
 }
