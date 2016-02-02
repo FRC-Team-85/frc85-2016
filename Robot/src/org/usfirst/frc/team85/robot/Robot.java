@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
-        //_tatorCannon = new TatorCannon(_operatorStick, _intake);
+        _tatorCannon = new TatorCannon(_operatorStick, _intake);
         _imageProcessing = new ImageProcessing(_table, _server, _dashboard);
 
         a = new AnalogInput(0);
@@ -88,10 +88,10 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	_tatorCannon.armCheck();
+    	//_tatorCannon.armCheck();
 
     	_drive.drive();
-    	_tatorCannon.run();
+    	//_tatorCannon.run();
 
     	//_imageProcessing.process();
     	
