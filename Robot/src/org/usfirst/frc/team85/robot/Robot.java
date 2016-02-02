@@ -34,6 +34,8 @@ public class Robot extends IterativeRobot {
     ImageProcessing _imageProcessing;
 
     private AnalogInput a;
+    
+    int i = 0;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -58,7 +60,7 @@ public class Robot extends IterativeRobot {
 
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
-        _tatorCannon = new TatorCannon(_operatorStick, _intake);
+        //_tatorCannon = new TatorCannon(_operatorStick, _intake);
         _imageProcessing = new ImageProcessing(_table, _server, _dashboard);
 
         a = new AnalogInput(0);
@@ -92,10 +94,13 @@ public class Robot extends IterativeRobot {
     	_tatorCannon.run();
 
     	//_imageProcessing.process();
+    	
+    	i=(++i)%100;
 
 
     	SmartDashboard.putNumber("Value: ", a.getValue());
     	SmartDashboard.putNumber("Voltage: ", a.getVoltage());
+    	SmartDashboard.putNumber("Wat:",  i);
 
     	System.out.println("Value: " + a.getValue());
     	System.out.println("Voltage: " + a.getVoltage());
