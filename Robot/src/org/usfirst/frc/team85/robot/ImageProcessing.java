@@ -38,16 +38,17 @@ public class ImageProcessing {
 			System.out.println(ex);
 		}
 	}
-	
-	/*
+/*
 	method that returns targeting angle change for drive
-	 */
+*/
 	public void center() {
-		if (contourFound /*&& button pressed*/) {
+		if (contourFound /*_opStick.getRawButton()*/) {
 			if (centerX < 10) {
 				//move robot (to the right?) until centerX is less than 10  
+                                //_drive.setMotors(FORWARD,BACKWARD);
 			} else if (centerX > -10) {
 				//move robot (to the left?) until centerX is more than -10
+                                //_drive.setMotors(BACKWARD,FORWARD);
 			}
 			
 			if (centerX > -10 && centerX < 10 /*and if the ball is in possession*/) {
@@ -55,5 +56,6 @@ public class ImageProcessing {
 			}
 		}
 	}
+
 }
 
