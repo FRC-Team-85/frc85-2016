@@ -29,8 +29,6 @@ public class Robot extends IterativeRobot {
 
     private CameraServer _server;
 
-    private SmartDashboard _dashboard;
-
     ImageProcessing _imageProcessing;
 
     private AnalogInput a;
@@ -56,12 +54,10 @@ public class Robot extends IterativeRobot {
     		System.out.println(ex);
     	}
 
-        _dashboard = new SmartDashboard();
-
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick, _intake);
-        _imageProcessing = new ImageProcessing(_table, _server, _dashboard);
+        _imageProcessing = new ImageProcessing(_table, _server);
 
         a = new AnalogInput(0);
     }

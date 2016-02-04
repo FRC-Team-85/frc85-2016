@@ -16,10 +16,9 @@ public class ImageProcessing {
 	
 	private double area, height, width, centerX, centerY;
 	
-	public ImageProcessing(NetworkTable table, CameraServer server, SmartDashboard dashboard) {
+	public ImageProcessing(NetworkTable table, CameraServer server) {
 		_table = table;
 		_server = server;
-		_dashboard = dashboard;
 	}
 	
 	public void process() {
