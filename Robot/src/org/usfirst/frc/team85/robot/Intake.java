@@ -40,34 +40,28 @@ public class Intake {
 
 		angleMotor.enableBrakeMode(true);
 		loadMotor.enableBrakeMode(true); // Or not?
-	}
+	} 
 
 	public boolean run(boolean cannonReady) {
 		if (opStick.getRawButton(2) && !opStick.getRawButton(3)) { //Uses button A, move to ground and "suction"
 			badPickUpLine();
 		} else if (opStick.getRawButton(3)) { //Uses button B, loads the cannon
-			return loadCannon(cannonReady);
+			return loadCannon(cannonReady);	
 		}
 		return false;
 	}
 	
-	private void badPickUpLine() {
+	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
 		intakeMove(PICKUPPOSITION);
 		loadMotor.set(-1);
 	}
 
-	private boolean loadCannon(boolean cannonReady) {
+	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
 		if (intakeMove(LOADPOS) && cannonReady) {
 			loadMotor.set(1);
 			return true;
 		}
 		return false;
-	}
-
-	private void groundFeed() {
-		if (intakeMove(PICKUPPOSITION)) {
-
-		}
 	}
 
 	private boolean intakeMove(double target) {

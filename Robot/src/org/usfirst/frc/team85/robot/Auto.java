@@ -74,11 +74,11 @@ public class Auto {
 		
 	}
 	
-	/*public boolean autoDrive(double target) {
-		if (target >= distance) {
+	public boolean autoDrive(double target) {
+		if (/*target >= distance*/true) {
 			return true;
 		} 
 		return false;
-	} */
+	}
 	
 }

@@ -8,13 +8,16 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class TatorCannon {
 
-	private double LOADPOS;
-	private double ARMTOL;
+	private double LOADPOS;		//load pos
+	private double FIREPOS;		//fire pos
+	private double ARMTOL;		//angle tol
 
-	private double FIRERPM;
-	private double RPMTOL;
+	private double LOADSPEED;	//loading speed
 
-	private double LIGHT;
+	private double FIRERPM;		//outerMotor speed
+	private double RPMTOL;		//outerMotor tol
+
+	private double LIGHT;		//innerMotor speed
 
 	private Boolean firstCheck = false;
 
@@ -24,6 +27,10 @@ public class TatorCannon {
 					_innerTopMotor, _innerBottomMotor, _armMotor;
 
 	private Intake _intake;
+	
+	private Timer _loadTimer;
+	private double _loadTime;
+	private boolean _loadInit, _loadComplete;
 
 	public TatorCannon(Joystick operatorStick, Intake intake) {
 
@@ -74,31 +81,48 @@ public class TatorCannon {
     }
 
     public void run() {	//main method
-
         fire();
-
-        if(_intake.run(readyToLoad())) {
-        	//load for timer
-        }
-
+        load();
     }
     
-    private boolean readyToLoad(){
-    	return (Math.abs(_armMotor.get() - LOADPOS) <= ARMTOL);
+    private void fire() {
+    	if (_operatorStick.getRawButton(99)) { //Uses button X
+    		if ( armMove(FIREPOS)&&
+    				(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) &&
+    				(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) ) {
+    			setInner(LIGHT);
+    		}
+    		setOuter(FIRERPM);
+    		setInner(0.0);
+    	}  
+    }
+    
+    private boolean load() {
+        if(_intake.run(readyToLoad()) && _operatorStick.getRawButton(99) && !_loadComplete) {	
+        	// if _intake is trying to load the cannon, wants to load, and not done loading
+        	if (!_loadInit) {
+        		_loadTimer.reset();
+        		_loadTimer.start();
+        		_loadInit = true;
+        	} else {
+        		if (_loadTimer.get() > _loadTime) {
+        			setInner(0.0);
+        			setOuter(0.0);
+            		_loadComplete = true;
+        		} else {
+        			setInner(LOADSPEED);
+        			setOuter(LOADSPEED);
+        		}
+        	}
+        } else {
+        	_loadInit = false;
+        	_loadComplete = false;
+        }
+        return _loadComplete;
     }
 
-    private void fire() {
-    	if (_operatorStick.getRawButton(1)) { //Uses button X
-/*    		if ( (Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) &&
-    		(Math.abs(_outerTopMotor.get()-FIRERPM) =< RPMTOL) ) {
-    			_innerTopMotor.set(LIGHT);
-    			_innerBottomMotor.set(LIGHT);
-    		}
-    		_outerTopMotor.set(FIRERPM);
-    		_outerBottomMotor.set(FIRERPM);
-    		_innerTopMotor.set(0.0);
-    		_innerBottomMotor.set(0.0);	*/
-    	}  
+    private boolean readyToLoad(){
+    	return (Math.abs(_armMotor.get() - LOADPOS) <= ARMTOL);
     }
 
     private boolean armAtTop() {
@@ -130,7 +154,16 @@ public class TatorCannon {
         }
     }
 
-    private boolean armMove(double target) {
+    private void setOuter(double speed) {
+		_outerTopMotor.set(speed);
+		_outerBottomMotor.set(speed);
+    }
+    private void setInner(double speed) {
+		_innerTopMotor.set(speed);
+		_innerBottomMotor.set(speed);
+    }
+
+    public boolean armMove(double target) {
     	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
     		return true;									 //this entire if-block is probably unnecessary
     		}
