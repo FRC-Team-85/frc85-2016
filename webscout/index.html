@@ -1,20 +1,17 @@
 <html manifest="webApp.manifest">
 <head>
     <title>Proof of Concept</title>
-    <script>
-        function set() {
-            localStorage.setItem(document.getElementById("k").value, document.getElementById("v").value);
-        }
-        function get() {
-            document.getElementById("v").value = localStorage.getItem(document.getElementById("k").value);
-        }
-    </script>
+    <script type="text/javascript" src="scout.js"></script>
 </head>
-<body>
+<body onload="onload()">
+
     Screw Formatting<br>
-    Key: <input id="k" type="text" name="key"><br>
-    Value: <input id="v" type="text" name="value"><br>
-    <button type="button" id="set" onclick="set();">Set</button>
-    <button type="button" id="get" onclick="get();">Get</button>
+    <input class="id" id="teamID" type="text" name="teamID"><br>
+    <input class="var" id="number" type="text" name="number"><br>
+    <button type="button" id="set">Set</button>
+    <button type="button" id="get">Get</button><br>
+    <button type="button" id="export">Export</button>
+    <button type="button" id="import">Import</button><br>
+    <input id="jsonData" type="text">
 </body>
 </html>
