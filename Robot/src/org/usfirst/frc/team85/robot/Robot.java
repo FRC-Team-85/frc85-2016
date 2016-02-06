@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.io.IOException;
+
 import org.usfirst.frc.team85.robot.Addresses.*;
 
 /**
@@ -27,39 +29,42 @@ public class Robot extends IterativeRobot {
 
     private NetworkTable _table;
 
-    private CameraServer _server;
-
     ImageProcessing _imageProcessing;
 
     private AnalogInput a;
     
     int i = 0;
 
+    private final static String[] GRIP_ARGS = new String[] {
+            "/usr/local/frc/JRE/bin/java", "-jar",
+            "/home/lvuser/grip.jar", "/home/lvuser/project.grip" };
+
+        private final NetworkTable grip = NetworkTable.getTable("grip");
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
     	//Sets up left controller
+
         _driveStick = new Joystick(CONTROLLERS.DRIVESTICK);
         _operatorStick = new Joystick(CONTROLLERS.OPERATORSTICK);
 
         _table = NetworkTable.getTable("GRIP/myContoursReport");
 
-        try {	//camera stream
-        	_server = CameraServer.getInstance();
-        	_server.setQuality(50);
-        	_server.startAutomaticCapture();
-    	} catch (Exception ex) {
-    		System.out.println(ex);
-    	}
-
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick, _intake);
-        _imageProcessing = new ImageProcessing(_table, _server);
 
         a = new AnalogInput(0);
+        
+        /* Run GRIP in a new process */
+        try {
+            Runtime.getRuntime().exec(GRIP_ARGS);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void autonomousInit() {
