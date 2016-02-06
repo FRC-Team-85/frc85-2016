@@ -30,20 +30,21 @@ public class Addresses {
 
     	//Cannon
 	public class CANNON {
-		public static final int OUTER_MOTOR_TOP = 7;
-		public static final int OUTER_MOTOR_BOTTOM = 8;
+		public static final int OUTER_MOTOR_TOP = 0;
+		public static final int OUTER_MOTOR_BOTTOM = 0;
 
-		public static final int INNER_MOTOR_TOP = 9;
-		public static final int INNER_MOTOR_BOTTOM = 10;
+		public static final int INNER_MOTOR_TOP = 0;
+		public static final int INNER_MOTOR_BOTTOM = 0;
 
-		public static final int ARM_MOTOR = 11;
+		public static final int ARM_MOTOR = 9;
 	}
 
     	//Intake
 	public class INTAKE {
-		public static final int LOAD_MOTOR = 12;
+		public static final int LOAD_MOTOR = 0; //TODO: Relay output number
 
-		public static final int ANGLE_MOTOR = 13;
+		public static final int LEFT_INTAKE_MOTOR = 7;
+		public static final int RIGHT_INTAKE_MOTOR = 8;
 	}
 
 }
