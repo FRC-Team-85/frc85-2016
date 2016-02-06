@@ -1,13 +1,5 @@
 <grip:Pipeline>
-  <sources>
-    <grip:Camera>
-<<<<<<< HEAD
-      <property name="address" value="http://10.0.85.11"/>
-=======
-      <property name="address" value="http://10.0.85.11/mjpg/video.mjpg"/>
->>>>>>> origin/master
-    </grip:Camera>
-  </sources>
+  <sources/>
   <steps>
     <grip:Step name="HSL Threshold">
       <grip:Input step="0" socket="0"/>
@@ -93,15 +85,8 @@
   </steps>
   <connections>
     <grip:Connection>
-<<<<<<< HEAD
-      <grip:Output step="0" socket="0" previewed="true"/>
-      <grip:Input step="1" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-=======
->>>>>>> origin/master
-      <grip:Output source="0" socket="0" previewed="true"/>
-      <grip:Input step="0" socket="0"/>
+      <grip:Output step="1" socket="0" previewed="true"/>
+      <grip:Input step="2" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="0" socket="0" previewed="true"/>
@@ -110,10 +95,6 @@
     <grip:Connection>
       <grip:Output step="2" socket="0" previewed="true"/>
       <grip:Input step="3" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output step="1" socket="0" previewed="true"/>
-      <grip:Input step="2" socket="0"/>
     </grip:Connection>
   </connections>
   <settings>
