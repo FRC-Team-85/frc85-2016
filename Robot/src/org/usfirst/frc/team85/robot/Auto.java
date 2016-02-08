@@ -65,9 +65,12 @@ public class Auto {
             break;
         case 8: //Rough Terrain
 
-
             break;
         }
+        /*
+        standard method for movement after clearing any of the obstacles, with clearance for 
+        various overshoots per obstacles, input distance over barrier into enemy territory
+         */
 	}
 
 	public void resetAutoDriveDist() {

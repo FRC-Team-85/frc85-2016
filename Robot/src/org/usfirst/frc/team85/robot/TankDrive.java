@@ -2,6 +2,7 @@ package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
 
@@ -111,6 +112,22 @@ public class TankDrive {
 
         _masterLeftMotor.set(lSpeed);
         _masterRightMotor.set(-rSpeed);
+        SmartDashboard.putNumber("Lspeed.get(): ", lSpeed);
+        SmartDashboard.putNumber("Lspeed.set(): ", _masterLeftMotor.get());
+        SmartDashboard.putNumber("Rspeed.get(): ", rSpeed);
+        SmartDashboard.putNumber("Rspeed.set(): ", _masterRightMotor.get());
+    }
+    
+    public double getLeftAvg() {
+    	return (_masterLeftMotor.get() +
+    			_slaveLeftMotorA.get() +
+                _slaveLeftMotorB.get())/3;
+    }
+    
+    public double getRightAvg() {
+    	return (_masterRightMotor.get() +
+                _slaveRightMotorA.get() +
+                _slaveRightMotorB.get())/3;
     }
 
 }
