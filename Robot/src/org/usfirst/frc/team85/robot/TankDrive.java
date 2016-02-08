@@ -1,7 +1,10 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
-//You're trash -Craig Smith
+/*
+"You're trash," (Smith).
+"Watching Craig play rocket league is like watching the special Olympics," (Costello)
+*/
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
