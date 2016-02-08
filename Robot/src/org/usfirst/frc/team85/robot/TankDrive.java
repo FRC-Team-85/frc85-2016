@@ -1,6 +1,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+//You're trash -Craig Smith
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
