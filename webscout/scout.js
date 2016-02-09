@@ -1,17 +1,20 @@
 var teamList;
+var dataArr;
 
 function registerClickEvents() {
     document.getElementById("set").onclick = set;
     document.getElementById("get").onclick = get;
-    document.getElementById("export").onclick=exportData;
-    //document.getElementById("import").onclick=importData;
+    document.getElementById("export").onclick = exportData;
+    document.getElementById("import").onclick = importData;
 }
 
 function onload() {
     if (localStorage.teamList) {
         teamList = JSON.parse(localStorage.teamList);
+        dataArr = JSON.parse(localStorage.cache);
     } else {
         teamList = [];
+        dataArr = [];
     }
     registerClickEvents();
 }
@@ -49,11 +52,17 @@ function jSONify() {
 function set() {
     var data = jSONify();
 
-    if (!teamList.includes(data["teamID"])) teamList.push(data["teamID"]);
+    if (!teamList.includes(data["teamID"])) {
+        teamList.push(data["teamID"]);
+        localStorage.teamList = JSON.stringify(teamList);
 
-    localStorage.setItem(data["teamID"], JSON.stringify(data));
-    localStorage.teamList = JSON.stringify(teamList);
+        dataArr.push(data);
 
+    } else {
+        dataArr[getTeamIndex(data["teamID"])] = data;
+    }
+
+    localStorage.cache = JSON.stringify(dataArr);
 }
 
 function unJSONify(dataObject) {
@@ -77,39 +86,40 @@ function unJSONify(dataObject) {
     }
 }
 
+function getTeamIndex(teamID) {
+    for (var i = 0; i < dataArr.length; i++) {
+        if (dataArr[i]["teamID"] == teamID) return i;
+    }
+}
+
 function get() {
     var teamID = document.getElementById("teamID").value;
     if (!teamList.includes(teamID)) return;
 
-    var dataObject = JSON.parse(localStorage.getItem(teamID));
+    var dataObject = dataArr[getTeamIndex(teamID)];
     unJSONify(dataObject);
-}
-
-function cacheDump() {
-    var cacheJSON = [];
-    for (var i = 0; i < teamList.length; i++) {
-        cacheJSON.push(localStorage.getItem(teamList[i]));
-    }
-    return cacheJSON;
 }
 
 function exportData() {
     var textbox = document.getElementById("jsonData");
-    textbox.value = JSON.stringify(cacheDump());
+    textbox.value = JSON.stringify(dataArr);
 }
 
-function importData(overwrite) {
+function importData(overwrite = true) {
     var textbox = document.getElementById("jsonData");
     var dataObject = JSON.parse(textbox.value);
+
     for (var i = 0; i < dataObject.length; i++) {
         if (!teamList.includes(dataObject[i]["teamID"])) {
-            localStorage[dataObject[i]["teamID"]] = dataObject[i];
+            dataArr.push(dataObject[i]);
             teamList.push(dataObject[i]["teamID"]);
-        } else if (override) {
-            localStorage[dataObject[i]["teamID"]] = dataObject[i];
+
+        } else if (overwrite) {
+            dataArr[getTeamIndex(dataObject[i]["teamID"])] = dataObject[i];
         }
     }
     localStorage.teamList = teamList;
+    localStorage.cache = dataArr;
 }
 
 function update(event) {
