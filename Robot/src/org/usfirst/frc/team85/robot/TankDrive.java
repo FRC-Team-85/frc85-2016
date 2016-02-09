@@ -82,24 +82,22 @@ public class TankDrive {
         double turnControl = _controller.getZ();
         double turnControlCubed = turnControl * turnControl * turnControl; //Faster than Math.pow
                                                                            //Could be made faster
+                                                                           
         turn = -1.15 * turnControlCubed +
-                0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified (-1.15x^3+0.38x^9)
+                0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified 0.8(-1.15x^3+0.38x^9)
 
-        if (!_controller.getRawButton(7) && _controller.getRawButton(8)) { // Right Only
-            turn *= 0.5;
-            thrust *= 0.5;
-        }
-
-        if (_controller.getRawButton(7) && !_controller.getRawButton(8)) { // Left only
-            // This is how everything should be
-        }
-
-        if (!_controller.getRawButton(7) && !_controller.getRawButton(8)) { // Neither
-            turn *= 0.8;
-        }
-
-        if (_controller.getRawButton(7) && _controller.getRawButton(8)) { // Both
-            // Regular response for this too I guess
+        if (_controller.getRawButton(7) && _controller.getRawButton(8)) {
+        	thrust *= 1;
+        	turn *= 1;
+        } else if(_controller.getRawButton(7) && !_controller.getRawButton(8)) {
+        	thrust *= 1;
+        	turn *= 1;
+        } else if(!_controller.getRawButton(7) && _controller.getRawButton(8)){
+        	thrust *= 0.5;
+        	turn *= 0.5;
+        } else if (!_controller.getRawButton(7) && !_controller.getRawButton(8)){
+        	thrust *= 1;
+        	turn *= 0.8;
         }
 
         double left = thrust + turn;
