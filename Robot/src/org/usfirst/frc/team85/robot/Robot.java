@@ -6,8 +6,11 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
+
+import com.sun.istack.internal.logging.Logger;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,7 +42,6 @@ public class Robot extends IterativeRobot {
             "/usr/local/frc/JRE/bin/java", "-jar",
             "/home/lvuser/grip.jar", "/home/lvuser/project.grip" };
 
-        private final NetworkTable grip = NetworkTable.getTable("grip");
     
     /**
      * This function is run when the robot is first started up and should be
@@ -51,7 +53,6 @@ public class Robot extends IterativeRobot {
         _driveStick = new Joystick(CONTROLLERS.DRIVESTICK);
         _operatorStick = new Joystick(CONTROLLERS.OPERATORSTICK);
 
-        _table = NetworkTable.getTable("GRIP/myContoursReport");
 
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
@@ -65,6 +66,21 @@ public class Robot extends IterativeRobot {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        //Setup NetworkTable
+        NetworkTable.setClientMode();
+        NetworkTable.setIPAddress("roborio-85-frc.local");
+        NetworkTable table = NetworkTable.getTable("grip");
+        
+        while(true) {
+        	try{
+        		Thread.sleep(1000);
+        	} catch (InterruptedException ex) {
+        			
+        	}
+        	double x = table.getNumber("X", null);
+        }
+        
     }
 
     public void autonomousInit() {
