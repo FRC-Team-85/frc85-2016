@@ -134,8 +134,7 @@ public class TatorCannon {
 		return _armMotor.isRevLimitSwitchClosed() || softLimited;
 	}
 
-    //When robot starts up, moves cannon all the way down
-    public void armCheck(){
+    public void armCheck(){ //When robot starts up, moves cannon all the way down
         if (!firstCheck){
             _armMotor.enableForwardSoftLimit(false);
             _armMotor.enableReverseSoftLimit(false);
@@ -175,9 +174,9 @@ public class TatorCannon {
     public boolean armMove(double target) {
     	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
     		return true;									 //this entire if-block is probably unnecessary
-    		}
-    		_armMotor.set(target);
-    		return false;
     	}
+    	_armMotor.set(target);
+    	return false;
+    }
 
 }

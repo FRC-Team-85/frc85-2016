@@ -1,6 +1,10 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+/*
+"You're trash," (Smith).
+"Watching Craig play rocket league is like watching the special Olympics," (Costello)
+*/
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -78,13 +82,22 @@ public class TankDrive {
         double turnControl = _controller.getZ();
         double turnControlCubed = turnControl * turnControl * turnControl; //Faster than Math.pow
                                                                            //Could be made faster
-
+        turn = (-1.15 * turnControlCubed +
+                0.38 * (turnControlCubed * turnControlCubed * turnControlCubed)); //Brian's dumb curve, fastified 0.8(-1.15x^3+0.38x^9)
+        
         if (_controller.getRawButton(7) && _controller.getRawButton(8)) {
-        	turn = -.375 * turnControlCubed; // -0.375x^3
-        } else {
-        	turn = -1.15 * turnControlCubed +
-                0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified (-1.15x^3+0.38x^9)
-    	}
+        	thrust *= 1;
+        	turn *= 1;
+        } else if(_controller.getRawButton(7) && !_controller.getRawButton(8)) {
+        	thrust *= 1;
+        	turn *= 1;
+        } else if(!_controller.getRawButton(7) && _controller.getRawButton(8)){
+        	thrust *= 0.5;
+        	turn *= 0.5;
+        } else if (!_controller.getRawButton(7) && !_controller.getRawButton(8)){
+        	thrust *= 1;
+        	turn*= 1;
+        }
 
         double left = thrust + turn;
         double right = thrust - turn;
