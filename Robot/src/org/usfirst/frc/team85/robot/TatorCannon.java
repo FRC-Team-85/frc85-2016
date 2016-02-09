@@ -17,19 +17,17 @@ public class TatorCannon {
 	private double FIRERPM;		//outerMotor speed
 	private double RPMTOL;		//outerMotor tol
 
-	private double LIGHT;		//innerMotor speed
-
 	private Boolean firstCheck = false;
 
 	private Joystick _operatorStick;
 
-	private CANTalon _outerTopMotor, _outerBottomMotor,
-					_innerTopMotor, _innerBottomMotor, _armMotor;
+	private CANTalon _outerTopMotor, _outerBottomMotor, _armMotor;
+	private Relay _innerTopMotor, _innerBottomMotor;
 
 	private Intake _intake;
 	
 	private Timer _loadTimer;
-	private double _loadTime;
+	private double _loadTime;	// = 0.0;	//milisecs
 	private boolean _loadInit, _loadComplete;
 
 	public TatorCannon(Joystick operatorStick, Intake intake) {
@@ -38,10 +36,11 @@ public class TatorCannon {
 
 		_outerTopMotor = new CANTalon(CANNON.OUTER_MOTOR_TOP);
 		_outerBottomMotor = new CANTalon(CANNON.OUTER_MOTOR_BOTTOM);
-		_innerTopMotor = new CANTalon(CANNON.INNER_MOTOR_TOP);
-		_innerBottomMotor = new CANTalon(CANNON.INNER_MOTOR_BOTTOM);
 		_armMotor = new CANTalon(CANNON.ARM_MOTOR);
 
+		_innerTopMotor = new Relay(CANNON.INNER_MOTOR_TOP, Relay.Direction.kBoth);
+		_innerBottomMotor = new Relay(CANNON.INNER_MOTOR_BOTTOM, Relay.Direction.kBoth);
+		
 		_intake = intake;
 
 		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
@@ -75,30 +74,28 @@ public class TatorCannon {
 
         _outerTopMotor.enableBrakeMode(false);
         _outerBottomMotor.enableBrakeMode(false);
-        _innerTopMotor.enableBrakeMode(true); //For precise control of ballfeeding
-        _innerBottomMotor.enableBrakeMode(true);
         _armMotor.enableBrakeMode(false);
     }
 
-    public void run() {	//main method
-        fire();
-        load();
+    public void run(boolean Autonomous) {	//main method
+        fire(Autonomous);
+        load(Autonomous);
     }
     
-    private void fire() {
-    	if (_operatorStick.getRawButton(99)) { //Uses button X
+    private void fire(boolean Autonomous) {
+    	if (_operatorStick.getRawButton(99) || Autonomous) { //Uses button X
     		if ( armMove(FIREPOS)&&
     				(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) &&
     				(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) ) {
-    			setInner(LIGHT);
+    			setInnerIgnition();
     		}
     		setOuter(FIRERPM);
-    		setInner(0.0);
+    		setInnerTrump();
     	}  
     }
     
-    private boolean load() {
-        if(_intake.run(readyToLoad()) && _operatorStick.getRawButton(99) && !_loadComplete) {	
+    private boolean load(boolean Autonomous) {
+        if(_intake.run(readyToLoad()) && (_operatorStick.getRawButton(99) || Autonomous) && !_loadComplete) {	
         	// if _intake is trying to load the cannon, wants to load, and not done loading
         	if (!_loadInit) {
         		_loadTimer.reset();
@@ -106,11 +103,11 @@ public class TatorCannon {
         		_loadInit = true;
         	} else {
         		if (_loadTimer.get() > _loadTime) {
-        			setInner(0.0);
+        			setInnerFree();
         			setOuter(0.0);
             		_loadComplete = true;
         		} else {
-        			setInner(LOADSPEED);
+        			setInnerHold();
         			setOuter(LOADSPEED);
         		}
         	}
@@ -158,9 +155,21 @@ public class TatorCannon {
 		_outerTopMotor.set(speed);
 		_outerBottomMotor.set(speed);
     }
-    private void setInner(double speed) {
-		_innerTopMotor.set(speed);
-		_innerBottomMotor.set(speed);
+    private void setInnerIgnition() {	//Ready and Aim and Fire
+		_innerTopMotor.set(Relay.Value.kForward);
+		_innerBottomMotor.set(Relay.Value.kForward);
+    }
+    private void setInnerHold() {	//Bring into Storage
+		_innerTopMotor.set(Relay.Value.kReverse);
+		_innerBottomMotor.set(Relay.Value.kReverse);
+    }
+    private void setInnerFree() {	//Free to Shove around
+		_innerTopMotor.set(Relay.Value.kOff);
+		_innerBottomMotor.set(Relay.Value.kOff);
+    }
+    private void setInnerTrump() {	//Sturdy Like the Wall of Mexico
+		_innerTopMotor.set(Relay.Value.kForward);
+		_innerBottomMotor.set(Relay.Value.kForward);
     }
 
     public boolean armMove(double target) {

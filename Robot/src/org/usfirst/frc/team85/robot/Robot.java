@@ -31,7 +31,7 @@ public class Robot extends IterativeRobot {
 
     ImageProcessing _imageProcessing;
 
-    private AnalogInput a;
+    private DigitalInput b;
     
     int i = 0;
 
@@ -57,7 +57,7 @@ public class Robot extends IterativeRobot {
         _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick, _intake);
 
-        a = new AnalogInput(0);
+        b = new DigitalInput(0);
         
         /* Run GRIP in a new process */
         try {
@@ -92,19 +92,14 @@ public class Robot extends IterativeRobot {
     	//_tatorCannon.armCheck();
 
     	_drive.drive();
-    	//_tatorCannon.run();
+    	_tatorCannon.run(false);
 
     	//_imageProcessing.process();
     	
     	i=(++i)%100;
 
+    	SmartDashboard.putBoolean("Digital 0: ", b.get());
 
-    	SmartDashboard.putNumber("Value: ", a.getValue());
-    	SmartDashboard.putNumber("Voltage: ", a.getVoltage());
-    	SmartDashboard.putNumber("Wat:",  i);
-
-    	System.out.println("Value: " + a.getValue());
-    	System.out.println("Voltage: " + a.getVoltage());
     	System.out.println();
 
     }

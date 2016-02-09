@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
 
@@ -30,10 +31,10 @@ public class Intake {
 
 		leftAngleMotor.changeControlMode(TalonControlMode.Position);
 		rightAngleMotor.changeControlMode(TalonControlMode.Position);
-		loadMotor.changeControlMode(TalonControlMode.Voltage); // Or Position?
 
 		//TODO: Set all to left and right
-		angleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
+		leftAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
+		/*rightAngleMotor.
 
 		angleMotor.reverseSensor(true); // Set to actual value
 
@@ -43,9 +44,9 @@ public class Intake {
 		angleMotor.setF(Constants.ARM_INTAKE.F);
 
 		angleMotor.enableLimitSwitch(true, true);
-
-		angleMotor.enableBrakeMode(true);
-		loadMotor.enableBrakeMode(true); // Or not?
+*/
+		leftAngleMotor.enableBrakeMode(true);
+		rightAngleMotor.enableBrakeMode(true);
 	} 
 
 	public boolean run(boolean cannonReady) {
@@ -54,27 +55,29 @@ public class Intake {
 		} else if (opStick.getRawButton(3)) { //Uses button B, loads the cannon
 			return loadCannon(cannonReady);	
 		}
+
+	//	SmartDashboard.putNumber("LoadMotor: ", loadMotor.get());
 		return false;
 	}
 	
 	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
 		intakeMove(PICKUPPOSITION);
-		loadMotor.set(-1);
+//		loadMotor.set(-1);
 	}
 
 	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
 		if (intakeMove(LOADPOS) && cannonReady) {
-			loadMotor.set(1);
+//			loadMotor.set(1);
 			return true;
 		}
 		return false;
 	}
 
 	private boolean intakeMove(double target) {
-		if (Math.abs(angleMotor.get()-target) <= INTAKETOL) {
-			return true;
-		}
-		angleMotor.set(target);
+//		if (Math.abs(angleMotor.get()-target) <= INTAKETOL) {
+//			return true;
+//		}
+//		angleMotor.set(target);
 		return false;
 	}
 	
