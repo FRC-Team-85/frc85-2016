@@ -82,13 +82,25 @@ public class TankDrive {
         double turnControl = _controller.getZ();
         double turnControlCubed = turnControl * turnControl * turnControl; //Faster than Math.pow
                                                                            //Could be made faster
-
-        if (_controller.getRawButton(7) && _controller.getRawButton(8)) {
-        	turn = -.375 * turnControlCubed; // -0.375x^3
-        } else {
-        	turn = -1.15 * turnControlCubed +
+        turn = -1.15 * turnControlCubed +
                 0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified (-1.15x^3+0.38x^9)
-    	}
+
+        if (!_controller.getRawButton(7) && _controller.getRawButton(8)) { // Right Only
+            turn *= 0.5;
+            thrust *= 0.5;
+        }
+
+        if (_controller.getRawButton(7) && !_controller.getRawButton(8)) { // Left only
+            // This is how everything should be
+        }
+
+        if (!_controller.getRawButton(7) && !_controller.getRawButton(8)) { // Neither
+            turn *= 0.8;
+        }
+
+        if (_controller.getRawButton(7) && _controller.getRawButton(8)) { // Both
+            // Regular response for this too I guess
+        }
 
         double left = thrust + turn;
         double right = thrust - turn;
@@ -121,13 +133,13 @@ public class TankDrive {
         SmartDashboard.putNumber("Rspeed.get(): ", rSpeed);
         SmartDashboard.putNumber("Rspeed.set(): ", _masterRightMotor.get());
     }
-    
+
     public double getLeftAvg() {
     	return (_masterLeftMotor.get() +
     			_slaveLeftMotorA.get() +
                 _slaveLeftMotorB.get())/3;
     }
-    
+
     public double getRightAvg() {
     	return (_masterRightMotor.get() +
                 _slaveRightMotorA.get() +

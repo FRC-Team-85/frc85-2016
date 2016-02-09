@@ -118,8 +118,8 @@ function importData(overwrite = true) {
             dataArr[getTeamIndex(dataObject[i]["teamID"])] = dataObject[i];
         }
     }
-    localStorage.teamList = teamList;
-    localStorage.cache = dataArr;
+    localStorage.teamList = JSON.stringify(teamList);
+    localStorage.cache = JSON.stringify(dataArr);
 }
 
 function update(event) {
