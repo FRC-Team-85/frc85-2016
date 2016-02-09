@@ -2,8 +2,10 @@ package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
+//import edu.wpi.first.wpilibj.CANTalon.DonaldTrump;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Relay;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
 
@@ -15,18 +17,23 @@ public class Intake {
 	private double PICKUPPOSITION;
 
 	private double INTAKETOL;
-	private CANTalon angleMotor, loadMotor;
+	private CANTalon leftAngleMotor, rightAngleMotor;
+	
+	private Relay loadMotor;
 
 	public Intake(Joystick operatorStick) {
 		
 		opStick = operatorStick;
 		
-		angleMotor = new CANTalon(INTAKE.ANGLE_MOTOR);
-		loadMotor = new CANTalon(INTAKE.LOAD_MOTOR);
+		leftAngleMotor = new CANTalon(INTAKE.LEFT_INTAKE_MOTOR);
+		rightAngleMotor = new CANTalon(INTAKE.RIGHT_INTAKE_MOTOR);
+		loadMotor = new Relay(INTAKE.LOAD_MOTOR);
 
-		angleMotor.changeControlMode(TalonControlMode.Position);
+		leftAngleMotor.changeControlMode(TalonControlMode.Position);
+		rightAngleMotor.changeControlMode(TalonControlMode.Position);
 		loadMotor.changeControlMode(TalonControlMode.Voltage); // Or Position?
 
+		//TODO: Set all to left and right
 		angleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
 
 		angleMotor.reverseSensor(true); // Set to actual value
