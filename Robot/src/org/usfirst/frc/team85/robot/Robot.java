@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.io.IOException;
-import java.util.logging.Level;
+//import java.util.logging.Level;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
 
-import com.sun.istack.internal.logging.Logger;
+//import com.sun.istack.internal.logging.Logger;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -34,7 +34,8 @@ public class Robot extends IterativeRobot {
 
     ImageProcessing _imageProcessing;
 
-    private DigitalInput b;
+    private AnalogInput a;
+    private DigitalInput b;//
     
     int i = 0;
 
@@ -58,30 +59,25 @@ public class Robot extends IterativeRobot {
         _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick, _intake);
 
+        a = new AnalogInput(0);
         b = new DigitalInput(0);
         
         /* Run GRIP in a new process */
-        try {
+/*        try {
             Runtime.getRuntime().exec(GRIP_ARGS);
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        //Setup NetworkTable
-        NetworkTable.setClientMode();
-        NetworkTable.setIPAddress("roborio-85-frc.local");
-        NetworkTable table = NetworkTable.getTable("grip");
-        
-        while(true) {
-        	try{
-        		Thread.sleep(1000);
-        	} catch (InterruptedException ex) {
-        			
-        	}
-     //   	double x = table.getNumber("X", null);
+        //Setup NetworkTable\
+        try {
+        	NetworkTable.setClientMode();
+        	NetworkTable.setIPAddress("roborio-85-frc.local");
+        	_table = NetworkTable.getTable("grip");
+        } catch(Exception ex) {
+        	System.out.println(ex.toString());
         }
-        
-    }
+*/    }
 
     public void autonomousInit() {
     	_drive.setVoltageRamp(2.0); //Limits controllers to 2V/sec
@@ -114,10 +110,20 @@ public class Robot extends IterativeRobot {
     	
     	i=(++i)%100;
 
+
+    	SmartDashboard.putNumber("Analog 0: ", a.pidGet());
     	SmartDashboard.putBoolean("Digital 0: ", b.get());
 
     	System.out.println();
 
+    }
+    
+    public void disabledInit() {
+    	System.out.println("Robot Init was disabled!!!");    	
+    }
+    
+    public void disabledPeriodic() {
+    	System.out.println("Robot Periodic was disabled!!!"); 
     }
 
 }

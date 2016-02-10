@@ -48,6 +48,7 @@ public class Intake {
 */
 		leftAngleMotor.enableBrakeMode(true);
 		rightAngleMotor.enableBrakeMode(true);
+        System.out.println("Intake Init Done");
 	} 
 
 	public boolean run(boolean cannonReady) {
@@ -57,28 +58,30 @@ public class Intake {
 			return loadCannon(cannonReady);	
 		}
 
-	//	SmartDashboard.putNumber("LoadMotor: ", loadMotor.get());
+//		SmartDashboard.putNumber("LoadMotor: ", loadMotor.get());
 		return false;
 	}
 	
 	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
 		intakeMove(PICKUPPOSITION);
-//		loadMotor.set(-1);
+		loadMotor.set(Relay.Value.kForward);
 	}
 
 	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
 		if (intakeMove(LOADPOS) && cannonReady) {
-//			loadMotor.set(1);
+			loadMotor.set(Relay.Value.kReverse);
 			return true;
 		}
 		return false;
 	}
 
 	private boolean intakeMove(double target) {
-//		if (Math.abs(angleMotor.get()-target) <= INTAKETOL) {
-//			return true;
-//		}
-//		angleMotor.set(target);
+		if (Math.abs(leftAngleMotor.get()-target) <= INTAKETOL &&
+				Math.abs(rightAngleMotor.get()-target) <= INTAKETOL) {
+			return true;
+		}
+		leftAngleMotor.set(target);
+		rightAngleMotor.set(target);
 		return false;
 	}
 	

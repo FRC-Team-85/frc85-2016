@@ -17,8 +17,6 @@ public class TankDrive {
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
 
-    private Encoder _LeftEncoder, _RightEncoder;
-
     public TankDrive(Joystick DriveController) {
         _controller = DriveController;
 
@@ -44,12 +42,8 @@ public class TankDrive {
         _slaveRightMotorB.changeControlMode(TalonControlMode.Follower);
         _slaveRightMotorB.set(DRIVE.RIGHT_FRONT_MOTOR);
 
-        _LeftEncoder = new Encoder(DRIVE.LEFT_ENCODER_CH1,
-                    DRIVE.LEFT_ENCODER_CH2);
-        _RightEncoder = new Encoder(DRIVE.RIGHT_ENCODER_CH1,
-                    DRIVE.RIGHT_ENCODER_CH2);
-
         setVoltageRamp(0.5);
+        System.out.println("TankDrive Init Done");
     }
 
 	public void setVoltageRamp(double rate) {
@@ -86,16 +80,16 @@ public class TankDrive {
         turn = -1.15 * turnControlCubed +
                 0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified 0.8(-1.15x^3+0.38x^9)
 
-        if (_controller.getRawButton(7) && _controller.getRawButton(8)) {
+        if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
         	thrust *= 1;
         	turn *= 1;
-        } else if(_controller.getRawButton(7) && !_controller.getRawButton(8)) {
+        } else if(_controller.getRawButton(5) && !_controller.getRawButton(6)) {
         	thrust *= 1;
         	turn *= 1;
-        } else if(!_controller.getRawButton(7) && _controller.getRawButton(8)){
+        } else if(!_controller.getRawButton(5) && _controller.getRawButton(6)){
         	thrust *= 0.5;
         	turn *= 0.5;
-        } else if (!_controller.getRawButton(7) && !_controller.getRawButton(8)){
+        } else if (!_controller.getRawButton(5) && !_controller.getRawButton(6)){
         	thrust *= 1;
         	turn *= 0.8;
         }

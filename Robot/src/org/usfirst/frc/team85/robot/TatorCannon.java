@@ -3,6 +3,7 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.*;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
+
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
@@ -75,6 +76,7 @@ public class TatorCannon {
         _outerTopMotor.enableBrakeMode(false);
         _outerBottomMotor.enableBrakeMode(false);
         _armMotor.enableBrakeMode(false);
+        System.out.println("TatorCannon Init Done");
     }
 
     public void run(boolean Autonomous) {	//main method

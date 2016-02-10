@@ -20,18 +20,12 @@ public class Addresses {
 		public static final int RIGHT_FRONT_MOTOR = 4;
 		public static final int RIGHT_MID_MOTOR = 5;
 		public static final int RIGHT_BACK_MOTOR = 6;
-
-		public static final int LEFT_ENCODER_CH1 = 0;
-		public static final int LEFT_ENCODER_CH2 = 1;
-
-		public static final int RIGHT_ENCODER_CH1 = 2;
-		public static final int RIGHT_ENCODER_CH2 = 3;
 	}
 
     	//Cannon
 	public class CANNON {
-		public static final int OUTER_MOTOR_TOP = 0;
-		public static final int OUTER_MOTOR_BOTTOM = 0;
+		public static final int OUTER_MOTOR_TOP = 11;
+		public static final int OUTER_MOTOR_BOTTOM = 10;
 
 		public static final int INNER_MOTOR_TOP = 1;		//Relay
 		public static final int INNER_MOTOR_BOTTOM = 2;		//Relay
