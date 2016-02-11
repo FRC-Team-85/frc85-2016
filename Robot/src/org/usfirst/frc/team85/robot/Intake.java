@@ -58,11 +58,13 @@ public class Intake {
 			return loadCannon(cannonReady);	
 		}
 
+		System.out.println("Cannon is ready.")
 //		SmartDashboard.putNumber("LoadMotor: ", loadMotor.get());
 		return false;
 	}
 	
 	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
+		System.out.println("Preparing Cannon...")
 		intakeMove(PICKUPPOSITION);
 		loadMotor.set(Relay.Value.kForward);
 	}
