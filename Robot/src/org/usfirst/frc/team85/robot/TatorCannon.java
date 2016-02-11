@@ -28,7 +28,7 @@ public class TatorCannon {
 	private Intake _intake;
 	
 	private Timer _loadTimer;
-	private double _loadTime /*= 0.0*/;	 //milliseconds
+	private double _loadTime;	// = 0.0;	//milisecs
 	private boolean _loadInit, _loadComplete;
 
 	public TatorCannon(Joystick operatorStick, Intake intake) {
@@ -97,7 +97,7 @@ public class TatorCannon {
     }
     
     private boolean load(boolean Autonomous) {
-        if (_intake.run(readyToLoad()) && (_operatorStick.getRawButton(99) || Autonomous) && !_loadComplete) {	
+        if(_intake.run(readyToLoad()) && (_operatorStick.getRawButton(99) || Autonomous) && !_loadComplete) {	
         	// if _intake is trying to load the cannon, wants to load, and not done loading
         	if (!_loadInit) {
         		_loadTimer.reset();
@@ -185,9 +185,14 @@ public class TatorCannon {
     	double set = _operatorStick.getY();
     				
     	System.out.println("!Danger!" + set);
-    	
+
     	_outerTopMotor.set(set);
     	_outerBottomMotor.set(set);
+    	System.out.println("OTM "+_outerTopMotor.get());
+    	System.out.println("OBM "+_outerBottomMotor.get());
+    	
+    	_armMotor.set(_operatorStick.getX()*100);
+    	System.out.print("ARM"+_armMotor.get());
     }
 
 }
