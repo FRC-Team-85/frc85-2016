@@ -44,8 +44,8 @@ public class TatorCannon {
 		
 		_intake = intake;
 
-		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
-		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
+//		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
+//		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
 		_armMotor.changeControlMode(TalonControlMode.Position);
 
 		_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
@@ -179,6 +179,15 @@ public class TatorCannon {
     	}
     	_armMotor.set(target);
     	return false;
+    }
+    
+    public void DANGER() {
+    	double set = _operatorStick.getY();
+    				
+    	System.out.println("!Danger!" + set);
+    	
+    	_outerTopMotor.set(set);
+    	_outerBottomMotor.set(set);
     }
 
 }

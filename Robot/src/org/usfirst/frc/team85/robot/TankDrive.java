@@ -126,16 +126,55 @@ public class TankDrive {
         SmartDashboard.putNumber("Rspeed.set(): ", _masterRightMotor.get());
     }
 
-    public double getLeftAvg() {
+    public double getLeftAvgSpeed() {
     	return (_masterLeftMotor.get() +
     			_slaveLeftMotorA.get() +
                 _slaveLeftMotorB.get())/3;
     }
 
-    public double getRightAvg() {
+    public double getRightAvgSpeed() {
     	return (_masterRightMotor.get() +
                 _slaveRightMotorA.get() +
                 _slaveRightMotorB.get())/3;
+    }
+    
+    public boolean setDriveTargetLinear(double target, double tolerance) {
+    	return setDriveTarget(target, tolerance, target, tolerance);
+    }
+    
+    public boolean setDriveTarget(double lTarget, double lTolerance, double rTarget, double rTolerance) {
+    	_masterLeftMotor.set(lTarget);
+    	_masterRightMotor.set(rTarget);
+    	return ( ((getLeftDist()-lTarget)<lTolerance)&&((getRightDist()-rTarget)<rTolerance) );
+    }
+    
+    public double getLeftDist() {
+    	double enc = _masterLeftMotor.getEncPosition();
+    	System.out.println("Left Encoder Position:" + enc);
+    	return enc;
+    }
+    
+    public double getRightDist() {
+    	double enc = _masterRightMotor.getEncPosition();
+    	System.out.println("Right Encoder Position:" + enc);
+    	return enc;
+    }
+    
+    public void resetDriveEncoders() {
+    	_masterLeftMotor.reset();
+    	_masterRightMotor.reset();
+    }
+    
+    public void setPositionMode() {
+        _masterLeftMotor.changeControlMode(TalonControlMode.Position);
+        _masterRightMotor.changeControlMode(TalonControlMode.Position);
+        System.out.println("Mode Changed to Position for Auto");
+    }
+    
+    public void setSpeedMode() {
+        _masterLeftMotor.changeControlMode(TalonControlMode.Speed);
+        _masterRightMotor.changeControlMode(TalonControlMode.Speed);
+        System.out.println("Mode Changed to Speed for Teleop");
     }
 
 }

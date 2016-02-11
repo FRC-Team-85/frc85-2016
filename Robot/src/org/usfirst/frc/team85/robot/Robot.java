@@ -102,9 +102,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	//_tatorCannon.armCheck();
-
-    	_drive.drive();
-    	_tatorCannon.run(false);
+ //   	_drive.drive();
+//    	_tatorCannon.run(false);
 
     	//_imageProcessing.process();
     	
@@ -114,7 +113,10 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("Analog 0: ", a.pidGet());
     	SmartDashboard.putBoolean("Digital 0: ", b.get());
 
+    	System.out.println("Double Analog[0]: " + a.pidGet());
+    	System.out.println("Bool Digital[0]: " + b.get());
     	System.out.println();
+    	/**/											    	_tatorCannon.DANGER();
 
     }
     
