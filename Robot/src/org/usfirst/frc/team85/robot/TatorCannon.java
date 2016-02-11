@@ -97,7 +97,7 @@ public class TatorCannon {
     }
     
     private boolean load(boolean Autonomous) {
-        if(_intake.run(readyToLoad()) && (_operatorStick.getRawButton(99) || Autonomous) && !_loadComplete) {	
+        if (_intake.run(readyToLoad()) && (_operatorStick.getRawButton(99) || Autonomous) && !_loadComplete) {	
         	// if _intake is trying to load the cannon, wants to load, and not done loading
         	if (!_loadInit) {
         		_loadTimer.reset();

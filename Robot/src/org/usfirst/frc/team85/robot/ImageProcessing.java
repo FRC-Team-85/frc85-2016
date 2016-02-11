@@ -22,7 +22,6 @@ public class ImageProcessing {
 	}
 	
 	public void process() {
-    	
     	try {
 			double area = _table.getNumber("area", 0);
 			contourFound = (area>0) ? true : false;

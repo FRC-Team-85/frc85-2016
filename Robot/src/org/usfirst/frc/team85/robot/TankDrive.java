@@ -74,8 +74,7 @@ public class TankDrive {
         double thrust = _controller.getY();
         double turn;
         double turnControl = _controller.getZ();
-        double turnControlCubed = turnControl * turnControl * turnControl; //Faster than Math.pow
-                                                                           //Could be made faster
+        double turnControlCubed = turnControl * turnControl * turnControl; //Faster than Math.pow, could be faster
                                                                            
         turn = -1.15 * turnControlCubed +
                 0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified 0.8(-1.15x^3+0.38x^9)
@@ -83,13 +82,13 @@ public class TankDrive {
         if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
         	thrust *= 1;
         	turn *= 1;
-        } else if(_controller.getRawButton(5) && !_controller.getRawButton(6)) {
+        } else if (_controller.getRawButton(5) && !_controller.getRawButton(6)) {
         	thrust *= 1;
         	turn *= 1;
-        } else if(!_controller.getRawButton(5) && _controller.getRawButton(6)){
+        } else if (!_controller.getRawButton(5) && _controller.getRawButton(6)) {
         	thrust *= 0.5;
         	turn *= 0.5;
-        } else if (!_controller.getRawButton(5) && !_controller.getRawButton(6)){
+        } else if (!_controller.getRawButton(5) && !_controller.getRawButton(6)) {
         	thrust *= 1;
         	turn *= 0.8;
         }
