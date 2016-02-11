@@ -28,7 +28,7 @@ public class TatorCannon {
 	private Intake _intake;
 	
 	private Timer _loadTimer;
-	private double _loadTime;	// = 0.0;	//milisecs
+	private double _loadTime /*= 0.0*/;	 //milliseconds
 	private boolean _loadInit, _loadComplete;
 
 	public TatorCannon(Joystick operatorStick, Intake intake) {
