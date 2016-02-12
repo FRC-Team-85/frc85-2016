@@ -6,6 +6,7 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TatorCannon {
 
@@ -17,6 +18,9 @@ public class TatorCannon {
 
 	private double FIRERPM;		//outerMotor speed
 	private double RPMTOL;		//outerMotor tol
+	
+	private static final double ARM_LOW_LIMIT = 4.15;
+	private static final double ARM_HIGH_LIMIT = 2.75;
 
 	private Boolean firstCheck = false;
 
@@ -24,12 +28,17 @@ public class TatorCannon {
 
 	private CANTalon _outerTopMotor, _outerBottomMotor, _armMotor;
 	private Relay _innerTopMotor, _innerBottomMotor;
+	
+	private AnalogInput _armPot;
 
 	private Intake _intake;
 	
 	private Timer _loadTimer;
 	private double _loadTime;	// = 0.0;	//milisecs
 	private boolean _loadInit, _loadComplete;
+	
+	private double _currentPosition;
+	private double _armAxis;
 
 	public TatorCannon(Joystick operatorStick, Intake intake) {
 
@@ -38,6 +47,7 @@ public class TatorCannon {
 		_outerTopMotor = new CANTalon(CANNON.OUTER_MOTOR_TOP);
 		_outerBottomMotor = new CANTalon(CANNON.OUTER_MOTOR_BOTTOM);
 		_armMotor = new CANTalon(CANNON.ARM_MOTOR);
+		_armPot = new AnalogInput(CANNON.ARM_POT);
 
 		_innerTopMotor = new Relay(CANNON.INNER_MOTOR_TOP, Relay.Direction.kBoth);
 		_innerBottomMotor = new Relay(CANNON.INNER_MOTOR_BOTTOM, Relay.Direction.kBoth);
@@ -46,7 +56,7 @@ public class TatorCannon {
 
 //		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
 //		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
-		_armMotor.changeControlMode(TalonControlMode.Position);
+		//_armMotor.changeControlMode(TalonControlMode.Position);
 
 		_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
 		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 	//Adjusted units of revolutions
@@ -54,7 +64,7 @@ public class TatorCannon {
 
 		_outerTopMotor.reverseSensor(true); //TODO: set to real value
 		_outerBottomMotor.reverseSensor(true);
-		_armMotor.reverseSensor(true);
+		//_armMotor.reverseSensor(true);
 /*
 		_outerTopMotor.setP(Constants.CANNON.P);
 		_outerTopMotor.setI(Constants.CANNON.I);
@@ -71,17 +81,31 @@ public class TatorCannon {
 		_armMotor.setD(Constants.ARM_CANNON.D);
 		_armMotor.setF(Constants.ARM_CANNON.F);
 */
-		_armMotor.enableLimitSwitch(true, true);
+		//_armMotor.enableLimitSwitch(true, true);
 
         _outerTopMotor.enableBrakeMode(false);
         _outerBottomMotor.enableBrakeMode(false);
-        _armMotor.enableBrakeMode(false);
+        _armMotor.enableBrakeMode(true);
         System.out.println("TatorCannon Init Done");
     }
 
     public void run(boolean Autonomous) {	//main method
-        fire(Autonomous);
-        load(Autonomous);
+        //fire(Autonomous);
+        //load(Autonomous);
+    	_currentPosition = _armPot.getVoltage();
+    	_armAxis = _operatorStick.getRawAxis(3);
+    	if ((_currentPosition < ARM_LOW_LIMIT && _currentPosition > ARM_HIGH_LIMIT) ||
+    			(_currentPosition > ARM_HIGH_LIMIT && _armAxis > 0) ||
+    			(_currentPosition < ARM_LOW_LIMIT && _armAxis < 0))
+    	{
+    		_armMotor.set(_armAxis);
+    	}
+    	else
+    	{
+    		_armMotor.set(0);
+    	}    	
+    	
+    	//SmartDashboard.putNumber("Arm pot", );
     }
     
     private void fire(boolean Autonomous) {

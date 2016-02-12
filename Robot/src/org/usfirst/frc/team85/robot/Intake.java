@@ -30,11 +30,11 @@ public class Intake {
 		rightAngleMotor = new CANTalon(INTAKE.RIGHT_INTAKE_MOTOR);
 		loadMotor = new Relay(INTAKE.LOAD_MOTOR);
 
-		leftAngleMotor.changeControlMode(TalonControlMode.Position);
-		rightAngleMotor.changeControlMode(TalonControlMode.Position);
+		//leftAngleMotor.changeControlMode(TalonControlMode.Position);
+		//rightAngleMotor.changeControlMode(TalonControlMode.Position);
 
 		//TODO: Set all to left and right
-		leftAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
+		//leftAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
 		/*rightAngleMotor.
 
 		angleMotor.reverseSensor(true); // Set to actual value
@@ -49,18 +49,22 @@ public class Intake {
 		leftAngleMotor.enableBrakeMode(true);
 		rightAngleMotor.enableBrakeMode(true);
         System.out.println("Intake Init Done");
+     
 	} 
 
 	public boolean run(boolean cannonReady) {
 		if (opStick.getRawButton(2) && !opStick.getRawButton(3)) { //Uses button A, move to ground and "suction"
 			badPickUpLine();
 		} else if (opStick.getRawButton(3)) { //Uses button B, loads the cannon
-			return loadCannon(cannonReady);	
+			return loadCannon(cannonReady);
+		} else {
+			this.SetMotors(opStick.getRawAxis(1));
 		}
 
-		System.out.println("Cannon is ready.");
+		//System.out.println("Cannon is ready.");
 //		SmartDashboard.putNumber("LoadMotor: ", loadMotor.get());
 		return false;
+
 	}
 	
 	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
@@ -82,9 +86,13 @@ public class Intake {
 				Math.abs(rightAngleMotor.get()-target) <= INTAKETOL) {
 			return true;
 		}
-		leftAngleMotor.set(target);
-		rightAngleMotor.set(target);
+		this.SetMotors(target);
 		return false;
 	}
 	
+	private void SetMotors(double value)
+	{
+		leftAngleMotor.set(value);
+		rightAngleMotor.set(value);
+	}
 }

@@ -59,7 +59,6 @@ public class Robot extends IterativeRobot {
         _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick, _intake);
 
-        a = new AnalogInput(0);
         b = new DigitalInput(0);
         
         /* Run GRIP in a new process */
@@ -102,21 +101,23 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	//_tatorCannon.armCheck();
- //   	_drive.drive();
-//    	_tatorCannon.run(false);
+  		//_drive.drive();
+    	   	
+    	_intake.run(false);
+    	_tatorCannon.run(false);
 
     	//_imageProcessing.process();
     	
-    	i=(++i)%100;
+    	//i=(++i)%100;
 
-
-    	SmartDashboard.putNumber("Analog 0: ", a.pidGet());
     	SmartDashboard.putBoolean("Digital 0: ", b.get());
 
-    	System.out.println("Double Analog[0]: " + a.pidGet());
-    	System.out.println("Bool Digital[0]: " + b.get());
-    	System.out.println();
-    	/**/											    	_tatorCannon.DANGER();
+    	//System.out.println("Double Analog[0]: " + a.pidGet());
+    	//System.out.println("Bool Digital[0]: " + b.get());
+    	//System.out.println();
+    	/**/											    	
+    	
+    	//_tatorCannon.DANGER();
 
     }
     
@@ -125,7 +126,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void disabledPeriodic() {
-    	System.out.println("Robot Periodic was disabled!!!"); 
+    	//System.out.println("Robot Periodic was disabled!!!"); 
     }
 
 }

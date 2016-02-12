@@ -31,6 +31,8 @@ public class Addresses {
 		public static final int INNER_MOTOR_BOTTOM = 2;		//Relay
 
 		public static final int ARM_MOTOR = 9;
+		
+		public static final int ARM_POT = 0;
 	}
 
     	//Intake
