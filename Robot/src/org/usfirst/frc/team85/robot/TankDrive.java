@@ -144,7 +144,7 @@ public class TankDrive {
     public boolean setDriveTarget(double lTarget, double lTolerance, double rTarget, double rTolerance) {
     	_masterLeftMotor.set(lTarget);
     	_masterRightMotor.set(rTarget);
-    	return ( ((getLeftDist()-lTarget)<lTolerance)&&((getRightDist()-rTarget)<rTolerance) );
+    	return ( ((getLeftDist()-lTarget)<lTolerance) && ((getRightDist()-rTarget)<rTolerance) );
     }
     
     public double getLeftDist() {
@@ -178,13 +178,13 @@ public class TankDrive {
 
     public void turn180() {
     	if (_controller.getRawButton(1) && !_controller.getRawButton(3)) {
-/*			_.resetDriveEncoders()
- * 
+/*			_drive.resetDriveEncoders()
+ 
     		if (encoderPos.getTalonSRXSomethingthing < 9000) {
     			_drive.setMotors(1,-1)
  			}*/
     	} else if (_controller.getRawButton(3) && !_controller.getRawButton(1)) {
-/*			_.resetDriveEncoders()
+/*			_drive.resetDriveEncoders()
 
     		if (encoderPos.getTalonSRXSomethingthing < 9000) {
     			_drive.setMotors(-1,1)
