@@ -25,6 +25,7 @@ public class TatorCannon {
 	private Boolean firstCheck = false;
 
 	private Joystick _operatorStick;
+	private Joystick _driveStick;
 
 	private CANTalon _outerTopMotor, _outerBottomMotor, _armMotor;
 	private Relay _innerTopMotor, _innerBottomMotor;
@@ -34,16 +35,17 @@ public class TatorCannon {
 	private Intake _intake;
 	
 	private Timer _loadTimer;
-	private double _loadTime;	// = 0.0;	//milisecs
+	private double _loadTime;	// = 0.0;	//millisecs
 	private boolean _loadInit, _loadComplete;
 	
 	private double _currentPosition;
 	private double _armAxis;
 
-	public TatorCannon(Joystick operatorStick, Intake intake) {
+	public TatorCannon(Joystick operatorStick, Joystick driveStick, Intake intake) {
 
 		_operatorStick = operatorStick;
-
+		_driveStick = driveStick;
+		
 		_outerTopMotor = new CANTalon(CANNON.OUTER_MOTOR_TOP);
 		_outerBottomMotor = new CANTalon(CANNON.OUTER_MOTOR_BOTTOM);
 		_armMotor = new CANTalon(CANNON.ARM_MOTOR);
@@ -57,13 +59,15 @@ public class TatorCannon {
 //		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
 //		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
 		//_armMotor.changeControlMode(TalonControlMode.Position);
+		
+		
 
-		_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
-		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 	//Adjusted units of revolutions
-		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); //Native units of 1/1024th of full range
+		//_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
+		//_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 	//Adjusted units of revolutions
+		//_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); //Native units of 1/1024th of full range
 
-		_outerTopMotor.reverseSensor(true); //TODO: set to real value
-		_outerBottomMotor.reverseSensor(true);
+		//_outerTopMotor.reverseSensor(true); //TODO: set to real value
+		//_outerBottomMotor.reverseSensor(true);
 		//_armMotor.reverseSensor(true);
 /*
 		_outerTopMotor.setP(Constants.CANNON.P);
@@ -87,6 +91,7 @@ public class TatorCannon {
         _outerBottomMotor.enableBrakeMode(false);
         _armMotor.enableBrakeMode(true);
         System.out.println("TatorCannon Init Done");
+        
     }
 
     public void run(boolean Autonomous) {	//main method
@@ -100,7 +105,9 @@ public class TatorCannon {
     		_armMotor.set(_armAxis);
     	} else {
     		_armMotor.set(0);
-    	}    	
+    	}
+    	
+    	
     	
     	//SmartDashboard.putNumber("Arm pot", );
     }
@@ -174,8 +181,8 @@ public class TatorCannon {
     }
 
     private void setOuter(double speed) {
-		_outerTopMotor.set(speed);
-		_outerBottomMotor.set(speed);
+		_outerTopMotor.set(1);
+		_outerBottomMotor.set(1);
     }
     private void setInnerIgnition() {	//Ready and Aim and Fire
 		_innerTopMotor.set(Relay.Value.kForward);
@@ -215,5 +222,73 @@ public class TatorCannon {
     	_armMotor.set(_operatorStick.getX()*100);
     	System.out.print("ARM"+_armMotor.get());
     }
+ 
+    	public void shootBall() {
+    		int mode;
+    		
+    		if (_driveStick.getRawButton(5)) {
+    			mode = 5;
+    		} else if (_driveStick.getRawButton(6)) {
+    			mode = 6;
+    		} else if (_operatorStick.getRawButton(8)) {
+    			mode = 8;
+    		} else {
+    			mode = 0;
+    		}
+    		
+    		
+    		switch (mode) {
+    		case 5:
+    			_outerBottomMotor.set(.75);
+    	    	_outerTopMotor.set(.75);
+    	    	
+    	    	if(_driveStick.getRawButton(6)) {
+    	    		_innerBottomMotor.set(Relay.Value.kForward);
+        	    	_innerTopMotor.set(Relay.Value.kForward);
+    	    	}
+    			break;
+    		
+    		case 8:
+    			_outerBottomMotor.set(-.75);
+    			_outerTopMotor.set(-.75);
+    	       	_innerBottomMotor.set(Relay.Value.kReverse);
+    	    	_innerTopMotor.set(Relay.Value.kReverse);
+    			break;
+    		case 0:
+    			 _outerTopMotor.set(0);
+    	         _outerBottomMotor.set(0);
+    	         _innerBottomMotor.set(Relay.Value.kOff);
+    	         _innerTopMotor.set(Relay.Value.kOff); 
+    		}
+/*
+    		if (_driveStick.getRawButton(5)) {
+    	_outerBottomMotor.set(.75);
+    	_outerTopMotor.set(.75);
+    	}
 
+    	  	
+    	
+    	if (_driveStick.getRawButton(6)) {
+    	_innerBottomMotor.set(Relay.Value.kForward);
+    	_innerTopMotor.set(Relay.Value.kForward);
+    	}
+    	
+    	
+    	if (_operatorStick.getRawButton(8) && !_driveStick.getRawButton(5) && !_driveStick.getRawButton(6)) {
+    	_outerTopMotor.set(-.75);
+    	_outerBottomMotor.set(-.75);
+       	_innerBottomMotor.set(Relay.Value.kReverse);
+    	_innerTopMotor.set(Relay.Value.kReverse);
+    	}
+    	else {
+            _outerTopMotor.set(0);
+            _outerBottomMotor.set(0);
+          	_innerBottomMotor.set(Relay.Value.kOff);
+        	_innerTopMotor.set(Relay.Value.kOff); 
+    	}
+    		
+    	} */
+    }
+    	
 }
+  

@@ -57,7 +57,7 @@ public class Robot extends IterativeRobot {
 
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
-        _tatorCannon = new TatorCannon(_operatorStick, _intake);
+        _tatorCannon = new TatorCannon(_operatorStick,_driveStick, _intake);
 
         b = new DigitalInput(0);
         
@@ -104,7 +104,7 @@ public class Robot extends IterativeRobot {
   		//_drive.drive();
     	   	
     	_intake.run(false);
-    	_tatorCannon.run(false);
+    	_tatorCannon.run(true);
 
     	//_imageProcessing.process();
     	
@@ -118,6 +118,7 @@ public class Robot extends IterativeRobot {
     	/**/											    	
     	
     	//_tatorCannon.DANGER();
+    	_tatorCannon.shootBall();
 
     }
     

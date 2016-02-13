@@ -83,15 +83,18 @@ public class TankDrive {
         	thrust *= 1;
         	turn *= 1;
         } else if (_controller.getRawButton(5) && !_controller.getRawButton(6)) {
-        	thrust *= 1;
+        	//"Quick Turn"
+        	thrust *= .5;
         	turn *= 1;
         } else if (!_controller.getRawButton(5) && _controller.getRawButton(6)) {
+        	//Slow speed for going over defenses
         	thrust *= 0.5;
         	turn *= 0.5;
         } else if (!_controller.getRawButton(5) && !_controller.getRawButton(6)) {
         	thrust *= 1;
         	turn *= 0.8;
         }
+        
 
         double left = thrust + turn;
         double right = thrust - turn;
