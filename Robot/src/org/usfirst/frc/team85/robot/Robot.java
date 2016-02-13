@@ -21,7 +21,7 @@ import org.usfirst.frc.team85.robot.Addresses.*;
  */
 public class Robot extends IterativeRobot {
 
-	//Defines three controllers: Two for tank drive, one for operator
+	//Defines two controllers: One for tank drive, one for operator
     private Joystick _driveStick;
 
     private Joystick _operatorStick;

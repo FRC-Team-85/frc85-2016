@@ -52,7 +52,7 @@ public class Intake {
      
 	} 
 
-	public boolean run(boolean cannonReady) {
+	public boolean run (boolean cannonReady) {
 		if (opStick.getRawButton(2) && !opStick.getRawButton(3)) { //Uses button A, move to ground and "suction"
 			badPickUpLine();
 		} else if (opStick.getRawButton(3)) { //Uses button B, loads the cannon
@@ -90,9 +90,9 @@ public class Intake {
 		return false;
 	}
 	
-	private void SetMotors(double value)
-	{
+	private void SetMotors(double value) {
 		leftAngleMotor.set(value);
 		rightAngleMotor.set(value);
 	}
+	
 }

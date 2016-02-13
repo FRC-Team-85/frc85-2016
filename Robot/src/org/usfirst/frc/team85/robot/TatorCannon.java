@@ -96,12 +96,9 @@ public class TatorCannon {
     	_armAxis = _operatorStick.getRawAxis(3);
     	if ((_currentPosition < ARM_LOW_LIMIT && _currentPosition > ARM_HIGH_LIMIT) ||
     			(_currentPosition > ARM_HIGH_LIMIT && _armAxis > 0) ||
-    			(_currentPosition < ARM_LOW_LIMIT && _armAxis < 0))
-    	{
+    			(_currentPosition < ARM_LOW_LIMIT && _armAxis < 0)) {
     		_armMotor.set(_armAxis);
-    	}
-    	else
-    	{
+    	} else {
     		_armMotor.set(0);
     	}    	
     	
@@ -110,7 +107,7 @@ public class TatorCannon {
     
     private void fire(boolean Autonomous) {
     	if (_operatorStick.getRawButton(99) || Autonomous) { //Uses button X
-    		if ( armMove(FIREPOS)&&
+    		if ( armMove(FIREPOS) &&
     				(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) &&
     				(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) ) {
     			setInnerIgnition();
