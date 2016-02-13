@@ -176,4 +176,20 @@ public class TankDrive {
         System.out.println("Mode Changed to Speed for Teleop");
     }
 
+    public void turn180() {
+    	if (_controller.getRawButton(1) && !_controller.getRawButton(3)) {
+/*			//set encoder count (rotations) to 0
+ * 
+    		if (encoderPos.getTalonSRXSomethingthing < 9000) {
+    			_drive.setMotors(1,-1)
+ 			}*/
+    	} else if (_controller.getRawButton(3) && !_controller.getRawButton(1)) {
+/*			//set encoder count (rotations) to 0
+
+    		if (encoderPos.getTalonSRXSomethingthing < 9000) {
+    			_drive.setMotors(-1,1)
+			}*/
+    	}
+    }
+    
 }
