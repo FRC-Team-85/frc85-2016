@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
 
@@ -56,7 +57,7 @@ public class Intake {
 		if (opStick.getRawButton(2) && !opStick.getRawButton(3)) { //Uses button A, move to ground and "suction"
 			badPickUpLine();
 		} else if (opStick.getRawButton(3)) { //Uses button B, loads the cannon
-			return loadCannon(cannonReady);
+			//return loadCannon(cannonReady);
 		} else {
 			this.SetMotors(opStick.getRawAxis(1));
 		}
@@ -73,13 +74,14 @@ public class Intake {
 		loadMotor.set(Relay.Value.kForward);
 	}
 
-	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
+	/*private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
 		if (intakeMove(LOADPOS) && cannonReady) {
 			loadMotor.set(Relay.Value.kReverse);
 			return true;
 		}
 		return false;
 	}
+	*/
 
 	private boolean intakeMove(double target) {
 		if (Math.abs(leftAngleMotor.get()-target) <= INTAKETOL &&
@@ -93,6 +95,27 @@ public class Intake {
 	private void SetMotors(double value) {
 		leftAngleMotor.set(value);
 		rightAngleMotor.set(value);
+	}
+	
+	public void rollers() {
+		if(opStick.getRawButton(6)) {
+			loadMotor.set(Relay.Value.kForward);
+		}
+		else {
+			loadMotor.set(Relay.Value.kOff);
+		}
+	}
+	
+	public void Stop() {
+		//Incomplete
+		DigitalInput limitSwitch;
+		limitSwitch = new DigitalInput(0);
+		
+		boolean limit = limitSwitch.get();
+		
+		if(limit == false) {
+			
+		}
 	}
 	
 }

@@ -119,6 +119,7 @@ public class Robot extends IterativeRobot {
     	
     	//_tatorCannon.DANGER();
     	_tatorCannon.shootBall();
+    	_intake.rollers();
 
     }
     

@@ -19,7 +19,7 @@ public class TatorCannon {
 	private double FIRERPM;		//outerMotor speed
 	private double RPMTOL;		//outerMotor tol
 	
-	private static final double ARM_LOW_LIMIT = 4.15;
+	private static final double ARM_LOW_LIMIT = 4.70;//4.15;
 	private static final double ARM_HIGH_LIMIT = 2.75;
 
 	private Boolean firstCheck = false;
@@ -260,6 +260,7 @@ public class TatorCannon {
     	         _innerBottomMotor.set(Relay.Value.kOff);
     	         _innerTopMotor.set(Relay.Value.kOff); 
     		}
+    	}
 /*
     		if (_driveStick.getRawButton(5)) {
     	_outerBottomMotor.set(.75);
@@ -289,6 +290,4 @@ public class TatorCannon {
     		
     	} */
     }
-    	
-}
-  
+    	  
