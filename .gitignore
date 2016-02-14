@@ -13,3 +13,4 @@ hs_err_pid*
 Robot/.classpath
 Robot/sysProps.xml
 *.xml
+*.xml

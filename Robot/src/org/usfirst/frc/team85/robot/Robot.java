@@ -101,7 +101,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	//_tatorCannon.armCheck();
-  		//_drive.drive();
+  		_drive.drive();
     	   	
     	_intake.run(false);
     	_tatorCannon.run(true);

@@ -228,8 +228,8 @@ public class TatorCannon {
     		
     		if (_driveStick.getRawButton(5)) {
     			mode = 5;
-    		} else if (_driveStick.getRawButton(6)) {
-    			mode = 6;
+    		} else if (_driveStick.getRawButton(6)) { //Probably should be deleted
+    			mode = 6; //Probably should be deleted
     		} else if (_operatorStick.getRawButton(8)) {
     			mode = 8;
     		} else {
@@ -238,23 +238,26 @@ public class TatorCannon {
     		
     		
     		switch (mode) {
-    		case 5:
+    		case 5: //Starts the firing motors, driver waits for it to speed up, then starts the index motors to feed the ball to the firing motors
+    			
+    			//Turns on outer firing motors
     			_outerBottomMotor.set(.75);
     	    	_outerTopMotor.set(.75);
     	    	
     	    	if(_driveStick.getRawButton(6)) {
+    	    		//Turns on index motors
     	    		_innerBottomMotor.set(Relay.Value.kForward);
         	    	_innerTopMotor.set(Relay.Value.kForward);
     	    	}
     			break;
     		
-    		case 8:
+    		case 8: //Sucks in ball
     			_outerBottomMotor.set(-.75);
     			_outerTopMotor.set(-.75);
     	       	_innerBottomMotor.set(Relay.Value.kReverse);
     	    	_innerTopMotor.set(Relay.Value.kReverse);
     			break;
-    		case 0:
+    		case 0: //Turns everything off
     			 _outerTopMotor.set(0);
     	         _outerBottomMotor.set(0);
     	         _innerBottomMotor.set(Relay.Value.kOff);
