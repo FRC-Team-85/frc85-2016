@@ -87,7 +87,6 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	_tatorCannon.armCheck();
     	//add the getpos for quadRatureEncoder here? -Matthew
     }
 
@@ -118,7 +117,7 @@ public class Robot extends IterativeRobot {
     	/**/											    	
     	
     	//_tatorCannon.DANGER();
-    	_tatorCannon.shootBall();
+    	_tatorCannon.run(false);
     	_intake.rollers();
 
     }
