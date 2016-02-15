@@ -49,8 +49,8 @@ public class Intake {
 */
 		leftAngleMotor.enableBrakeMode(true);
 		rightAngleMotor.enableBrakeMode(true);
-        System.out.println("Intake Init Done");
-     
+        	
+        	System.out.println("Intake Init Done");
 	} 
 
 	public boolean run (boolean cannonReady) {
@@ -61,11 +61,11 @@ public class Intake {
 		} else {
 			this.SetMotors(opStick.getRawAxis(1));
 		}
-
-		//System.out.println("Cannon is ready.");
-//		SmartDashboard.putNumber("LoadMotor: ", loadMotor.get());
+/*
+		System.out.println("Cannon is ready.");
+		SmartDashboard.putNumber("LoadMotor: ", loadMotor.get());
+*/
 		return false;
-
 	}
 	
 	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
@@ -73,16 +73,15 @@ public class Intake {
 		intakeMove(PICKUPPOSITION);
 		loadMotor.set(Relay.Value.kForward);
 	}
-
-	/*private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
+/*
+	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
 		if (intakeMove(LOADPOS) && cannonReady) {
 			loadMotor.set(Relay.Value.kReverse);
 			return true;
 		}
 		return false;
 	}
-	*/
-
+*/
 	private boolean intakeMove(double target) {
 		if (Math.abs(leftAngleMotor.get()-target) <= INTAKETOL &&
 				Math.abs(rightAngleMotor.get()-target) <= INTAKETOL) {
@@ -100,8 +99,7 @@ public class Intake {
 	public void rollers() {
 		if(opStick.getRawButton(6)) {
 			loadMotor.set(Relay.Value.kForward);
-		}
-		else {
+		} else {
 			loadMotor.set(Relay.Value.kOff);
 		}
 	}
@@ -113,7 +111,7 @@ public class Intake {
 		
 		boolean limit = limitSwitch.get();
 		
-		if(limit == false) {
+		if (limit == false) {
 			
 		}
 	}
