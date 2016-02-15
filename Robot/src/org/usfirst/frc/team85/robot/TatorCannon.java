@@ -181,24 +181,20 @@ public class TatorCannon {
     }
 
     private void setOuter(double speed) {
-		_outerTopMotor.set(1);
-		_outerBottomMotor.set(1);
+		_outerTopMotor.set(speed);
+		_outerBottomMotor.set(speed);
     }
-    private void setInnerIgnition() {	//Ready and Aim and Fire
+    private void indexOut() {	//Ready and Aim and Fire
 		_innerTopMotor.set(Relay.Value.kForward);
 		_innerBottomMotor.set(Relay.Value.kForward);
     }
-    private void setInnerHold() {	//Bring into Storage
+    private void indexIn() {	//Bring into Storage
 		_innerTopMotor.set(Relay.Value.kReverse);
 		_innerBottomMotor.set(Relay.Value.kReverse);
     }
-    private void setInnerFree() {	//Free to Shove around
+    private void indexOff() {	//Free to Shove around
 		_innerTopMotor.set(Relay.Value.kOff);
 		_innerBottomMotor.set(Relay.Value.kOff);
-    }
-    private void setInnerTrump() {	//Sturdy Like the Wall of Mexico
-		_innerTopMotor.set(Relay.Value.kForward);
-		_innerBottomMotor.set(Relay.Value.kForward);
     }
 
     public boolean armMove(double target) {
@@ -241,8 +237,7 @@ public class TatorCannon {
     		case 5: //Starts the firing motors, driver waits for it to speed up, then starts the index motors to feed the ball to the firing motors
     			
     			//Turns on outer firing motors
-    			_outerBottomMotor.set(.75);
-    	    	_outerTopMotor.set(.75);
+    			setOuter(.75);
     	    	
     	    	if(_driveStick.getRawButton(6)) {
     	    		//Turns on index motors
@@ -252,8 +247,7 @@ public class TatorCannon {
     			break;
     		
     		case 8: //Sucks in ball
-    			_outerBottomMotor.set(-.75);
-    			_outerTopMotor.set(-.75);
+    			setOuter(-.75);
     	       	_innerBottomMotor.set(Relay.Value.kReverse);
     	    	_innerTopMotor.set(Relay.Value.kReverse);
     			break;
