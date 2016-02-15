@@ -36,7 +36,8 @@ public class Intake {
 
 		//TODO: Set all to left and right
 		//leftAngleMotor.setFeedbackDevice(FeedbackDevice.AnalogPot);
-		/*rightAngleMotor.
+/*
+		rightAngleMotor.
 
 		angleMotor.reverseSensor(true); // Set to actual value
 

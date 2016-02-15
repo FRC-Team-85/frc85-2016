@@ -107,8 +107,6 @@ public class TatorCannon {
     		_armMotor.set(0);
     	}
     	
-    	
-    	
     	//SmartDashboard.putNumber("Arm pot", );
     }
     
@@ -212,7 +210,7 @@ public class TatorCannon {
     public void DANGER() {
     	double set = _operatorStick.getY();
     				
-    	System.out.println("!Danger!" + set);
+    	System.out.println("Danger!" + set);
 
     	_outerTopMotor.set(set);
     	_outerBottomMotor.set(set);
@@ -223,34 +221,28 @@ public class TatorCannon {
     	System.out.print("ARM"+_armMotor.get());
     }
  
-    	public void shootBall() {
-    		int mode;
+    public void shootBall() {
+    	int mode;
     		
-    		if (_driveStick.getRawButton(5)) {
-    			mode = 5;
-    		} else if (_driveStick.getRawButton(6)) { //Probably should be deleted
-    			mode = 6; //Probably should be deleted
-    		} else if (_operatorStick.getRawButton(8)) {
-    			mode = 8;
-    		} else {
-    			mode = 0;
-    		}
+    	if (_driveStick.getRawButton(5)) {
+    		mode = 5;
+    	} else if (_operatorStick.getRawButton(8)) {
+    		mode = 8;
+    	} else {
+    		mode = 0;
+    	}
     		
-    		
-    		switch (mode) {
-    		case 5: //Starts the firing motors, driver waits for it to speed up, then starts the index motors to feed the ball to the firing motors
-    			
-    			//Turns on outer firing motors
+    	switch (mode) {
+    		case 5: //Starts the firing motors, driver waits for it to speed up, then starts the index motors to feed the ball to the firing motors	
+    		//Turns on outer firing motors
     			_outerBottomMotor.set(.75);
-    	    	_outerTopMotor.set(.75);
+    			_outerTopMotor.set(.75);
     	    	
-    	    	if(_driveStick.getRawButton(6)) {
-    	    		//Turns on index motors
+    	    	if(_driveStick.getRawButton(6)) { //Turns on index motors
     	    		_innerBottomMotor.set(Relay.Value.kForward);
         	    	_innerTopMotor.set(Relay.Value.kForward);
     	    	}
     			break;
-    		
     		case 8: //Sucks in ball
     			_outerBottomMotor.set(-.75);
     			_outerTopMotor.set(-.75);
@@ -264,33 +256,6 @@ public class TatorCannon {
     	         _innerTopMotor.set(Relay.Value.kOff); 
     		}
     	}
-/*
-    		if (_driveStick.getRawButton(5)) {
-    	_outerBottomMotor.set(.75);
-    	_outerTopMotor.set(.75);
-    	}
 
-    	  	
-    	
-    	if (_driveStick.getRawButton(6)) {
-    	_innerBottomMotor.set(Relay.Value.kForward);
-    	_innerTopMotor.set(Relay.Value.kForward);
-    	}
-    	
-    	
-    	if (_operatorStick.getRawButton(8) && !_driveStick.getRawButton(5) && !_driveStick.getRawButton(6)) {
-    	_outerTopMotor.set(-.75);
-    	_outerBottomMotor.set(-.75);
-       	_innerBottomMotor.set(Relay.Value.kReverse);
-    	_innerTopMotor.set(Relay.Value.kReverse);
-    	}
-    	else {
-            _outerTopMotor.set(0);
-            _outerBottomMotor.set(0);
-          	_innerBottomMotor.set(Relay.Value.kOff);
-        	_innerTopMotor.set(Relay.Value.kOff); 
-    	}
-    		
-    	} */
     }
     	  
