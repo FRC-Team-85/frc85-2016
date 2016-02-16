@@ -39,7 +39,7 @@ public class TatorCannon {
 	private Intake _intake;
 	
 	private Timer _loadTimer;
-	private double _loadTime;	// = 0.0;	//millisecs
+	private double _loadTime;	// = 0.0;	//milliseconds
 	private boolean _loadInit, _loadComplete;
 	
 	private double _currentPosition;
@@ -59,21 +59,19 @@ public class TatorCannon {
 		_innerBottomMotor = new Relay(CANNON.INNER_MOTOR_BOTTOM, Relay.Direction.kBoth);
 		
 		_intake = intake;
-
-//		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
-//		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
-		//_armMotor.changeControlMode(TalonControlMode.Position);
-		
-		
-
-		//_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
-		//_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 	//Adjusted units of revolutions
-		//_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); //Native units of 1/1024th of full range
-
-		//_outerTopMotor.reverseSensor(true); //TODO: set to real value
-		//_outerBottomMotor.reverseSensor(true);
-		//_armMotor.reverseSensor(true);
 /*
+		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
+		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
+		_armMotor.changeControlMode(TalonControlMode.Position);
+		
+		_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
+		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 	//Adjusted units of revolutions
+		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); 							//Native units of 1/1024th of full range
+
+		_outerTopMotor.reverseSensor(true); //TODO: set to real value
+		_outerBottomMotor.reverseSensor(true);
+		_armMotor.reverseSensor(true);
+
 		_outerTopMotor.setP(Constants.CANNON.P);
 		_outerTopMotor.setI(Constants.CANNON.I);
 		_outerTopMotor.setD(Constants.CANNON.D);
@@ -88,9 +86,9 @@ public class TatorCannon {
 		_armMotor.setI(Constants.ARM_CANNON.I);
 		_armMotor.setD(Constants.ARM_CANNON.D);
 		_armMotor.setF(Constants.ARM_CANNON.F);
-*/
-		//_armMotor.enableLimitSwitch(true, true);
 
+		_armMotor.enableLimitSwitch(true, true);
+*/
         _outerTopMotor.enableBrakeMode(false);
         _outerBottomMotor.enableBrakeMode(false);
         _armMotor.enableBrakeMode(true);
@@ -105,7 +103,7 @@ public class TatorCannon {
     		setCannonMode();
     		runCannonMode();
     	} else {
-    		
+    		//Senpai make it do
     	}
     }
     
@@ -113,6 +111,7 @@ public class TatorCannon {
     	_currentPosition = _armPot.getVoltage();
     	SmartDashboard.putNumber("Arm pot: ", _currentPosition);
     	_armAxis = _operatorStick.getRawAxis(3);
+    	
     	if ((_currentPosition < ARM_LOW_LIMIT && _currentPosition > ARM_HIGH_LIMIT) ||
     			(_currentPosition > ARM_HIGH_LIMIT && _armAxis > 0) ||
     			(_currentPosition < ARM_LOW_LIMIT && _armAxis < 0)) {
@@ -133,8 +132,8 @@ public class TatorCannon {
     	_armMotor.set(target);
     	return false;
     }
-    
-/*    public void DANGER() {
+/*   
+	public void DANGER() {
     	double set = _operatorStick.getY();
     				
     	System.out.println("Danger!" + set);
@@ -146,12 +145,12 @@ public class TatorCannon {
     	
     	_armMotor.set(_operatorStick.getX()*100);
     	System.out.print("ARM"+_armMotor.get());
-    }*/
-    
+    }
+*/    
     public void setCannonMode() {
-    	if (_driveStick.getRawButton(5)) {
+    	if (_driveStick.getRawButton(5)) {				//Left bumper
     		MODE = CannonMode.CHARGE;
-    	} else if (_operatorStick.getRawButton(8)) {
+    	} else if (_operatorStick.getRawButton(8)) {	//Right trigger
     		MODE = CannonMode.STORAGE;
     	} else {
     		MODE = CannonMode.OFF;
@@ -190,14 +189,17 @@ public class TatorCannon {
     		
     	switch (MODE) {
     		case CHARGE:
-    			//Starts the firing motors, driver waits for it to speed up,
-    			//then starts the index motors to feed the ball to the firing motors
-    			//Turns on outer firing motors
+/*    			
+ * 				Starts the firing motors, driver waits for it to speed up,
+    			then starts the index motors to feed the ball to the firing motors
+    			Turns on outer firing motors
+*/    			
     			setOuter(FIRERPM);
-    	    	if(_driveStick.getRawButton(6)) { //Turns on index motors
+    	    	
+    			if(_driveStick.getRawButton(6)) { //Turns on index motors
     	    		indexOut();
     	    	}
-    			break;
+    	    	break;
     		case STORAGE: //Sucks in ball
     			setOuter(LOADSPEED);
     			indexIn();
@@ -208,7 +210,7 @@ public class TatorCannon {
     			break;
     		case AUTOFIRE:
     			if (true) {	//opButton or Auto
-    				if ( armMove(FIREPOS) &&
+    				if (armMove(FIREPOS) &&
         					(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) &&
         					(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) ) {
     					indexOut();
@@ -220,7 +222,7 @@ public class TatorCannon {
     			}
     			break;
     		case AUTOLOAD:
-    			if(_intake.run(readyToLoad()) && (true) && !_loadComplete) {	//opButton or Auto
+    			if (_intake.run(readyToLoad()) && (true) && !_loadComplete) {	//opButton or Auto
     	        	// if _intake is trying to load the cannon, wants to load, and not done loading
     	        	if (!_loadInit) {
     	        		_loadTimer.reset();
