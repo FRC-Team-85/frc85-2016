@@ -19,8 +19,8 @@ public class TatorCannon {
 	private double FIRERPM;		//outerMotor speed
 	private double RPMTOL;		//outerMotor tol
 	
-	private static final double ARM_LOW_LIMIT = 4.70;//4.15;
-	private static final double ARM_HIGH_LIMIT = 2.75;
+	private static final double ARM_LOW_LIMIT = 4.45;//4.70;//4.15;
+	private static final double ARM_HIGH_LIMIT = 2.65;//2.75;
 
 	private Boolean firstCheck = false;
 
@@ -31,7 +31,6 @@ public class TatorCannon {
 	private Relay _innerTopMotor, _innerBottomMotor;
 	
 	private AnalogInput _armPot;
-
 	private Intake _intake;
 	
 	private Timer _loadTimer;
@@ -225,7 +224,7 @@ public class TatorCannon {
  
     	public void shootBall() {
     		int mode;
-    		
+    		SmartDashboard.putNumber("pot", _currentPosition);
     		if (_driveStick.getRawButton(5)) {
     			mode = 5;
     		} else if (_driveStick.getRawButton(6)) { //Probably should be deleted
