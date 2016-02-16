@@ -20,7 +20,14 @@ import org.usfirst.frc.team85.robot.Addresses.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
+	
+	/**
+	 * https://www.ctr-electronics.com/Talon%20SRX%20Software%20Reference%20Manual.pdf
+	 * Page 49
+	 * This references the magnetic encoders we are using
+	 * 4096 steps per rotation, 12 bits per rotation 
+	 */
+	
 	//Defines two controllers: One for tank drive, one for operator
     private Joystick _driveStick;
 
@@ -87,7 +94,6 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	_tatorCannon.armCheck();
     	//add the getpos for quadRatureEncoder here? -Matthew
     }
 
@@ -118,7 +124,7 @@ public class Robot extends IterativeRobot {
     	/**/											    	
     	
     	//_tatorCannon.DANGER();
-    	_tatorCannon.shootBall();
+    	_tatorCannon.run(false);
     	_intake.rollers();
 
     }

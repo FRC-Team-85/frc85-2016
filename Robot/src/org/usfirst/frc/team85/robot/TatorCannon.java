@@ -10,17 +10,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TatorCannon {
 
-	private double LOADPOS;		//load pos
-	private double FIREPOS;		//fire pos
-	private double ARMTOL;		//angle tol
+	private double LOADPOS;		//auto load pos -- around 4.70
+	private double FIREPOS;		//auto fire pos -- around 2.70
+	private double ARMTOL;		//auto angle tol
 
-	private double LOADSPEED;	//loading speed
+	private double LOADSPEED = -0.75;	//loading speed
 
-	private double FIRERPM;		//outerMotor speed
+	private double FIRERPM = 0.75;		//outerMotor speed ---Voltage mode: 0.75
 	private double RPMTOL;		//outerMotor tol
 	
+<<<<<<< HEAD
 	private static final double ARM_LOW_LIMIT = 4.45;//4.70;//4.15;
 	private static final double ARM_HIGH_LIMIT = 2.65;//2.75;
+=======
+	private CannonMode MODE;
+	
+	private boolean AutoOR = true;
+	
+	private static final double ARM_LOW_LIMIT = 4.70;//4.15;		//Rename these
+	private static final double ARM_HIGH_LIMIT = 2.75;				//Rename these
+>>>>>>> origin/master
 
 	private Boolean firstCheck = false;
 
@@ -34,7 +43,7 @@ public class TatorCannon {
 	private Intake _intake;
 	
 	private Timer _loadTimer;
-	private double _loadTime;	// = 0.0;	//millisecs
+	private double _loadTime;	// = 0.0;	//milliseconds
 	private boolean _loadInit, _loadComplete;
 	
 	private double _currentPosition;
@@ -54,21 +63,19 @@ public class TatorCannon {
 		_innerBottomMotor = new Relay(CANNON.INNER_MOTOR_BOTTOM, Relay.Direction.kBoth);
 		
 		_intake = intake;
-
-//		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
-//		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
-		//_armMotor.changeControlMode(TalonControlMode.Position);
-		
-		
-
-		//_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
-		//_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 	//Adjusted units of revolutions
-		//_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); //Native units of 1/1024th of full range
-
-		//_outerTopMotor.reverseSensor(true); //TODO: set to real value
-		//_outerBottomMotor.reverseSensor(true);
-		//_armMotor.reverseSensor(true);
 /*
+		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
+		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
+		_armMotor.changeControlMode(TalonControlMode.Position);
+		
+		_outerTopMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 		//Native units of 1/4096th of a revolution, but
+		_outerBottomMotor.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative); 	//Adjusted units of revolutions
+		_armMotor.setFeedbackDevice(FeedbackDevice.AnalogPot); 							//Native units of 1/1024th of full range
+
+		_outerTopMotor.reverseSensor(true); //TODO: set to real value
+		_outerBottomMotor.reverseSensor(true);
+		_armMotor.reverseSensor(true);
+
 		_outerTopMotor.setP(Constants.CANNON.P);
 		_outerTopMotor.setI(Constants.CANNON.I);
 		_outerTopMotor.setD(Constants.CANNON.D);
@@ -83,9 +90,9 @@ public class TatorCannon {
 		_armMotor.setI(Constants.ARM_CANNON.I);
 		_armMotor.setD(Constants.ARM_CANNON.D);
 		_armMotor.setF(Constants.ARM_CANNON.F);
-*/
-		//_armMotor.enableLimitSwitch(true, true);
 
+		_armMotor.enableLimitSwitch(true, true);
+*/
         _outerTopMotor.enableBrakeMode(false);
         _outerBottomMotor.enableBrakeMode(false);
         _armMotor.enableBrakeMode(true);
@@ -94,10 +101,21 @@ public class TatorCannon {
     }
 
     public void run(boolean Autonomous) {	//main method
-        //fire(Autonomous);
-        //load(Autonomous);
+    	AutoOR = Autonomous;
+    	if (!AutoOR) {
+    		setArm();
+    		setCannonMode();
+    		runCannonMode();
+    	} else {
+    		//Senpai make it do
+    	}
+    }
+    
+    private void setArm() {
     	_currentPosition = _armPot.getVoltage();
+    	SmartDashboard.putNumber("Arm pot: ", _currentPosition);
     	_armAxis = _operatorStick.getRawAxis(3);
+    	
     	if ((_currentPosition < ARM_LOW_LIMIT && _currentPosition > ARM_HIGH_LIMIT) ||
     			(_currentPosition > ARM_HIGH_LIMIT && _armAxis > 0) ||
     			(_currentPosition < ARM_LOW_LIMIT && _armAxis < 0)) {
@@ -105,22 +123,46 @@ public class TatorCannon {
     	} else {
     		_armMotor.set(0);
     	}
-    	
-    	
-    	
-    	//SmartDashboard.putNumber("Arm pot", );
     }
     
-    private void fire(boolean Autonomous) {
-    	if (_operatorStick.getRawButton(99) || Autonomous) { //Uses button X
-    		if ( armMove(FIREPOS) &&
-    				(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) &&
-    				(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) ) {
-    			setInnerIgnition();
-    		}
-    		setOuter(FIRERPM);
-    		setInnerTrump();
-    	}  
+    private boolean readyToLoad(){
+    	return (Math.abs(_armMotor.get() - LOADPOS) <= ARMTOL);
+    }
+
+    public boolean armMove(double target) {
+    	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
+    		return true;									 //this entire if-block is probably unnecessary
+    	}
+    	_armMotor.set(target);
+    	return false;
+    }
+/*   
+	public void DANGER() {
+    	double set = _operatorStick.getY();
+    				
+    	System.out.println("Danger!" + set);
+
+    	_outerTopMotor.set(set);
+    	_outerBottomMotor.set(set);
+    	System.out.println("OTM "+_outerTopMotor.get());
+    	System.out.println("OBM "+_outerBottomMotor.get());
+    	
+    	_armMotor.set(_operatorStick.getX()*100);
+    	System.out.print("ARM"+_armMotor.get());
+    }
+*/    
+    public void setCannonMode() {
+    	if (_driveStick.getRawButton(5)) {				//Left bumper
+    		MODE = CannonMode.CHARGE;
+    	} else if (_operatorStick.getRawButton(8)) {	//Right trigger
+    		MODE = CannonMode.STORAGE;
+    	} else {
+    		MODE = CannonMode.OFF;
+    	}
+    	
+    	if (AutoOR) {
+    		
+    	}
     }
     
     private boolean load(boolean Autonomous) {
@@ -132,11 +174,11 @@ public class TatorCannon {
         		_loadInit = true;
         	} else {
         		if (_loadTimer.get() > _loadTime) {
-        			setInnerFree();
+        			indexOff();
         			setOuter(0.0);
             		_loadComplete = true;
         		} else {
-        			setInnerHold();
+        			indexOff();
         			setOuter(LOADSPEED);
         		}
         	}
@@ -147,67 +189,86 @@ public class TatorCannon {
         return _loadComplete;
     }
 
-    private boolean readyToLoad(){
-    	return (Math.abs(_armMotor.get() - LOADPOS) <= ARMTOL);
-    }
-
-    private boolean armAtTop() {
-		boolean softLimited = _armMotor.isForwardSoftLimitEnabled() &&
-							_armMotor.get() >= _armMotor.getForwardSoftLimit();
-		return _armMotor.isFwdLimitSwitchClosed() || softLimited;
-	}
-
-	private boolean armAtBottom() {
-		boolean softLimited = _armMotor.isReverseSoftLimitEnabled() &&
-							_armMotor.get() <= _armMotor.getReverseSoftLimit();
-		return _armMotor.isRevLimitSwitchClosed() || softLimited;
-	}
-
-    public void armCheck(){ //When robot starts up, moves cannon all the way down
-        if (!firstCheck){
-            _armMotor.enableForwardSoftLimit(false);
-            _armMotor.enableReverseSoftLimit(false);
-            if (!armAtBottom()) {
-                _armMotor.set (_armMotor.get() - 0.01);
-            }
-            firstCheck = true;
-            _armMotor.setPosition(0);
-            _armMotor.enableForwardSoftLimit(true);
-            _armMotor.setForwardSoftLimit(0.25); //Tuning required (rotations (probably))
-            _armMotor.enableReverseSoftLimit(true);
-            _armMotor.setReverseSoftLimit(0.0); //Rotations (probably), but still 0 even if it isn't
-        }
+    public void runCannonMode() {
+    		
+    	switch (MODE) {
+    		case CHARGE:
+/*    			
+ * 				Starts the firing motors, driver waits for it to speed up,
+    			then starts the index motors to feed the ball to the firing motors
+    			Turns on outer firing motors
+*/    			
+    			setOuter(FIRERPM);
+    	    	
+    			if(_driveStick.getRawButton(6)) { //Turns on index motors
+    	    		indexOut();
+    	    	}
+    	    	break;
+    		case STORAGE: //Sucks in ball
+    			setOuter(LOADSPEED);
+    			indexIn();
+    			break;
+    		case OFF: //Turns everything off
+    			setOuter(0.0);
+    			indexOff();
+    			break;
+    		case AUTOFIRE:
+    			if (true) {	//opButton or Auto
+    				if (armMove(FIREPOS) &&
+        					(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) &&
+        					(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) ) {
+    					indexOut();
+        				//MODE = asdfasdfasdfas;
+    				} else {
+        				setOuter(FIRERPM);
+        				indexOff();
+        			}
+    			}
+    			break;
+    		case AUTOLOAD:
+    			if (_intake.run(readyToLoad()) && (true) && !_loadComplete) {	//opButton or Auto
+    	        	// if _intake is trying to load the cannon, wants to load, and not done loading
+    	        	if (!_loadInit) {
+    	        		_loadTimer.reset();
+    	        		_loadTimer.start();
+    	        		_loadInit = true;
+    	        	} else {
+    	        		if (_loadTimer.get() > _loadTime) {
+    	        			indexOff();
+    	        			setOuter(0.0);
+    	            		_loadComplete = true;
+    	        		} else {
+    	        			indexIn();
+    	        			setOuter(LOADSPEED);
+    	        		}
+    	        	}
+    	        } else {
+    	        	_loadInit = false;
+    	        	_loadComplete = false;
+    	        }
+    	        //return _loadComplete;
+    			break;
+    	}
     }
 
     private void setOuter(double speed) {
-		_outerTopMotor.set(1);
-		_outerBottomMotor.set(1);
+		_outerTopMotor.set(speed);
+		_outerBottomMotor.set(speed);
     }
-    private void setInnerIgnition() {	//Ready and Aim and Fire
+    private void indexOut() {	//Ready and Aim and Fire
 		_innerTopMotor.set(Relay.Value.kForward);
 		_innerBottomMotor.set(Relay.Value.kForward);
     }
-    private void setInnerHold() {	//Bring into Storage
+    private void indexIn() {	//Bring into Storage
 		_innerTopMotor.set(Relay.Value.kReverse);
 		_innerBottomMotor.set(Relay.Value.kReverse);
     }
-    private void setInnerFree() {	//Free to Shove around
+    private void indexOff() {	//Free to Shove around
 		_innerTopMotor.set(Relay.Value.kOff);
 		_innerBottomMotor.set(Relay.Value.kOff);
     }
-    private void setInnerTrump() {	//Sturdy Like the Wall of Mexico
-		_innerTopMotor.set(Relay.Value.kForward);
-		_innerBottomMotor.set(Relay.Value.kForward);
-    }
-
-    public boolean armMove(double target) {
-    	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
-    		return true;									 //this entire if-block is probably unnecessary
-    	}
-    	_armMotor.set(target);
-    	return false;
-    }
     
+<<<<<<< HEAD
     public void DANGER() {
     	double set = _operatorStick.getY();
     				
@@ -292,4 +353,7 @@ public class TatorCannon {
     		
     	} */
     }
+=======
+}
+>>>>>>> origin/master
     	  
