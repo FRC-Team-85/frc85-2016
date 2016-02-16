@@ -20,7 +20,14 @@ import org.usfirst.frc.team85.robot.Addresses.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
+	
+	/**
+	 * https://www.ctr-electronics.com/Talon%20SRX%20Software%20Reference%20Manual.pdf
+	 * Page 49
+	 * This references the magnetic encoders we are using
+	 * 4096 steps per rotation, 12 bits per rotation 
+	 */
+	
 	//Defines two controllers: One for tank drive, one for operator
     private Joystick _driveStick;
 
