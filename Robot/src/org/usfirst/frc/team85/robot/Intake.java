@@ -54,27 +54,28 @@ public class Intake {
         	System.out.println("Intake Init Done");
 	} 
 
-	public boolean run (boolean cannonReady) {
+	public boolean run(boolean cannonReady) {
 		if (opStick.getRawButton(2) && !opStick.getRawButton(3)) { //Uses button A, move to ground and "suction"
 			badPickUpLine();
-		} else if (opStick.getRawButton(3)) { //Uses button B, loads the cannon
-			//return loadCannon(cannonReady);
+		} else if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
+			return loadCannon(cannonReady);
 		} else {
-			this.SetMotors(opStick.getRawAxis(1));
+			setMotors(opStick.getRawAxis(1));
 		}
-/*
-		System.out.println("Cannon is ready.");
-		SmartDashboard.putNumber("LoadMotor: ", loadMotor.get());
-*/
+		if(opStick.getRawButton(6)) {
+			loadMotor.set(Relay.Value.kForward);
+		} else {
+			loadMotor.set(Relay.Value.kOff);
+		}
 		return false;
 	}
 	
 	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
-		System.out.println("Preparing Cannon...");
+		System.out.println("Picking Up Boulders...");
 		intakeMove(PICKUPPOSITION);
 		loadMotor.set(Relay.Value.kForward);
 	}
-/*
+
 	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
 		if (intakeMove(LOADPOS) && cannonReady) {
 			loadMotor.set(Relay.Value.kReverse);
@@ -82,27 +83,19 @@ public class Intake {
 		}
 		return false;
 	}
-*/
+
 	private boolean intakeMove(double target) {
 		if (Math.abs(leftAngleMotor.get()-target) <= INTAKETOL &&
 				Math.abs(rightAngleMotor.get()-target) <= INTAKETOL) {
 			return true;
 		}
-		this.SetMotors(target);
+		setMotors(target);
 		return false;
 	}
 	
-	private void SetMotors(double value) {
+	private void setMotors(double value) {
 		leftAngleMotor.set(value);
 		rightAngleMotor.set(value);
-	}
-	
-	public void rollers() {
-		if(opStick.getRawButton(6)) {
-			loadMotor.set(Relay.Value.kForward);
-		} else {
-			loadMotor.set(Relay.Value.kOff);
-		}
 	}
 	
 	public void Stop() {

@@ -30,21 +30,13 @@ public class Robot extends IterativeRobot {
 	
 	//Defines two controllers: One for tank drive, one for operator
     private Joystick _driveStick;
-
     private Joystick _operatorStick;
 
     private TankDrive _drive;
     private Intake _intake;
     private TatorCannon _tatorCannon;
 
-    private NetworkTable _table;
-
     ImageProcessing _imageProcessing;
-
-    private AnalogInput a;
-    private DigitalInput b;//
-    
-    int i = 0;
 
     private final static String[] GRIP_ARGS = new String[] {
             "/usr/local/frc/JRE/bin/java", "-jar",
@@ -56,18 +48,14 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-    	//Sets up left controller
 
         _driveStick = new Joystick(CONTROLLERS.DRIVESTICK);
         _operatorStick = new Joystick(CONTROLLERS.OPERATORSTICK);
-
 
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick,_driveStick, _intake);
 
-        b = new DigitalInput(0);
-        
         /* Run GRIP in a new process */
 /*        try {
             Runtime.getRuntime().exec(GRIP_ARGS);
@@ -107,27 +95,14 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	//_tatorCannon.armCheck();
-  		_drive.drive();
-    	   	
-    	_intake.run(false);
-
     	//_imageProcessing.process();
-    	
-    	//i=(++i)%100;
-
-    	SmartDashboard.putBoolean("Digital 0: ", b.get());
-
-    	//System.out.println("Double Analog[0]: " + a.pidGet());
-    	//System.out.println("Bool Digital[0]: " + b.get());
-    	//System.out.println();
-    	
+  		_drive.drive();
+    	_intake.run(false);
     	_tatorCannon.run(false);
-    	_intake.rollers();
-
     }
     
     public void disabledInit() {
-    	System.out.println("Robot Init was disabled!!!");    	
+    	//System.out.println("Robot Init was disabled!!!");    	
     }
     
     public void disabledPeriodic() {
