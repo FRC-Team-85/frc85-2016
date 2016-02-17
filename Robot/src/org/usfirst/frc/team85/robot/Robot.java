@@ -110,7 +110,6 @@ public class Robot extends IterativeRobot {
   		_drive.drive();
     	   	
     	_intake.run(false);
-    	_tatorCannon.run(true);
 
     	//_imageProcessing.process();
     	
@@ -121,9 +120,7 @@ public class Robot extends IterativeRobot {
     	//System.out.println("Double Analog[0]: " + a.pidGet());
     	//System.out.println("Bool Digital[0]: " + b.get());
     	//System.out.println();
-    	/**/											    	
     	
-    	//_tatorCannon.DANGER();
     	_tatorCannon.run(false);
     	_intake.rollers();
 

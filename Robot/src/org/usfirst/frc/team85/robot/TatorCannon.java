@@ -15,24 +15,16 @@ public class TatorCannon {
 	private double ARMTOL;		//auto angle tol
 
 	private double LOADSPEED = -0.75;	//loading speed
-
 	private double FIRERPM = 0.75;		//outerMotor speed ---Voltage mode: 0.75
 	private double RPMTOL;		//outerMotor tol
 	
-<<<<<<< HEAD
-	private static final double ARM_LOW_LIMIT = 4.45;//4.70;//4.15;
-	private static final double ARM_HIGH_LIMIT = 2.65;//2.75;
-=======
-	private CannonMode MODE;
+	private static final double ARM_LOW_LIMIT = 4.45;//4.70;//4.15;	//Rename these
+	private static final double ARM_HIGH_LIMIT = 2.65;//2.75;		//Rename these
 	
-	private boolean AutoOR = true;
+	private CannonMode MODE = CannonMode.OFF;
 	
-	private static final double ARM_LOW_LIMIT = 4.70;//4.15;		//Rename these
-	private static final double ARM_HIGH_LIMIT = 2.75;				//Rename these
->>>>>>> origin/master
-
-	private Boolean firstCheck = false;
-
+	private boolean AutoOR = false;
+	
 	private Joystick _operatorStick;
 	private Joystick _driveStick;
 
@@ -136,21 +128,7 @@ public class TatorCannon {
     	_armMotor.set(target);
     	return false;
     }
-/*   
-	public void DANGER() {
-    	double set = _operatorStick.getY();
-    				
-    	System.out.println("Danger!" + set);
-
-    	_outerTopMotor.set(set);
-    	_outerBottomMotor.set(set);
-    	System.out.println("OTM "+_outerTopMotor.get());
-    	System.out.println("OBM "+_outerBottomMotor.get());
-    	
-    	_armMotor.set(_operatorStick.getX()*100);
-    	System.out.print("ARM"+_armMotor.get());
-    }
-*/    
+    
     public void setCannonMode() {
     	if (_driveStick.getRawButton(5)) {				//Left bumper
     		MODE = CannonMode.CHARGE;
@@ -165,41 +143,16 @@ public class TatorCannon {
     	}
     }
     
-    private boolean load(boolean Autonomous) {
-        if(_intake.run(readyToLoad()) && (_operatorStick.getRawButton(99) || Autonomous) && !_loadComplete) {	
-        	// if _intake is trying to load the cannon, wants to load, and not done loading
-        	if (!_loadInit) {
-        		_loadTimer.reset();
-        		_loadTimer.start();
-        		_loadInit = true;
-        	} else {
-        		if (_loadTimer.get() > _loadTime) {
-        			indexOff();
-        			setOuter(0.0);
-            		_loadComplete = true;
-        		} else {
-        			indexOff();
-        			setOuter(LOADSPEED);
-        		}
-        	}
-        } else {
-        	_loadInit = false;
-        	_loadComplete = false;
-        }
-        return _loadComplete;
-    }
-
     public void runCannonMode() {
     		
     	switch (MODE) {
     		case CHARGE:
 /*    			
- * 				Starts the firing motors, driver waits for it to speed up,
+ 				Starts the firing motors, driver waits for it to speed up,
     			then starts the index motors to feed the ball to the firing motors
     			Turns on outer firing motors
 */    			
-    			setOuter(FIRERPM);
-    	    	
+    			setOuter(FIRERPM);    	    	
     			if(_driveStick.getRawButton(6)) { //Turns on index motors
     	    		indexOut();
     	    	}
@@ -267,93 +220,6 @@ public class TatorCannon {
 		_innerTopMotor.set(Relay.Value.kOff);
 		_innerBottomMotor.set(Relay.Value.kOff);
     }
-    
-<<<<<<< HEAD
-    public void DANGER() {
-    	double set = _operatorStick.getY();
-    				
-    	System.out.println("!Danger!" + set);
 
-    	_outerTopMotor.set(set);
-    	_outerBottomMotor.set(set);
-    	System.out.println("OTM "+_outerTopMotor.get());
-    	System.out.println("OBM "+_outerBottomMotor.get());
-    	
-    	_armMotor.set(_operatorStick.getX()*100);
-    	System.out.print("ARM"+_armMotor.get());
-    }
- 
-    	public void shootBall() {
-    		int mode;
-    		SmartDashboard.putNumber("pot", _currentPosition);
-    		if (_driveStick.getRawButton(5)) {
-    			mode = 5;
-    		} else if (_driveStick.getRawButton(6)) { //Probably should be deleted
-    			mode = 6; //Probably should be deleted
-    		} else if (_operatorStick.getRawButton(8)) {
-    			mode = 8;
-    		} else {
-    			mode = 0;
-    		}
-    		
-    		
-    		switch (mode) {
-    		case 5: //Starts the firing motors, driver waits for it to speed up, then starts the index motors to feed the ball to the firing motors
-    			
-    			//Turns on outer firing motors
-    			_outerBottomMotor.set(.75);
-    	    	_outerTopMotor.set(.75);
-    	    	
-    	    	if(_driveStick.getRawButton(6)) {
-    	    		//Turns on index motors
-    	    		_innerBottomMotor.set(Relay.Value.kForward);
-        	    	_innerTopMotor.set(Relay.Value.kForward);
-    	    	}
-    			break;
-    		
-    		case 8: //Sucks in ball
-    			_outerBottomMotor.set(-.75);
-    			_outerTopMotor.set(-.75);
-    	       	_innerBottomMotor.set(Relay.Value.kReverse);
-    	    	_innerTopMotor.set(Relay.Value.kReverse);
-    			break;
-    		case 0: //Turns everything off
-    			 _outerTopMotor.set(0);
-    	         _outerBottomMotor.set(0);
-    	         _innerBottomMotor.set(Relay.Value.kOff);
-    	         _innerTopMotor.set(Relay.Value.kOff); 
-    		}
-    	}
-/*
-    		if (_driveStick.getRawButton(5)) {
-    	_outerBottomMotor.set(.75);
-    	_outerTopMotor.set(.75);
-    	}
-
-    	  	
-    	
-    	if (_driveStick.getRawButton(6)) {
-    	_innerBottomMotor.set(Relay.Value.kForward);
-    	_innerTopMotor.set(Relay.Value.kForward);
-    	}
-    	
-    	
-    	if (_operatorStick.getRawButton(8) && !_driveStick.getRawButton(5) && !_driveStick.getRawButton(6)) {
-    	_outerTopMotor.set(-.75);
-    	_outerBottomMotor.set(-.75);
-       	_innerBottomMotor.set(Relay.Value.kReverse);
-    	_innerTopMotor.set(Relay.Value.kReverse);
-    	}
-    	else {
-            _outerTopMotor.set(0);
-            _outerBottomMotor.set(0);
-          	_innerBottomMotor.set(Relay.Value.kOff);
-        	_innerTopMotor.set(Relay.Value.kOff); 
-    	}
-    		
-    	} */
-    }
-=======
 }
->>>>>>> origin/master
     	  
