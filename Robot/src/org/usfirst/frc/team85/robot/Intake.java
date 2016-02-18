@@ -13,6 +13,8 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 
 public class Intake {
 
+	DigitalInput upIntakeLimit = new DigitalInput(0);
+	
 	private Joystick opStick;
 
 	private double LOADPOS;
@@ -22,6 +24,8 @@ public class Intake {
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
 	private Relay loadMotor;
+	
+	//private DigitalInput upIntakeLimit = new DigitalInput(1);
 
 	public Intake(Joystick operatorStick) {
 		
@@ -55,6 +59,8 @@ public class Intake {
 	} 
 
 	public boolean run(boolean cannonReady) {
+		
+		SmartDashboard.putData("Upper Intake Limit: ", upIntakeLimit);
 		if (opStick.getRawButton(2) && !opStick.getRawButton(3)) { //Uses button A, move to ground and "suction"
 			badPickUpLine();
 		} else if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
@@ -97,15 +103,16 @@ public class Intake {
 		leftAngleMotor.set(value);
 		rightAngleMotor.set(value);
 	}
-	
+
 	public void Stop() {
 		//Incomplete
 		DigitalInput limitSwitch;
-		limitSwitch = new DigitalInput(0);
 		
-		boolean limit = limitSwitch.get();
+		boolean limit = upIntakeLimit.get();
 		
 		if (limit == false) {
+			
+			
 			
 		}
 	}

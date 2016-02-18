@@ -11,15 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team85.robot.Addresses.*;
 
 public class TankDrive {
-
+	
     private Joystick _controller;
 
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
-
+    
     public TankDrive(Joystick DriveController) {
         _controller = DriveController;
-
         _masterLeftMotor = new CANTalon(DRIVE.LEFT_FRONT_MOTOR);	//MASTER LEFT
         _masterLeftMotor.enableBrakeMode(false);
 
@@ -44,6 +43,9 @@ public class TankDrive {
 
         setVoltageRamp(0.5);
         System.out.println("TankDrive Init Done");
+        
+        
+        
     }
 
 	public void setVoltageRamp(double rate) {
@@ -100,6 +102,7 @@ public class TankDrive {
         double right = thrust - turn;
 
         setMotors(left + skim(right), right + skim(left));
+            
     }
 
     double skim(double v) { // Sets adjustments to the right side if the left

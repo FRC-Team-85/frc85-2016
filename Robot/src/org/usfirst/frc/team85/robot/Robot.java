@@ -88,6 +88,7 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         _drive.setVoltageRamp(0.0); //Removes voltage ramp limit
         _drive.setBrakeMode(false);
+       
     }
 
     /**
@@ -97,7 +98,7 @@ public class Robot extends IterativeRobot {
     	//_tatorCannon.armCheck();
     	//_imageProcessing.process();
   		_drive.drive();
-    	_intake.run(false);
+    	_intake.run(true);
     	_tatorCannon.run(false);
     }
     
