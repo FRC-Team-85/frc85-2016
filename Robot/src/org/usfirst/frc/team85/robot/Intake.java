@@ -2,7 +2,8 @@ package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
-//import edu.wpi.first.wpilibj.CANTalon.DonaldTrump;
+//import edu.wpi.first.wpilibj.CANTalon.DonaldTrump; why?
+//import edu.wpi.first.wpilibk.CANTalon.BernieSanders.FreeMoney.get(10000000000);
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
@@ -14,6 +15,7 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 public class Intake {
 
 	DigitalInput upIntakeLimit = new DigitalInput(0);
+	DigitalInput downIntakeLimit = new DigitalInput(3);
 	
 	private Joystick opStick;
 
@@ -99,22 +101,24 @@ public class Intake {
 		return false;
 	}
 	
-	private void setMotors(double value) {
-		leftAngleMotor.set(value);
-		rightAngleMotor.set(value);
-	}
-
-	public void Stop() {
-		//Incomplete
-		DigitalInput limitSwitch;
+	private void setMotors(double value) {		
+		SmartDashboard.putData("Top Intake Limit: ", upIntakeLimit);
+		SmartDashboard.putData("Bot Intake Limit: ", downIntakeLimit);
 		
-		boolean limit = upIntakeLimit.get();
+		boolean topLimit = upIntakeLimit.get();
+		boolean botLimit = downIntakeLimit.get();
 		
-		if (limit == false) {
-			
-			
+		if (value < .05 && topLimit == true) { 
+			leftAngleMotor.set(0);
+			rightAngleMotor.set(0);
+		} else if (value > -.05 && botLimit == true) { 
+			leftAngleMotor.set(0);
+			rightAngleMotor.set(0);
+		} else {
+			leftAngleMotor.set(value/2);
+			rightAngleMotor.set(value/2);
+		}
 			
 		}
 	}
-	
-}
+

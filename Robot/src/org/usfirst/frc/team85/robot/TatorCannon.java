@@ -98,34 +98,13 @@ public class TatorCannon {
     public void run(boolean Autonomous) {	//main method
     	AutoOR = Autonomous;
     	if (!AutoOR) {
-    		setArm();
+    		setArmMotor(_operatorStick.getRawAxis(3));
     		setCannonMode();
     		runCannonMode();
     	} else {
     		//Senpai make it do
     	}
     }
-    
-    private void setArm() {
-    	_currentPosition = _armPot.getVoltage();
-    	_armAxis = _operatorStick.getRawAxis(3);
-    	
-        SmartDashboard.putData("Top Dart Limit: ", topDartLimit);
-        SmartDashboard.putData("Bottom Dart Limit: ", bottomDartLimit);
-    }
-    	
-        
-        
-     /*   
-    	if ((_currentPosition < ARM_LOW_LIMIT && _currentPosition > ARM_HIGH_LIMIT) ||
-    			(_currentPosition > ARM_HIGH_LIMIT && _armAxis > 0) ||
-    			(_currentPosition < ARM_LOW_LIMIT && _armAxis < 0)) {
-    		_armMotor.set(_armAxis);
-    	} else {
-    		_armMotor.set(0);
-    	}
-    }
-    */
     
     private boolean readyToLoad(){
     	return (Math.abs(_armMotor.get() - LOADPOS) <= ARMTOL);
@@ -230,23 +209,18 @@ public class TatorCannon {
 		_innerTopMotor.set(Relay.Value.kOff);
 		_innerBottomMotor.set(Relay.Value.kOff);
     }
-    public void Stop() {
-		//Incomplete
-		DigitalInput limitSwitch;
-		
+    public void setArmMotor(double value) {
 		boolean topLimit = topDartLimit.get();
-		boolean botLimit = topDartLimit.get();
+		boolean botLimit = bottomDartLimit.get();
 		
-		if ((topLimit == true && botLimit == true) ||
-    			(topLimit == true && _armAxis > 0) ||
-    			(botLimit == true && _armAxis < 0)) {
-    		_armMotor.set(_armAxis);
-    	} else {
-    		_armMotor.set(0);
-    	}
-			
+		if (value < .05 && topLimit == false) { 
+			_armMotor.set(0);
+		} else if (value > -.05 && botLimit == false) { 
+			_armMotor.set(0);
+		} else {
+			_armMotor.set(value * 0.4);
 		}
-
-
+			
+	}
 }
     	  
