@@ -43,6 +43,7 @@ public class TatorCannon {
 	
 	DigitalInput topDartLimit = new DigitalInput(1);
 	DigitalInput bottomDartLimit = new DigitalInput(2);
+	DigitalInput _ballNotPresentSensor;
 
 	public TatorCannon(Joystick operatorStick, Joystick driveStick, Intake intake) {
 
@@ -56,6 +57,8 @@ public class TatorCannon {
 
 		_innerTopMotor = new Relay(CANNON.INNER_MOTOR_TOP, Relay.Direction.kBoth);
 		_innerBottomMotor = new Relay(CANNON.INNER_MOTOR_BOTTOM, Relay.Direction.kBoth);
+		
+		_ballNotPresentSensor = new DigitalInput(CANNON.BALL_NOT_PRESENT_SENSOR);
 		
 		_intake = intake;
 /*
@@ -119,9 +122,10 @@ public class TatorCannon {
     }
     
     public void setCannonMode() {
+    	SmartDashboard.putData("Ball not present ", _ballNotPresentSensor);
     	if (_driveStick.getRawButton(5)) {				//Left bumper
     		MODE = CannonMode.CHARGE;
-    	} else if (_operatorStick.getRawButton(8)) {	//Right trigger
+    	} else if (_operatorStick.getRawButton(8) && _ballNotPresentSensor.get()) {	//Right trigger
     		MODE = CannonMode.STORAGE;
     	} else {
     		MODE = CannonMode.OFF;
