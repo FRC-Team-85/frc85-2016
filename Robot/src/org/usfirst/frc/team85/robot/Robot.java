@@ -27,6 +27,7 @@ public class Robot extends IterativeRobot {
 	 * This references the magnetic encoders we are using
 	 * 4096 steps per rotation, 12 bits per rotation 
 	 * From Nathan:  25.132741232 inches per rotation, or 2.094395102666666666 repeating ft/rotation
+	 * After serious maths: ~23468.35129 units of the "native rotation" per feet
 	 */
 	
 	//Defines two controllers: One for tank drive, one for operator
