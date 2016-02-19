@@ -82,18 +82,18 @@ public class TankDrive {
                 0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified 0.8(-1.15x^3+0.38x^9)
 
         if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
-        	thrust *= 1;
-        	turn *= 1;
-        } else if (_controller.getRawButton(5) && !_controller.getRawButton(6)) {
+      //  	thrust *= 1;
+       // 	turn *= 1;
+        } else if (_controller.getRawButton(5)) {
         	//"Quick Turn"
         	thrust *= .5;
-        	turn *= 1;
-        } else if (!_controller.getRawButton(5) && _controller.getRawButton(6)) {
+       // 	turn *= 1;
+        } else if (_controller.getRawButton(6)) {
         	//Slow speed for going over defenses
         	thrust *= 0.5;
         	turn *= 0.5;
-        } else if (!_controller.getRawButton(5) && !_controller.getRawButton(6)) {
-        	thrust *= 1;
+        } else {
+       // 	thrust *= 1;
         	turn *= 0.8;
         }
         

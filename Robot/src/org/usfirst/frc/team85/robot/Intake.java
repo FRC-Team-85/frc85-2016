@@ -3,7 +3,7 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 //import edu.wpi.first.wpilibj.CANTalon.DonaldTrump; why?
-//import edu.wpi.first.wpilibk.CANTalon.BernieSanders.FreeMoney.get(10000000000);
+//import edu.wpi.first.wpilibj.CANTalon.BernieSanders.getFreeMoney(19039640481000);
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
@@ -19,10 +19,14 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	private double LOADPOS;
-	private double PICKUPPOSITION;
-
-	private double INTAKETOL;
+	private int LOADPOS = -550000;
+	private int LIFTHEIGHT = -880000;
+	private int OPENDOOR = -784380;
+	private int HOME = 0;
+	
+	int _encPos;
+	
+	private double INTAKETOL = 1000; //TODO: Bigger
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
 	private Relay loadMotor;
@@ -57,19 +61,33 @@ public class Intake {
 		leftAngleMotor.enableBrakeMode(true);
 		rightAngleMotor.enableBrakeMode(true);
         	
-        	System.out.println("Intake Init Done");
+        System.out.println("Intake Init Done");
 	} 
 
 	public boolean run(boolean cannonReady) {
 		
-		SmartDashboard.putData("Upper Intake Limit: ", upIntakeLimit);
-		if (opStick.getRawButton(2) && !opStick.getRawButton(3)) { //Uses button A, move to ground and "suction"
-			badPickUpLine();
-		} else if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
+		_encPos = rightAngleMotor.getEncPosition();
+		if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
 			return loadCannon(cannonReady);
-		} else {
+		}
+		else if (opStick.getPOV() == 0){ //Uses button A, move to ground and "suction"
+			intakeMove(HOME);
+		} 
+		else if (opStick.getPOV() == 180) {
+			intakeMove(LIFTHEIGHT);
+		}
+		else if (opStick.getPOV() == 90) {
+			intakeMove(OPENDOOR);
+		}
+		else if (opStick.getPOV() == 270) {
+			intakeMove(LOADPOS);
+		}
+		else {
 			setMotors(opStick.getRawAxis(1));
 		}
+		
+		
+		
 		if(opStick.getRawButton(6)) {
 			loadMotor.set(Relay.Value.kForward);
 		} else {
@@ -79,8 +97,7 @@ public class Intake {
 	}
 	
 	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
-		System.out.println("Picking Up Boulders...");
-		intakeMove(PICKUPPOSITION);
+		intakeMove(LOADPOS);
 		loadMotor.set(Relay.Value.kForward);
 	}
 
@@ -93,17 +110,24 @@ public class Intake {
 	}
 
 	private boolean intakeMove(double target) {
-		if (Math.abs(leftAngleMotor.get()-target) <= INTAKETOL &&
-				Math.abs(rightAngleMotor.get()-target) <= INTAKETOL) {
+		SmartDashboard.putNumber("Intake Position Target", target);
+		if (Math.abs(_encPos-target) <= INTAKETOL) {
 			return true;
 		}
-		setMotors(target);
+		else if(_encPos < target) {
+			setMotors(-1);
+		}
+		else if(_encPos > target) {
+			setMotors(1);
+		}
+		
 		return false;
 	}
 	
 	private void setMotors(double value) {		
 		SmartDashboard.putData("Top Intake Limit: ", upIntakeLimit);
 		SmartDashboard.putData("Bot Intake Limit: ", downIntakeLimit);
+		SmartDashboard.putInt("Intake encoder", rightAngleMotor.getEncPosition());
 		
 		boolean topLimit = upIntakeLimit.get();
 		boolean botLimit = downIntakeLimit.get();
@@ -111,14 +135,14 @@ public class Intake {
 		if (value < .05 && topLimit == true) { 
 			leftAngleMotor.set(0);
 			rightAngleMotor.set(0);
+			rightAngleMotor.setEncPosition(0);
 		} else if (value > -.05 && botLimit == true) { 
 			leftAngleMotor.set(0);
 			rightAngleMotor.set(0);
 		} else {
 			leftAngleMotor.set(value/2);
 			rightAngleMotor.set(value/2);
-		}
-			
-		}
+		}			
 	}
+}
 
