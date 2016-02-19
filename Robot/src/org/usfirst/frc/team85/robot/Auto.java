@@ -24,42 +24,6 @@ public class Auto {
         //_driveQuadEncoderPos = _talons[1].getEncPosition();
 		//Note: if we are not using the PID loops for driving, we can
 		//connect the encoder directly to the roboRIO
-        
-        //this giant next part is my unsure input of the intakeMove and setMotors from intake and deletion of the system.out.println due to its un-necessity
-        //please tell me how wrong i am nicely </3
-/*      private boolean intakeMove(double target) {
-    		if (Math.abs(_encPos-target) <= INTAKETOL) {
-    			return true;
-    		}
-    		else if(_encPos < target) {
-    			setMotors(-1);
-    		}
-    		else if(_encPos > target) {
-    			setMotors(1);
-    		}
-    		
-    		return false;
-    	}
-		private void setMotors(double value) {		
-			SmartDashboard.putData("Top Intake Limit: ", upIntakeLimit);
-			SmartDashboard.putData("Bot Intake Limit: ", downIntakeLimit);
-			SmartDashboard.putInt("Intake encoder", rightAngleMotor.getEncPosition());
-	
-			boolean topLimit = upIntakeLimit.get();
-			boolean botLimit = downIntakeLimit.get();
-	
-			if (value < .05 && topLimit == true) { 
-				leftAngleMotor.set(0);
-				rightAngleMotor.set(0);
-				rightAngleMotor.setEncPosition(0);
-			} else if (value > -.05 && botLimit == true) { 
-				leftAngleMotor.set(0);
-				rightAngleMotor.set(0);
-			} else {
-				leftAngleMotor.set(value/2);
-				rightAngleMotor.set(value/2);
-			}
-*/	
         switch (obstacle) {
         case 0: //LowBar
 /*
