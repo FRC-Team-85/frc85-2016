@@ -12,7 +12,7 @@ app.get('/', function(req, res) {
 
 app.get('/api/:teamid/get', function(req, res) {
     var teamid = res.teamid;
-    client.hgetall("team:85", function(err, reply) {
+    client.hgetall("team:" . teamid, function(err, reply) {
         if (err) {
             res.json({});
             res.status(500).json({ error: "It broke."});
@@ -22,7 +22,7 @@ app.get('/api/:teamid/get', function(req, res) {
     });
 });
 
-app.get('/api/:teamid/set', function(req, res) {
+app.get('/api/:teamid/set', function(req, res) { //should be put eventually
   var teamid = res.teamid;
   for (var i = 0; i < fields.length; i++) {
       var value = (req.param(fields[i]));

@@ -14,3 +14,8 @@ Robot/.classpath
 Robot/sysProps.xml
 *.xml
 *.xml
+
+# Redis Dump (not sure why it's even there)
+*.rdb
+
+usbscout/node_modules
