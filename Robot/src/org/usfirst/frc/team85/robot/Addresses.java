@@ -33,6 +33,7 @@ public class Addresses {
 		public static final int ARM_MOTOR = 9;
 		
 		public static final int ARM_POT = 0;
+		public static final int BALL_NOT_PRESENT_SENSOR = 4;
 	}
 
     	//Intake
