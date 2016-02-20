@@ -51,13 +51,15 @@ public class Auto {
             
         	break;
         case 1: //Portcullis
-        	/*
+/*
         	if (_driveQuadEncoderPos <= 3000) {
         		_drive.setMotors(FORWARD, FORWARD);
         	}
         	_drive.setBrakeMode(true);
-        	intakeMove(-784380);
-        	//then there would be something here about driving a little bit more forward and also lifting the actual door
+        	intakeMove(OPENDOOR);
+        	//_drive.setMotors(1INCH, 1INCH);
+        	//intakeMove(HOME);
+		//_drive.setMotors(FORWARD, FORWARD);
 */
             break;
         case 2: //Cheval de Frise
