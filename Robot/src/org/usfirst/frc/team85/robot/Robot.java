@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
     private Intake _intake;
     private TatorCannon _tatorCannon;
 
-    ImageProcessing _imageProcessing;
+    private ImageProcessing _imageProcessing;
 
     private final static String[] GRIP_ARGS = new String[] {
             "/usr/local/frc/JRE/bin/java", "-jar",
@@ -57,23 +57,9 @@ public class Robot extends IterativeRobot {
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
         _tatorCannon = new TatorCannon(_operatorStick,_driveStick, _intake);
-
-        /* Run GRIP in a new process */
-/*        try {
-            Runtime.getRuntime().exec(GRIP_ARGS);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         
-        //Setup NetworkTable\
-        try {
-        	NetworkTable.setClientMode();
-        	NetworkTable.setIPAddress("roborio-85-frc.local");
-        	_table = NetworkTable.getTable("grip");
-        } catch(Exception ex) {
-        	System.out.println(ex.toString());
-        }
-*/    }
+        _imageProcessing = new ImageProcessing();
+    }
 
     public void autonomousInit() {
     	_drive.setVoltageRamp(2.0); //Limits controllers to 2V/sec
@@ -97,8 +83,9 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	PowerMonitoring.Monitor();
     	//_tatorCannon.armCheck();
-    	//_imageProcessing.process();
+    	_imageProcessing.process();
   		_drive.drive();
     	_intake.run(true);
     	_tatorCannon.run(false);

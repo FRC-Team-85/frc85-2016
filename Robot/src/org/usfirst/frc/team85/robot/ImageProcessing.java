@@ -1,29 +1,34 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ImageProcessing {
 	
 	private NetworkTable _table;
-	private CameraServer _server;
-	private SmartDashboard _dashboard;
 	
 	private boolean contourFound;
-	private int fov = 180;
-	int pixelToAngle = fov/320; //each pixel equals X degrees
 	
-	private double area, height, width, centerX, centerY;
+	public double area, height, width, centerX, centerY;
 	
-	public ImageProcessing(NetworkTable table, CameraServer server) {
-		_table = table;
-		_server = server;
+	public ImageProcessing() {		
+		System.out.println("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+		
+		//Setup NetworkTables
+        try {
+        	NetworkTable.setClientMode();
+        	NetworkTable.setIPAddress("roborio-85-frc.local");
+        	_table = NetworkTable.getTable("grip");
+        } catch(Exception ex) {
+        	System.out.println(ex.toString());
+        }
 	}
 	
 	public void process() {
     	try {
-			double area = _table.getNumber("area", 0);
+			area = _table.getNumber("area", 0);
 			contourFound = (area>0) ? true : false;
 			centerX = _table.getNumber("centerX", 160) - 160;
 			centerY = _table.getNumber("centerX", 120) - 120;
