@@ -123,7 +123,7 @@ public class TatorCannon {
     
     public void setCannonMode() {
     	SmartDashboard.putData("Ball not present ", _ballNotPresentSensor);
-    	if (_driveStick.getRawButton(5)) {				//Left bumper
+    	if (_driveStick.getRawButton(7)) {				//Left bumper
     		MODE = CannonMode.CHARGE;
     	} else if (_operatorStick.getRawButton(8) && _ballNotPresentSensor.get()) {	//Right trigger
     		MODE = CannonMode.STORAGE;
@@ -146,7 +146,7 @@ public class TatorCannon {
     			Turns on outer firing motors
 */    			
     			setOuter(FIRERPM);    	    	
-    			if(_driveStick.getRawButton(6)) { //Turns on index motors
+    			if(_driveStick.getRawButton(8)) { //Turns on index motors
     	    		indexOut();
     	    	}
     	    	break;

@@ -19,6 +19,7 @@ public class Intake {
 	
 	private Joystick opStick;
 
+	private int DART_LIMIT = -267371;
 	private int LOADPOS = -550000;
 	private int LIFTHEIGHT = -880000;
 	private int OPENDOOR = -784380;
@@ -84,9 +85,7 @@ public class Intake {
 		}
 		else {
 			setMotors(opStick.getRawAxis(1));
-		}
-		
-		
+		}		
 		
 		if(opStick.getRawButton(6)) {
 			loadMotor.set(Relay.Value.kForward);
@@ -127,7 +126,7 @@ public class Intake {
 	private void setMotors(double value) {		
 		SmartDashboard.putData("Top Intake Limit: ", upIntakeLimit);
 		SmartDashboard.putData("Bot Intake Limit: ", downIntakeLimit);
-		SmartDashboard.putInt("Intake encoder", rightAngleMotor.getEncPosition());
+		SmartDashboard.putInt("Intake encoder", _encPos);
 		
 		boolean topLimit = upIntakeLimit.get();
 		boolean botLimit = downIntakeLimit.get();
