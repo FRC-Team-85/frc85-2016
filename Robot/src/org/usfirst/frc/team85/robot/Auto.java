@@ -16,19 +16,19 @@ public class Auto {
 	private int FORWARD = 0;
 /*
 	//various distances of int and jazz
-	private int 12FEET = 23468		//.35128852
-	private int 8FEET = 15645		//.56752568
-	private int SIXFEET = 11734		//.17564426
-	private int FOURFEET = 7822		//.78376284
-	private int THREEFEET = 5867	//.08782213
-	private int TWOFEET = 3911		//.39188142
-	private int ONEFOOT = 1955		//.69594071
-	private int 8INCH = 1303		//.797293806667
-	private int 6INCH = 977			//.847970355
-	private int 4INCH = 651			//.8986469033333
-	private int 3INCH = 488			//.9239851775
-	private int 2INCH = 325			//.9493234516667
-	private int 1INCH = 162			//.9746617258333
+	private final int 12FEET = 23468	//.35128852
+	private final int 8FEET = 15645 	//.56752568
+	private final int 6FEET = 11734 	//.17564426
+	private final int 4FEET = 7822		//.78376284
+	private final int 3FEET = 5867		//.08782213
+	private final int 2FEET = 3911		//.39188142
+	private final int 1FOOT = 1955		//.69594071
+	private final int 8INCH = 1303		//.797293806667
+	private final int 6INCH = 977		//.847970355
+	private final int 4INCH = 651		//.8986469033333
+	private final int 3INCH = 488		//.9239851775
+	private final int 2INCH = 325		//.9493234516667
+	private final int 1INCH = 162		//.9746617258333
 */	
 	private double _driveQuadEncoderPos;
 	
@@ -59,7 +59,7 @@ public class Auto {
         	intakeMove(OPENDOOR);
         	//_drive.setMotors(1INCH, 1INCH);
         	//intakeMove(HOME);
-		//_drive.setMotors(FORWARD, FORWARD);
+        	//_drive.setMotors(FORWARD, FORWARD);
 */
             break;
         case 2: //Cheval de Frise
