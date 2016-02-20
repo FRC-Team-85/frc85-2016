@@ -12,6 +12,7 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 
 public class TankDrive {
 	
+	private int turnCount = 2000;
 	private boolean turnInit;
 	
     private Joystick _controller;
@@ -183,20 +184,22 @@ public class TankDrive {
     }
 
     public void turn180() {
-    	if (_controller.getRawButton(1) && !_controller.getRawButton(3)) {
-/*			if (!turnInit) {
- * 				_drive.resetDriveEncoders()
+    	if (_controller.getRawButton(1) && !_controller.getRawButton(3)) { //180 Left
+			if (!turnInit) {
+  				resetDriveEncoders();
  				turnInit = true;
- 			} else {
- 				if (getLeftDist && getRightDist
- 			
- 			}*/
-    	} else if (_controller.getRawButton(3) && !_controller.getRawButton(1)) {
-/*			_drive.resetDriveEncoders()
-
-    		if (getRightDist ) {
-    			_drive.setMotors(-1,1)
-			}*/
+ 			} else if (getLeftDist() < 2000 && getRightDist()> -2000) {
+ 				setMotors(1,-1);
+ 			}
+    	} else if (_controller.getRawButton(3) && !_controller.getRawButton(1)) { //180 Right
+			if (!turnInit) {
+  				resetDriveEncoders();
+ 				turnInit = true;
+ 			} else if (getLeftDist() > -2000 && getRightDist() < 2000) {
+ 				setMotors(-1,1);
+ 			}
+    	} else {
+    		turnInit = false;
     	}
     }
     
