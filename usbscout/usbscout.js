@@ -3,7 +3,6 @@ var app = express();
 
 var redis = require('redis');
 redisSock = (process.argv.length > 2) ? process.argv[2] : '/tmp/redis.sock';
-
 var client = redis.createClient(redisSock);
 
 var teamlist = [];
@@ -29,13 +28,15 @@ function refreshTeamlist() {
 
 function doesTeamExist(teamid) {
     return (teamlist.indexOf(teamid) != -1);
-    console.log("team " + teamid + " not found")
-    console.log(teamlist.indexOf(teamid));
 }
 
 
 // BEGIN HANDLERS
 function getInfo(teamid, req, res) {
+    if (teamid === undefined) {
+        res.status(500).json({ error: "No team specified."});
+        return;
+    }
     var teamexists = doesTeamExist(teamid);
 
     if (teamexists) {
@@ -54,12 +55,16 @@ function getInfo(teamid, req, res) {
 
 function setInfo(teamid, req, res) {
     var overwrite = (req.param("overwrite") !== undefined);
+    if (teamid === undefined) {
+        res.status(500).json({ error: "No team specified."});
+        return;
+    }
     var teamexists = doesTeamExist(teamid);
 
     if (overwrite || !teamexists) {
         for (var i = 0; i < fields.length; i++) {
             var value = (req.param(fields[i]));
-            var b = client.hset("team:" + teamid, fields[i], value);
+            if (value != "") client.hset("team:" + teamid, fields[i], value);
         }
         teamlist.push(teamid);
         res.status(teamexists ? 204 : 201).json({ success: "The team information was added successfully."});
@@ -69,7 +74,11 @@ function setInfo(teamid, req, res) {
 }
 
 function delTeam(teamid, req, res) {
-    var teamexists = doesTeamExist(teamid)
+    if (teamid === undefined) {
+        res.status(500).json({ error: "No team specified."});
+        return;
+    }
+    var teamexists = doesTeamExist(teamid);
 
     if (teamexists) {
         client.del("team:" + teamid);
@@ -88,7 +97,7 @@ function listTeams(req, res) {
 
 // BEGIN "MOUNT"
 app.get('/', function(req, res) {
-    res.send("Default page");
+    res.render("index.html");
 });
 
 app.get('/api/:teamid/get', function(req, res) {
@@ -128,7 +137,8 @@ app.get('/api/del', function(req, res) {
 });
 
 app.delete("/api/del", function(req, res) {
-    var teamid = req.params("teamId")
+    var teamid = req.params("teamid");
+    delTeam(teamid);
 })
 
 app.get('/api/list', function(req, res) {
@@ -138,6 +148,9 @@ app.get('/api/list', function(req, res) {
 
 
 refreshTeamlist();
+
+app.engine('html', require('ejs').renderFile);
+app.set('views', __dirname + '/client');
 
 app.listen(80, function() {
     console.log('Server is up');
