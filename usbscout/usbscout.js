@@ -2,7 +2,9 @@ var express = require('express');
 var app = express();
 
 var redis = require('redis');
-var client = redis.createClient('/tmp/redis.sock');
+redisSock = (process.argv.length > 2) ? process.argv[2] : '/tmp/redis.sock';
+
+var client = redis.createClient(redisSock);
 
 var teamlist = [];
 
