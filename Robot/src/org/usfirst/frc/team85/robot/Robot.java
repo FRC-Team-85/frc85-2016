@@ -97,6 +97,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	PowerMonitoring.Monitor();
     	//_tatorCannon.armCheck();
     	//_imageProcessing.process();
   		_drive.drive();
