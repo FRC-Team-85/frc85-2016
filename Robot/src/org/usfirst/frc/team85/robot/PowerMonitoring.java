@@ -8,22 +8,22 @@ public class PowerMonitoring {
 	
 	public static void Monitor()
 	{
-		SmartDashboard.putNumber("Current[DriveLeftFront]", pdp.getCurrent(Addresses.DRIVE.LEFT_FRONT_MOTOR));
-		SmartDashboard.putNumber("Current[DriveLeftMid]", pdp.getCurrent(Addresses.DRIVE.LEFT_MID_MOTOR));
-		SmartDashboard.putNumber("Current[DriveLeftBack]", pdp.getCurrent(Addresses.DRIVE.LEFT_BACK_MOTOR));
-		SmartDashboard.putNumber("Current[DriveRightFront]", pdp.getCurrent(Addresses.DRIVE.RIGHT_FRONT_MOTOR));
-		SmartDashboard.putNumber("Current[DriveRightMid]", pdp.getCurrent(Addresses.DRIVE.RIGHT_MID_MOTOR));
-		SmartDashboard.putNumber("Current[DriveRightBack]", pdp.getCurrent(Addresses.DRIVE.RIGHT_BACK_MOTOR));
+		SmartDashboard.putNumber("Current[DriveLeftFront]", pdp.getCurrent(0));
+		SmartDashboard.putNumber("Current[DriveLeftMid]", pdp.getCurrent(1));
+		SmartDashboard.putNumber("Current[DriveLeftBack]", pdp.getCurrent(2));
+		SmartDashboard.putNumber("Current[DriveRightFront]", pdp.getCurrent(15));
+		SmartDashboard.putNumber("Current[DriveRightMid]", pdp.getCurrent(14));
+		SmartDashboard.putNumber("Current[DriveRightBack]", pdp.getCurrent(13));
 		
-		SmartDashboard.putNumber("Current[CannonOuterTop]", pdp.getCurrent(Addresses.CANNON.OUTER_MOTOR_TOP));
-		SmartDashboard.putNumber("Current[CannonOuterBottom]", pdp.getCurrent(Addresses.CANNON.OUTER_MOTOR_BOTTOM));
-		SmartDashboard.putNumber("Current[CannonInnerTop]", pdp.getCurrent(Addresses.CANNON.INNER_MOTOR_TOP));
-		SmartDashboard.putNumber("Current[CannonInnerBottom]", pdp.getCurrent(Addresses.CANNON.INNER_MOTOR_BOTTOM));
-		SmartDashboard.putNumber("Current[CannonArm]", pdp.getCurrent(Addresses.CANNON.ARM_MOTOR));
+		SmartDashboard.putNumber("Current[CannonShooter1]", pdp.getCurrent(3));
+		SmartDashboard.putNumber("Current[CannonShooter2]", pdp.getCurrent(12));
+		SmartDashboard.putNumber("Current[CannonIndexerTop]", pdp.getCurrent(8));
+		SmartDashboard.putNumber("Current[CannonIndexerBottom]", pdp.getCurrent(9));
+		SmartDashboard.putNumber("Current[CannonArm]", pdp.getCurrent(4));
 		
-		SmartDashboard.putNumber("Current[IntakeLoad]", pdp.getCurrent(Addresses.INTAKE.LOAD_MOTOR));
-		SmartDashboard.putNumber("Current[IntakeLeft]", pdp.getCurrent(Addresses.INTAKE.LEFT_INTAKE_MOTOR));
-		SmartDashboard.putNumber("Current[IntakeRight]", pdp.getCurrent(Addresses.INTAKE.RIGHT_INTAKE_MOTOR));
+		SmartDashboard.putNumber("Current[IntakeLoad]", pdp.getCurrent(10));
+		SmartDashboard.putNumber("Current[IntakeLeft]", pdp.getCurrent(11));
+		SmartDashboard.putNumber("Current[IntakeRight]", pdp.getCurrent(5));
 		
 }
 }
