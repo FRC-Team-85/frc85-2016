@@ -15,7 +15,8 @@ public class TatorCannon {
 	private double ARMTOL;		//auto angle tol
 
 	private double LOADSPEED = -0.75;	//loading speed
-	private double FIRERPM = 0.75;		//outerMotor speed ---Voltage mode: 0.75
+	private double SPITSPEED = 0.75;
+	private double FIRERPM = 1.0;		//outerMotor speed ---Voltage mode: 0.75
 	private double RPMTOL;		//outerMotor tol
 	
 	private static final double ARM_LOW_LIMIT = 4.45;//4.70;//4.15;	//Rename these
@@ -125,7 +126,9 @@ public class TatorCannon {
     	SmartDashboard.putData("Ball not present ", _ballNotPresentSensor);
     	if (_driveStick.getRawButton(7)) {				//Left bumper
     		MODE = CannonMode.CHARGE;
-    	} else if (_operatorStick.getRawButton(8) && _ballNotPresentSensor.get()) {	//Right trigger
+    	} else if (_operatorStick.getRawButton(7)) {
+    		MODE = CannonMode.SPIT;
+    	} else if ( (_operatorStick.getRawButton(8)||_operatorStick.getRawButton(3)) && _ballNotPresentSensor.get()) {	//Right trigger
     		MODE = CannonMode.STORAGE;
     	} else {
     		MODE = CannonMode.OFF;
@@ -150,6 +153,10 @@ public class TatorCannon {
     	    		indexOut();
     	    	}
     	    	break;
+    		case SPIT:
+    			setOuter(SPITSPEED);
+    			indexOut();
+    			break;
     		case STORAGE: //Sucks in ball
     			setOuter(LOADSPEED);
     			indexIn();

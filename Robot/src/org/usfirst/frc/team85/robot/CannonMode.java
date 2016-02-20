@@ -1,6 +1,6 @@
 package org.usfirst.frc.team85.robot;
 
 public enum CannonMode {
-	CHARGE, STORAGE, OFF,
+	CHARGE, SPIT, STORAGE, OFF,
 	AUTOFIRE, AUTOLOAD
 }

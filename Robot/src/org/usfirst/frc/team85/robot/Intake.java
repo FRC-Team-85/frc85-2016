@@ -29,7 +29,8 @@ public class Intake {
 	
 	private double DEADBAND = 0.05;
 	
-	private double INTAKETOL = 1000; //TODO: Bigger
+	private double INTAKESLOWRANGE = 30000;
+	private double INTAKETOL = 10000; //TODO: Bigger
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
 	private Relay loadMotor;
@@ -89,8 +90,12 @@ public class Intake {
 			setMotors(opStick.getRawAxis(1));
 		}		
 		
-		if(opStick.getRawButton(6)) {
+		if (opStick.getRawButton(5)) {
+			loadMotor.set(Relay.Value.kReverse);
+		} else if (opStick.getRawButton(6)) {
 			loadMotor.set(Relay.Value.kForward);
+		} else {
+			loadMotor.set(Relay.Value.kOff);
 		}
 		return false;
 	}
@@ -101,8 +106,8 @@ public class Intake {
 	}
 
 	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
+		loadMotor.set(Relay.Value.kForward);
 		if (intakeMove(LOADPOS) && cannonReady) {
-			loadMotor.set(Relay.Value.kReverse);
 			return true;
 		}
 		return false;
@@ -114,10 +119,18 @@ public class Intake {
 			return true;
 		}
 		else if(_encPos < target) {
-			setMotors(-1);
+			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
+				setMotors(-0.3);
+			} else {
+				setMotors(-1);
+			}
 		}
 		else if(_encPos > target) {
-			setMotors(1);
+			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
+				setMotors(0.3);
+			} else {
+				setMotors(1);
+			}
 		}
 		
 		return false;
