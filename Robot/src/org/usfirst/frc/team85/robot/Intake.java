@@ -19,11 +19,11 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	private int DART_LIMIT = -267371;
-	private int LOADPOS = -550000;
-	private int LIFTHEIGHT = -880000;
-	private int OPENDOOR = -784380;
-	private int HOME = 0;
+	public final int DART_LIMIT = -267371;
+	public final int LOADPOS = -550000;
+	public final int LIFTHEIGHT = -880000;
+	public final int OPENDOOR = -784380;
+	public final int HOME = 0;
 	
 	int _encPos;
 	
