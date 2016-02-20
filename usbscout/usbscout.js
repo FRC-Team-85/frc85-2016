@@ -61,13 +61,21 @@ function setInfo(teamid, req, res) {
     }
     var teamexists = doesTeamExist(teamid);
 
+    var modified = false;
     if (overwrite || !teamexists) {
         for (var i = 0; i < fields.length; i++) {
             var value = (req.param(fields[i]));
-            if (value != "") client.hset("team:" + teamid, fields[i], value);
+            if (value !== undefined && value != "") {
+                client.hset("team:" + teamid, fields[i], value);
+                modified = true;
+            }
         }
-        teamlist.push(teamid);
-        res.status(teamexists ? 204 : 201).json({ success: "The team information was added successfully."});
+        if (modified) {
+            teamlist.push(teamid);
+            res.status(teamexists ? 204 : 201).json({ success: "The team information was added successfully."});
+        } else {
+            res.status(200).json({ success: "No information provided."});
+        }
     } else {
         res.status(500).json({ error: "Team already exists."});
     }
@@ -96,10 +104,6 @@ function listTeams(req, res) {
 
 
 // BEGIN "MOUNT"
-app.get('/', function(req, res) {
-    res.render("index.html");
-});
-
 app.get('/api/:teamid/get', function(req, res) {
     var teamid = req.params.teamid;
     console.log(JSON.stringify(res.teamid));
@@ -107,7 +111,7 @@ app.get('/api/:teamid/get', function(req, res) {
 });
 
 app.get('/api/get', function(req, res) {
-    var teamid = req.param('teamid');
+    var teamid = req.query.teamid;
     getInfo(teamid, req, res);
 });
 
@@ -117,12 +121,12 @@ app.get('/api/:teamid/set', function(req, res) {
 });
 
 app.get('/api/set', function(req, res) {
-    var teamid = req.param("teamid");
+    var teamid = req.query.teamid;
     setInfo(teamid, req, res);
 });
 
-app.put('/api/set', function(req, res) {
-    var teamid = req.param("teamid");
+app.put('/api/:teamid/set', function(req, res) {
+    var teamid = req.params.teamid;
     setInfo(teamid, req, res);
 });
 
@@ -132,18 +136,21 @@ app.get('/api/:teamid/del', function(req, res) {
 });
 
 app.get('/api/del', function(req, res) {
-    var teamid = req.param("teamid");
+    var teamid = req.query.teamid;
     delTeam(teamid, req, res);
 });
 
-app.delete("/api/del", function(req, res) {
-    var teamid = req.params("teamid");
+app.delete("/api/:teamid/del", function(req, res) {
+    var teamid = req.params.teamid;
     delTeam(teamid);
 })
 
 app.get('/api/list', function(req, res) {
     listTeams(req, res);
 });
+
+app.use('/', express.static("client"));
+
 // END "MOUNT"
 
 
