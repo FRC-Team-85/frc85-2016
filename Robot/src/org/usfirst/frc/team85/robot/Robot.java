@@ -98,6 +98,8 @@ public class Robot extends IterativeRobot {
     
     public void disabledPeriodic() {
     	//System.out.println("Robot Periodic was disabled!!!"); 
+    	_imageProcessing.process();
     }
+
 
 }

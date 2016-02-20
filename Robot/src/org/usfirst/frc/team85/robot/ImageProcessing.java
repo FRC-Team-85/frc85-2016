@@ -20,7 +20,6 @@ public class ImageProcessing {
         try {
         	NetworkTable.setClientMode();
         	NetworkTable.setIPAddress("roborio-85-frc.local");
-        	_table = NetworkTable.getTable("grip");
         } catch(Exception ex) {
         	System.out.println(ex.toString());
         }
@@ -28,6 +27,7 @@ public class ImageProcessing {
 	
 	public void process() {
     	try {
+    		_table = NetworkTable.getTable("grip");
 			area = _table.getNumber("area", 0);
 			contourFound = (area>0) ? true : false;
 			centerX = _table.getNumber("centerX", 160) - 160;

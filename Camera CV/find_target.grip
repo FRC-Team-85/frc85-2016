@@ -5,132 +5,122 @@
     </grip:Camera>
   </sources>
   <steps>
-    <grip:Step name="HSL Threshold">
+    <grip:Step name="Publish Number">
       <grip:Input step="0" socket="0"/>
       <grip:Input step="0" socket="1">
-        <value>
-          <double>72.84172661870504</double>
-          <double>110.88737201365188</double>
-        </value>
+        <value>myNumber</value>
       </grip:Input>
       <grip:Input step="0" socket="2">
+        <value>true</value>
+      </grip:Input>
+    </grip:Step>
+    <grip:Step name="HSL Threshold">
+      <grip:Input step="1" socket="0"/>
+      <grip:Input step="1" socket="1">
         <value>
-          <double>176.57374100719426</double>
+          <double>63.129496402877706</double>
+          <double>109.35153583617748</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="1" socket="2">
+        <value>
+          <double>75.6744604316547</double>
           <double>255.0</double>
         </value>
       </grip:Input>
-      <grip:Input step="0" socket="3">
+      <grip:Input step="1" socket="3">
         <value>
           <double>116.95143884892083</double>
           <double>255.0</double>
         </value>
       </grip:Input>
-      <grip:Output step="0" socket="0" previewed="true"/>
-    </grip:Step>
-    <grip:Step name="Find Contours">
-      <grip:Input step="1" socket="0"/>
-      <grip:Input step="1" socket="1">
-        <value>false</value>
-      </grip:Input>
       <grip:Output step="1" socket="0" previewed="true"/>
     </grip:Step>
-    <grip:Step name="Filter Contours">
+    <grip:Step name="Find Contours">
       <grip:Input step="2" socket="0"/>
       <grip:Input step="2" socket="1">
-        <value>1000.0</value>
+        <value>false</value>
       </grip:Input>
-      <grip:Input step="2" socket="2">
-        <value>300.0</value>
+      <grip:Output step="2" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="Filter Contours">
+      <grip:Input step="3" socket="0"/>
+      <grip:Input step="3" socket="1">
+        <value>350.0</value>
       </grip:Input>
-      <grip:Input step="2" socket="3">
-        <value>29.0</value>
+      <grip:Input step="3" socket="2">
+        <value>200.0</value>
       </grip:Input>
-      <grip:Input step="2" socket="4">
-        <value>300.0</value>
+      <grip:Input step="3" socket="3">
+        <value>10.0</value>
       </grip:Input>
-      <grip:Input step="2" socket="5">
-        <value>0.0</value>
+      <grip:Input step="3" socket="4">
+        <value>100.0</value>
       </grip:Input>
-      <grip:Input step="2" socket="6">
-        <value>1000.0</value>
+      <grip:Input step="3" socket="5">
+        <value>15.0</value>
       </grip:Input>
-      <grip:Input step="2" socket="7">
+      <grip:Input step="3" socket="6">
+        <value>50.0</value>
+      </grip:Input>
+      <grip:Input step="3" socket="7">
         <value>
           <double>0.0</double>
           <double>100.0</double>
         </value>
       </grip:Input>
-      <grip:Output step="2" socket="0" previewed="true"/>
+      <grip:Output step="3" socket="0" previewed="true"/>
     </grip:Step>
     <grip:Step name="Publish ContoursReport">
-      <grip:Input step="3" socket="0"/>
-      <grip:Input step="3" socket="1">
-        <value>contoursReport</value>
-      </grip:Input>
-      <grip:Input step="3" socket="2">
-        <value>false</value>
-      </grip:Input>
-      <grip:Input step="3" socket="3">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="3" socket="4">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="3" socket="5">
-        <value>false</value>
-      </grip:Input>
-      <grip:Input step="3" socket="6">
-        <value>false</value>
-      </grip:Input>
-      <grip:Input step="3" socket="7">
-        <value>false</value>
-      </grip:Input>
-    </grip:Step>
-    <grip:Step name="Publish Number">
       <grip:Input step="4" socket="0"/>
       <grip:Input step="4" socket="1">
-        <value>myNumber</value>
+        <value>contoursReport</value>
       </grip:Input>
       <grip:Input step="4" socket="2">
         <value>true</value>
       </grip:Input>
-    </grip:Step>
-    <grip:Step name="Publish Video">
-      <grip:Input step="5" socket="0"/>
-      <grip:Input step="5" socket="1">
-        <value>69.1891891891892</value>
+      <grip:Input step="4" socket="3">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="4">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="5">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="6">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="7">
+        <value>true</value>
       </grip:Input>
     </grip:Step>
   </steps>
   <connections>
     <grip:Connection>
-      <grip:Output source="0" socket="0" previewed="true"/>
+      <grip:Output source="0" socket="1" previewed="false"/>
       <grip:Input step="0" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output step="1" socket="0" previewed="true"/>
-      <grip:Input step="2" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
       <grip:Output source="0" socket="0" previewed="true"/>
-      <grip:Input step="5" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output source="0" socket="1" previewed="false"/>
-      <grip:Input step="4" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output step="0" socket="0" previewed="true"/>
       <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="3" socket="0" previewed="true"/>
+      <grip:Input step="4" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="2" socket="0" previewed="true"/>
       <grip:Input step="3" socket="0"/>
     </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="1" socket="0" previewed="true"/>
+      <grip:Input step="2" socket="0"/>
+    </grip:Connection>
   </connections>
   <settings>
     <teamNumber>0</teamNumber>
-    <publishAddress>169.254.177.162</publishAddress>
+    <publishAddress>roborio-85-frc.local</publishAddress>
     <deployAddress>raspberrypi.local</deployAddress>
     <deployDir>/home/pi/vision/grip</deployDir>
     <deployUser>pi</deployUser>
