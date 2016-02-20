@@ -27,6 +27,8 @@ public class Intake {
 	
 	int _encPos;
 	
+	private double DEADBAND = 0.05;
+	
 	private double INTAKETOL = 1000; //TODO: Bigger
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
@@ -71,7 +73,7 @@ public class Intake {
 		if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
 			return loadCannon(cannonReady);
 		}
-		else if (opStick.getPOV() == 0){ //Uses button A, move to ground and "suction"
+		else if (opStick.getPOV() == 0){ 
 			intakeMove(HOME);
 		} 
 		else if (opStick.getPOV() == 180) {
@@ -89,8 +91,6 @@ public class Intake {
 		
 		if(opStick.getRawButton(6)) {
 			loadMotor.set(Relay.Value.kForward);
-		} else {
-			loadMotor.set(Relay.Value.kOff);
 		}
 		return false;
 	}
@@ -131,16 +131,20 @@ public class Intake {
 		boolean topLimit = upIntakeLimit.get();
 		boolean botLimit = downIntakeLimit.get();
 		
-		if (value < .05 && topLimit == true) { 
+		if (value < 0 && topLimit == true) { //positive value goes down
 			leftAngleMotor.set(0);
 			rightAngleMotor.set(0);
 			rightAngleMotor.setEncPosition(0);
-		} else if (value > -.05 && botLimit == true) { 
+		} else if (value > 0 && botLimit == true) { //negative value goes up
 			leftAngleMotor.set(0);
 			rightAngleMotor.set(0);
 		} else {
-			leftAngleMotor.set(value/2);
-			rightAngleMotor.set(value/2);
+			value *= 0.5;
+			if (Math.abs(value) < DEADBAND) {
+				value = 0;
+			}
+			leftAngleMotor.set(value);
+			rightAngleMotor.set(value);
 		}			
 	}
 }

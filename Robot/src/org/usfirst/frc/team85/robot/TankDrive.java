@@ -12,6 +12,8 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 
 public class TankDrive {
 	
+	private boolean turnInit;
+	
     private Joystick _controller;
 
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
@@ -43,8 +45,6 @@ public class TankDrive {
 
         setVoltageRamp(0.5);
         System.out.println("TankDrive Init Done");
-        
-        
         
     }
 
@@ -155,13 +155,13 @@ public class TankDrive {
     
     public double getLeftDist() {
     	double enc = _masterLeftMotor.getEncPosition();
-    	System.out.println("Left Encoder Position:" + enc);
+    	SmartDashboard.putNumber("Left Encoder Position:", enc);
     	return enc;
     }
     
     public double getRightDist() {
     	double enc = _masterRightMotor.getEncPosition();
-    	System.out.println("Right Encoder Position:" + enc);
+    	SmartDashboard.putNumber("Right Encoder Position:", enc);
     	return enc;
     }
     
@@ -176,23 +176,25 @@ public class TankDrive {
         System.out.println("Mode Changed to Position for Auto");
     }
     
-    public void setSpeedMode() {
-        _masterLeftMotor.changeControlMode(TalonControlMode.Speed);
-        _masterRightMotor.changeControlMode(TalonControlMode.Speed);
-        System.out.println("Mode Changed to Speed for Teleop");
+    public void setVoltageMode() {
+        _masterLeftMotor.changeControlMode(TalonControlMode.Voltage);
+        _masterRightMotor.changeControlMode(TalonControlMode.Voltage);
+        System.out.println("Mode Changed to Voltage for Teleop");
     }
 
     public void turn180() {
     	if (_controller.getRawButton(1) && !_controller.getRawButton(3)) {
-/*			_drive.resetDriveEncoders()
- 
-    		if (encoderPos.getTalonSRXSomethingthing < 9000) {
-    			_drive.setMotors(1,-1)
+/*			if (!turnInit) {
+ * 				_drive.resetDriveEncoders()
+ 				turnInit = true;
+ 			} else {
+ 				if (getLeftDist && getRightDist
+ 			
  			}*/
     	} else if (_controller.getRawButton(3) && !_controller.getRawButton(1)) {
 /*			_drive.resetDriveEncoders()
 
-    		if (encoderPos.getTalonSRXSomethingthing < 9000) {
+    		if (getRightDist ) {
     			_drive.setMotors(-1,1)
 			}*/
     	}
