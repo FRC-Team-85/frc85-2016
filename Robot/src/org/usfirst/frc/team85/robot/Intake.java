@@ -28,8 +28,8 @@ public class Intake {
 	int _encPos;
 	
 	private double DEADBAND = 0.05;
-	
 	private double INTAKESLOWRANGE = 40000;
+
 	private double INTAKETOL = 10000; //TODO: Bigger
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
