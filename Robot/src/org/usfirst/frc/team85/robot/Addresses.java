@@ -34,6 +34,9 @@ public class Addresses {
 		
 		public static final int ARM_POT = 0;
 		public static final int BALL_NOT_PRESENT_SENSOR = 4;
+
+		public static final int DART_ENCODER_CH_A = 5;
+		public static final int DART_ENCODER_CH_B = 6;
 	}
 
     	//Intake

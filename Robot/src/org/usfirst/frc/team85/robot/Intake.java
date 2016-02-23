@@ -23,14 +23,14 @@ public class Intake {
 	public final int LOADPOS = -550000;
 	public final int LIFTHEIGHT = -880000;
 	public final int OPENDOOR = -784380;
-	public final int HOME = 0;
+	public final int HOME = 1000;
 	
 	int _encPos;
 	
 	private double DEADBAND = 0.05;
 	
-	private double INTAKESLOWRANGE = 35000;
-	private double INTAKETOL = 10000; //TODO: Bigger
+	private double INTAKESLOWRANGE = 35000;	//35k
+	private double INTAKETOL = 10000;	//10k
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
 	private Relay loadMotor;
@@ -115,24 +115,29 @@ public class Intake {
 
 	private boolean intakeMove(double target) {
 		SmartDashboard.putNumber("Intake Position Target", target);
-		if (Math.abs(_encPos-target) <= INTAKETOL) {
-			return true;
+		if (target==LOADPOS) {
+			if (_encPos < LOADPOS && _encPos > (LOADPOS-INTAKETOL)) {
+				setMotors(0.0);
+				return true;
+			}
+		} else {
+			if (Math.abs(_encPos-target) <= INTAKETOL) {
+				return true;
+			}
 		}
-		else if(_encPos < target) {
+		if(_encPos < target) {
 			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
 				setMotors(-0.3);
 			} else {
 				setMotors(-1);
 			}
-		}
-		else if(_encPos > target) {
+		} else if(_encPos > target) {
 			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
 				setMotors(0.3);
 			} else {
 				setMotors(1);
 			}
 		}
-		
 		return false;
 	}
 	

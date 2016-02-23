@@ -14,8 +14,8 @@ public class TatorCannon {
 	private double FIREPOS;		//auto fire pos -- around 2.70
 	private double ARMTOL;		//auto angle tol
 
-	private double LOADSPEED = -0.75;	//loading speed
-	private double SPITSPEED = 0.75;
+	private double LOADSPEED = -1.0;	//loading speed
+	private double SPITSPEED = 1.0;
 	private double FIRERPM = 1.0;		//outerMotor speed ---Voltage mode: 0.75
 	private double RPMTOL;		//outerMotor tol
 	
@@ -33,11 +33,15 @@ public class TatorCannon {
 	private Relay _innerTopMotor, _innerBottomMotor;
 	
 	private AnalogInput _armPot;
+	private Encoder _dartEncoder;
 	private Intake _intake;
 	
-	private Timer _loadTimer;
-	private double _loadTime;	// = 0.0;	//milliseconds
-	private boolean _loadInit, _loadComplete;
+	private Timer _delayTimer;
+	private static final double SPITDELAY = 0.5;
+	private static final double LOADDELAY = 0.5;
+	private static final double LOADTIME = 1.0;	// = 0.0;	//milliseconds
+	private static final double STORAGEDELAY = 0.5;
+	private boolean _spitInit, _loadInit, _loadComplete, _storageInit;
 	
 	private double _currentPosition;
 	private double _armAxis;
@@ -62,6 +66,12 @@ public class TatorCannon {
 		_ballNotPresentSensor = new DigitalInput(CANNON.BALL_NOT_PRESENT_SENSOR);
 		
 		_intake = intake;
+		
+		_dartEncoder = new Encoder(Addresses.CANNON.DART_ENCODER_CH_A, Addresses.CANNON.DART_ENCODER_CH_B);
+		
+		_delayTimer = new Timer();
+		_delayTimer.start();
+		
 /*
 		_outerTopMotor.changeControlMode(TalonControlMode.Speed);
 		_outerBottomMotor.changeControlMode(TalonControlMode.Speed);
@@ -108,6 +118,7 @@ public class TatorCannon {
     	} else {
     		//Senpai make it do
     	}
+    	SmartDashboard.putData("Dart Encoder", _dartEncoder);
     }
     
     private boolean readyToLoad(){
@@ -154,8 +165,15 @@ public class TatorCannon {
     	    	}
     	    	break;
     		case SPIT:
-    			setOuter(SPITSPEED);
-    			indexOut();
+    			if (!_spitInit) {
+    				_spitInit = true;
+    				_delayTimer.reset();
+    			} else {
+					setOuter(SPITSPEED);
+    				if (_delayTimer.get() > SPITDELAY) {
+    					indexOut();
+    				}
+    			}
     			break;
     		case STORAGE: //Sucks in ball
     			setOuter(LOADSPEED);
@@ -164,6 +182,9 @@ public class TatorCannon {
     		case OFF: //Turns everything off
     			setOuter(0.0);
     			indexOff();
+        		_spitInit = false;
+        		_loadInit = false;
+        		_storageInit = false;
     			break;
     		case AUTOFIRE:
     			if (true) {	//opButton or Auto
@@ -182,17 +203,16 @@ public class TatorCannon {
     			if (_intake.run(readyToLoad()) && (true) && !_loadComplete) {	//opButton or Auto
     	        	// if _intake is trying to load the cannon, wants to load, and not done loading
     	        	if (!_loadInit) {
-    	        		_loadTimer.reset();
-    	        		_loadTimer.start();
+    	        		_delayTimer.reset();
     	        		_loadInit = true;
     	        	} else {
-    	        		if (_loadTimer.get() > _loadTime) {
+	        			setOuter(LOADSPEED);
+    	        		if (_delayTimer.get() > LOADDELAY){
+    	        			indexIn();
+    	        		} else if (_delayTimer.get() > LOADTIME) {
     	        			indexOff();
     	        			setOuter(0.0);
     	            		_loadComplete = true;
-    	        		} else {
-    	        			indexIn();
-    	        			setOuter(LOADSPEED);
     	        		}
     	        	}
     	        } else {
@@ -228,7 +248,9 @@ public class TatorCannon {
 			_armMotor.set(0);
 		} else if (value > -.05 && botLimit == false) { 
 			_armMotor.set(0);
-		} else {
+		} else if (value < 0) {
+			_armMotor.set(value * 0.65);
+		} else if (value > 0) {
 			_armMotor.set(value * 0.4);
 		}
 			
