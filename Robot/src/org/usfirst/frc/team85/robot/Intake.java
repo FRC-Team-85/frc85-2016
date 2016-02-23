@@ -29,7 +29,7 @@ public class Intake {
 	
 	private double DEADBAND = 0.05;
 	
-	private double INTAKESLOWRANGE = 35000;	//35k
+	private double INTAKESLOWRANGE = 40000;	//35k
 	private double INTAKETOL = 10000;	//10k
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
