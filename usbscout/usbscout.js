@@ -5,9 +5,9 @@ var redis = require('redis');
 redisSock = (process.argv.length > 2) ? process.argv[2] : '/tmp/redis.sock';
 var client = redis.createClient(redisSock);
 
-var teamlist = [];
+var teamlist = {};
 
-var fields = ["a_reach"]
+var fields = ['a_reach']
 
 // Array Remove - By John Resig (MIT Licensed)
 Array.prototype.remove = function(from, to) {
@@ -17,144 +17,203 @@ Array.prototype.remove = function(from, to) {
 };
 
 function refreshTeamlist() {
-    client.keys("team:*", function(err, reply) {
-        teamlist = [];
+    client.keys('team:*', function(err, reply) {
+        teamlist = {};
         for (var i = 0; i < reply.length; i++) {
-            console.log("Added to teamlist:" + reply[i].split(":")[1])
-            teamlist.push(reply[i].split(":")[1]);
+            var teamid = reply[i].split(':')[1];
+            var matchid = reply[i].split(':')[2];
+
+            if (teamid === null) break;
+
+            if (teamlist[teamid] === undefined) {
+                teamlist[teamid] = [];
+            }
+            teamlist[teamid].push(matchid);
+            console.log('Added team ' + teamid + ' match ' + matchid + ' to js teamlist');
         }
     });
 }
 
 function doesTeamExist(teamid) {
-    return (teamlist.indexOf(teamid) != -1);
+    return teamlist[teamid] !== undefined;
+}
+
+function doesMatchDataExist(teamid, matchid) {
+    return teamlist[teamid].indexOf(matchid)!=-1;
 }
 
 
 // BEGIN HANDLERS
-function getInfo(teamid, req, res) {
+function getInfo(teamid, matchid, req, res) {
     if (teamid === undefined) {
-        res.status(500).json({ error: "No team specified."});
+        res.status(500).json({ error: 'No team specified.'});
         return;
     }
-    var teamexists = doesTeamExist(teamid);
+    if (matchid === undefined) {
+        res.status(500).json({ error: 'No match specified.'});
+        return;
+    }
 
-    if (teamexists) {
-        client.hgetall("team:" . teamid, function(err, reply) {
+    var teamexists = doesTeamExist(teamid);
+    var matchexists = teamexists && doesMatchDataExist(teamid, matchid);
+
+    if (teamexists && matchexists) {
+        client.hgetall('team:' + teamid + ':' + matchid, function(err, reply) {
             if (err) {
                 res.json({});
-                res.status(500).json({ error: "It broke."});
+                res.status(500).json({ error: 'It broke.'});
             } else {
                 res.json(reply);
             }
         });
+    } else if (teamexists) {
+        res.status(404).json({ error: 'No such match.'});
     } else {
-        res.status(404).json({ error: "No such team."});
+        res.status(404).json({ error: 'No such team.'});
     }
 }
 
-function setInfo(teamid, req, res) {
-    var overwrite = (req.param("overwrite") !== undefined);
+function setInfo(teamid, matchid, req, res) {
+    var overwrite = (req.query.overwrite !== undefined);
     if (teamid === undefined) {
-        res.status(500).json({ error: "No team specified."});
+        res.status(500).json({ error: 'No team specified.'});
         return;
     }
+    if (matchid === undefined) {
+        res.status(500).json({ error: 'No match specified.'});
+        return;
+    }
+
     var teamexists = doesTeamExist(teamid);
+    var matchexists = teamexists && doesMatchDataExist(teamid, matchid);
 
     var modified = false;
-    if (overwrite || !teamexists) {
+    if (overwrite || !matchexists) {
         for (var i = 0; i < fields.length; i++) {
-            var value = (req.param(fields[i]));
-            if (value !== undefined && value != "") {
-                client.hset("team:" + teamid, fields[i], value);
+            var value = (req.params[fields[i]]);
+            if (value !== undefined && value != '') {
+                client.hset('team:' + teamid + ':' + matchid, fields[i], value);
                 modified = true;
             }
         }
         if (modified) {
-            teamlist.push(teamid);
-            res.status(teamexists ? 204 : 201).json({ success: "The team information was added successfully."});
+            if (!teamexists) {
+                teamlist[teamid] = [];
+            }
+            teamlist[teamid].push(matchid);
+
+            res.status(matchexists ? 204 : 201).json({ success: 'The team information was added successfully.'});
         } else {
-            res.status(200).json({ success: "No information provided."});
+            res.status(200).json({ success: 'No information provided.'});
         }
     } else {
-        res.status(500).json({ error: "Team already exists."});
+        res.status(500).json({ error: 'Match data already exists.'});
+    }
+}
+
+function delMatch(teamid, matchid, req, res) {
+    if (teamid === undefined) {
+        res.status(500).json({ error: 'No team specified.'});
+        return;
+    }
+    if (matchid === undefined) {
+        res.status(500).json({ error: 'No match specified.'});
+        return;
+    }
+
+    var teamexists = doesTeamExist(teamid);
+    var matchexists = teamexists && doesMatchDataExist(teamid, matchid);
+
+    if (matchexists) {
+        client.del('team:' + teamid + ':' + matchid);
+        teamlist[teamid].remove(teamlist[teamid].indexOf(matchid));
+        if (teamlist[teamid].length == 0) {
+            delete teamlist[teamid];
+        }
+        res.status(200).json({ success: 'The match was removed successfully.'});
+    } else if (teamexists) {
+        res.status(404).json({ error: 'No such team.'});
+    } else {
+        res.status(404).json({ error: 'No such match.'});
     }
 }
 
 function delTeam(teamid, req, res) {
     if (teamid === undefined) {
-        res.status(500).json({ error: "No team specified."});
+        res.status(500).json({ error: 'No team specified.'});
         return;
     }
+
     var teamexists = doesTeamExist(teamid);
 
-    if (teamexists) {
-        client.del("team:" + teamid);
-        teamlist.remove(teamlist.indexOf(teamid));
-        res.status(200).json({ success: "The team was removed successfully."})
+    if (teamexists){
+        var i;
+        for (i = 0; i < teamlist[teamid].length; i++) {
+            client.del('team:' + teamid + ':' + teamlist[teamid][i]);
+        }
+        res.status(200).json({ success: 'The team was removed successfully.'});
     } else {
-        res.status(404).json({ error: "No such team."});
+        res.status(404).json({ error: 'No such team.'});
     }
+
 }
 
 function listTeams(req, res) {
     res.status(200).json(teamlist);
 }
+
+function listMatches(teamid, req, res) {
+    if (teamid === undefined) {
+        res.status(500).json({ error: 'No team specified.'});
+        return;
+    }
+
+    var teamexists = doesTeamExist(teamid);
+
+    if (teamexists) {
+        res.status(200).json(teamlist[teamid]);
+    } else {
+        res.status(404).json({error: 'No such team.'});
+    }
+}
 // END HANDLERS
 
 
-// BEGIN "MOUNT"
-app.get('/api/:teamid/get', function(req, res) {
+// BEGIN 'MOUNT'
+app.get('/api/:teamid/:matchid/get', function(req, res) {
     var teamid = req.params.teamid;
-    console.log(JSON.stringify(res.teamid));
-    getInfo(teamid, req, res);
+    var matchid = req.params.matchid;
+    getInfo(teamid, matchid, req, res);
 });
 
-app.get('/api/get', function(req, res) {
-    var teamid = req.query.teamid;
-    getInfo(teamid, req, res);
-});
-
-app.get('/api/:teamid/set', function(req, res) {
+app.get('/api/:teamid/:matchid/set', function(req, res) { //should be put eventually
     var teamid = req.params.teamid;
-    setInfo(teamid, req, res);
+    var matchid = req.params.matchid;
+    setInfo(teamid, matchid, req, res);
 });
 
-app.get('/api/set', function(req, res) {
-    var teamid = req.query.teamid;
-    setInfo(teamid, req, res);
-});
-
-app.put('/api/:teamid/set', function(req, res) {
+app.get('/api/:teamid/:matchid/del', function(req, res) { //should be delete eventually
     var teamid = req.params.teamid;
-    setInfo(teamid, req, res);
+    var matchid = req.params.matchid;
+    delMatch(teamid, matchid, req, res);
 });
 
-app.get('/api/:teamid/del', function(req, res) {
-    var teamid = req.params.teamid;
-    delTeam(teamid, req, res);
-});
-
-app.get('/api/del', function(req, res) {
-    var teamid = req.query.teamid;
-    delTeam(teamid, req, res);
-});
-
-app.delete("/api/:teamid/del", function(req, res) {
-    var teamid = req.params.teamid;
-    delTeam(teamid);
-})
-
-app.get('/api/list', function(req, res) {
+app.get('/api/tlist', function(req, res) {
     listTeams(req, res);
 });
 
-app.use('/', express.static("client"));
+app.get('/api/:teamid/mlist', function(req, res) {
+    var teamid = req.params.teamid;
+    listMatches(teamid, req, res);
+});
 
-// END "MOUNT"
+app.use('/', express.static('client'));
 
+// END 'MOUNT'
 
+console.log(JSON.stringify(teamlist));
 refreshTeamlist();
+console.log(JSON.stringify(teamlist));
 
 app.engine('html', require('ejs').renderFile);
 app.set('views', __dirname + '/client');
