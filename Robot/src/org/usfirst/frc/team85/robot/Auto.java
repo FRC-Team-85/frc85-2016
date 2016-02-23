@@ -34,6 +34,13 @@ public class Auto {
 	
 	private double target;
 	
+	private int commandSubStage;	//on command_ of command array
+	private double[][] commandArray;//current runlist from DB input
+	
+	/*
+	for the switch cases, add run commands based on found values - conclude with 0,0,- and camera command
+	 */
+	
 	public Auto(TankDrive drive) {
         _drive = drive;
         //_driveQuadEncoderPos = _talons[1].getEncPosition();
@@ -105,6 +112,36 @@ public class Auto {
 			return true;
 		} 
 		return false;
+	}
+	
+	public void addCommand(double lTarget, double rTarget, double time) {
+		/*
+		get three double fields from the DB and add them to the end of the command array
+		
+		1st lt, rt, t
+		2nd lt, rt, t
+		etc.
+		 */
+	}
+	
+	public void clearCommands() {
+		/*
+		if some DB button is pressed, clear the command array and stop all
+		 */
+	}
+	
+	public void runCommands() {
+		// based on
+		//for XXX comandArray[][]
+		//commandSubStage++
+		double lastLeftSet = _drive.getLeftAvgSpeed();
+		double lastRightSet = _drive.getRightAvgSpeed();
+		/*
+		use .get to find last attempted motor.set
+		ramp from there to target motor speeds
+		until Timer.get > last command end + time for command
+			then commandSubStage++
+		 */
 	}
 	
 }
