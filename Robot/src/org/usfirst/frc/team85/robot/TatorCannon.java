@@ -17,7 +17,7 @@ public class TatorCannon {
 	private double LOADSPEED = -1.0;	//loading speed
 	private double SPITSPEED = 1.0;
 	private double FIRERPM = 1.0;		//outerMotor speed ---Voltage mode: 0.75
-	private double RPMTOL;		//outerMotor tol
+	private double RPMTOL;				//outerMotor tol
 	
 	private static final double ARM_LOW_LIMIT = 4.45;//4.70;//4.15;	//Rename these
 	private static final double ARM_HIGH_LIMIT = 2.65;//2.75;		//Rename these
@@ -256,4 +256,3 @@ public class TatorCannon {
 			
 	}
 }
-    	  
