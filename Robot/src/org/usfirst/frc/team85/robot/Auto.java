@@ -16,19 +16,19 @@ public class Auto {
 	private int FORWARD = 0;
 /*
 	//various distances of int and jazz
-	private final int 12FEET = 23468	//.35128852
-	private final int 8FEET  = 15645 	//.56752568
-	private final int 6FEET  = 11734 	//.17564426
-	private final int 4FEET  = 7822		//.78376284
-	private final int 3FEET  = 5867		//.08782213
-	private final int 2FEET  = 3911		//.39188142
-	private final int 1FOOT  = 1955		//.69594071
-	private final int 8INCH  = 1303		//.79729381
-	private final int 6INCH  = 977		//.84797036
-	private final int 4INCH  = 651		//.89864690
-	private final int 3INCH  = 488		//.92398518
-	private final int 2INCH  = 325		//.94932345
-	private final int 1INCH  = 162		//.97466173
+	private final int 12FEET =  23468	//.35128852
+	private final int 8FEET  =  15645	//.56752568
+	private final int 6FEET  =  11734	//.17564426
+	private final int 4FEET  =  7822	//.78376284
+	private final int 3FEET  =  5867	//.08782213
+	private final int 2FEET  =  3911	//.39188142
+	private final int 1FOOT  =  1955	//.69594071
+	private final int 8INCH  =  1303	//.79729381
+	private final int 6INCH  =  977 	//.84797036
+	private final int 4INCH  =  651 	//.89864690
+	private final int 3INCH  =  488 	//.92398518
+	private final int 2INCH  =  325 	//.94932345
+	private final int 1INCH  =  162 	//.97466173
 */	
 	private double _driveQuadEncoderPos;
 	
