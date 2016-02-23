@@ -45,15 +45,25 @@ function doesMatchDataExist(teamid, matchid) {
 
 
 // BEGIN HANDLERS
-function getInfo(teamid, matchid, req, res) {
+function checkTeamid(req, res, next) {
+    var teamid = req.params.teamid;
     if (teamid === undefined) {
         res.status(500).json({ error: 'No team specified.'});
         return;
-    }
+    } else next();
+}
+
+function checkMatchid(req, res, next) {
+    var matchid = req.params.matchid;
     if (matchid === undefined) {
         res.status(500).json({ error: 'No match specified.'});
         return;
-    }
+    } else next();
+}
+
+function getInfo(req, res) {
+    var teamid = req.params.teamid;
+    var matchid = req.params.matchid;
 
     var teamexists = doesTeamExist(teamid);
     var matchexists = teamexists && doesMatchDataExist(teamid, matchid);
@@ -74,16 +84,10 @@ function getInfo(teamid, matchid, req, res) {
     }
 }
 
-function setInfo(teamid, matchid, req, res) {
+function setInfo(req, res) {
+    var teamid = req.params.teamid;
+    var matchid = req.params.matchid;
     var overwrite = (req.query.overwrite !== undefined);
-    if (teamid === undefined) {
-        res.status(500).json({ error: 'No team specified.'});
-        return;
-    }
-    if (matchid === undefined) {
-        res.status(500).json({ error: 'No match specified.'});
-        return;
-    }
 
     var teamexists = doesTeamExist(teamid);
     var matchexists = teamexists && doesMatchDataExist(teamid, matchid);
@@ -112,15 +116,9 @@ function setInfo(teamid, matchid, req, res) {
     }
 }
 
-function delMatch(teamid, matchid, req, res) {
-    if (teamid === undefined) {
-        res.status(500).json({ error: 'No team specified.'});
-        return;
-    }
-    if (matchid === undefined) {
-        res.status(500).json({ error: 'No match specified.'});
-        return;
-    }
+function delMatch(req, res) {
+    var teamid = req.params.teamid;
+    var matchid = req.params.matchid;
 
     var teamexists = doesTeamExist(teamid);
     var matchexists = teamexists && doesMatchDataExist(teamid, matchid);
@@ -139,11 +137,8 @@ function delMatch(teamid, matchid, req, res) {
     }
 }
 
-function delTeam(teamid, req, res) {
-    if (teamid === undefined) {
-        res.status(500).json({ error: 'No team specified.'});
-        return;
-    }
+function delTeam(req, res) {
+    var teamid = req.params.teamid;
 
     var teamexists = doesTeamExist(teamid);
 
@@ -163,11 +158,8 @@ function listTeams(req, res) {
     res.status(200).json(teamlist);
 }
 
-function listMatches(teamid, req, res) {
-    if (teamid === undefined) {
-        res.status(500).json({ error: 'No team specified.'});
-        return;
-    }
+function listMatches(req, res) {
+    var teamid = req.params.teamid;
 
     var teamexists = doesTeamExist(teamid);
 
@@ -181,31 +173,19 @@ function listMatches(teamid, req, res) {
 
 
 // BEGIN 'MOUNT'
-app.get('/api/:teamid/:matchid/get', function(req, res) {
-    var teamid = req.params.teamid;
-    var matchid = req.params.matchid;
-    getInfo(teamid, matchid, req, res);
-});
+app.get('/api/:teamid/:matchid/get', checkTeamid, checkMatchid, getInfo);
 
-app.get('/api/:teamid/:matchid/set', function(req, res) { //should be put eventually
-    var teamid = req.params.teamid;
-    var matchid = req.params.matchid;
-    setInfo(teamid, matchid, req, res);
-});
+app.get('/api/:teamid/:matchid/set', checkTeamid, checkMatchid, setInfo);
 
-app.get('/api/:teamid/:matchid/del', function(req, res) { //should be delete eventually
-    var teamid = req.params.teamid;
-    var matchid = req.params.matchid;
-    delMatch(teamid, matchid, req, res);
-});
+app.get('/api/:teamid/:matchid/del', checkTeamid, checkMatchid, delMatch);
 
-app.get('/api/tlist', function(req, res) {
-    listTeams(req, res);
-});
+app.get('/api/tlist', listTeams);
 
-app.get('/api/:teamid/mlist', function(req, res) {
-    var teamid = req.params.teamid;
-    listMatches(teamid, req, res);
+app.get('/api/:teamid/mlist', checkTeamid, listMatches);
+
+app.get('/dev/frtl', function(req, res) { //*F*orce *R*efresh *T*eam *L*ist
+    refreshTeamlist();
+    res.status(200).json({ success: "Lol ok."});
 });
 
 app.use('/', express.static('client'));
