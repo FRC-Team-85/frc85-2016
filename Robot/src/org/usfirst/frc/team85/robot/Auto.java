@@ -16,23 +16,30 @@ public class Auto {
 	private int FORWARD = 0;
 /*
 	//various distances of int and jazz
-	private final int 12FEET = 23468	//.35128852
-	private final int 8FEET  = 15645 	//.56752568
-	private final int 6FEET  = 11734 	//.17564426
-	private final int 4FEET  = 7822		//.78376284
-	private final int 3FEET  = 5867		//.08782213
-	private final int 2FEET  = 3911		//.39188142
-	private final int 1FOOT  = 1955		//.69594071
-	private final int 8INCH  = 1303		//.79729381
-	private final int 6INCH  = 977		//.84797036
-	private final int 4INCH  = 651		//.89864690
-	private final int 3INCH  = 488		//.92398518
-	private final int 2INCH  = 325		//.94932345
-	private final int 1INCH  = 162		//.97466173
+	private final int 12FEET =  23468	//.35128852
+	private final int 8FEET  =  15645	//.56752568
+	private final int 6FEET  =  11734	//.17564426
+	private final int 4FEET  =  7822	//.78376284
+	private final int 3FEET  =  5867	//.08782213
+	private final int 2FEET  =  3911	//.39188142
+	private final int 1FOOT  =  1955	//.69594071
+	private final int 8INCH  =  1303	//.79729381
+	private final int 6INCH  =  977 	//.84797036
+	private final int 4INCH  =  651 	//.89864690
+	private final int 3INCH  =  488 	//.92398518
+	private final int 2INCH  =  325 	//.94932345
+	private final int 1INCH  =  162 	//.97466173
 */	
 	private double _driveQuadEncoderPos;
 	
 	private double target;
+	
+	private int commandSubStage;	//on command_ of command array
+	private double[][] commandArray;//current runlist from DB input
+	
+	/*
+	for the switch cases, add run commands based on found values - conclude with 0,0,- and camera command
+	 */
 	
 	public Auto(TankDrive drive) {
         _drive = drive;
@@ -105,6 +112,36 @@ public class Auto {
 			return true;
 		} 
 		return false;
+	}
+	
+	public void addCommand(double lTarget, double rTarget, double time) {
+		/*
+		get three double fields from the DB and add them to the end of the command array
+		
+		1st lt, rt, t
+		2nd lt, rt, t
+		etc.
+		 */
+	}
+	
+	public void clearCommands() {
+		/*
+		if some DB button is pressed, clear the command array and stop all
+		 */
+	}
+	
+	public void runCommands() {
+		// based on
+		//for XXX comandArray[][]
+		//commandSubStage++
+		double lastLeftSet = _drive.getLeftAvgSpeed();
+		double lastRightSet = _drive.getRightAvgSpeed();
+		/*
+		use .get to find last attempted motor.set
+		ramp from there to target motor speeds
+		until Timer.get > last command end + time for command
+			then commandSubStage++
+		 */
 	}
 	
 }

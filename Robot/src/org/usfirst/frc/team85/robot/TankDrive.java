@@ -144,7 +144,7 @@ public class TankDrive {
                 _slaveRightMotorA.get() +
                 _slaveRightMotorB.get())/3;
     }
-    
+  /*  
     public boolean setDriveTargetLinear(double target, double tolerance) {
     	return setDriveTarget(target, tolerance, target, tolerance);
     }
@@ -203,5 +203,5 @@ public class TankDrive {
     		turnInit = false;
     	}
     }
-    
+*/    
 }
