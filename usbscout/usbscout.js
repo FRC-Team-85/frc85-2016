@@ -2,20 +2,21 @@ var express = require('express');
 var app = express();
 
 var redis = require('redis');
+
+//Uses redis socket at /tmp/redis.sock or specified by command-line argument
 redisSock = (process.argv.length > 2) ? process.argv[2] : '/tmp/redis.sock';
 var client = redis.createClient(redisSock);
 
+
+//teamlist is an associative array where the keys are the team numbers
+//and the values are arrays of the matches that redis has data on
 var teamlist = {};
 
+//fields is an array of fields (duh). This is used to determine what data to
+//keep track of later on
 var fields = ['a_reach']
 
-// Array Remove - By John Resig (MIT Licensed)
-Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
-};
-
+//refreshTeamlist scrapes redis for team data and updates the teamlist variable
 function refreshTeamlist() {
     client.keys('team:*', function(err, reply) {
         teamlist = {};
@@ -211,9 +212,7 @@ app.use('/', express.static('client'));
 
 // END 'MOUNT'
 
-console.log(JSON.stringify(teamlist));
 refreshTeamlist();
-console.log(JSON.stringify(teamlist));
 
 app.engine('html', require('ejs').renderFile);
 app.set('views', __dirname + '/client');
