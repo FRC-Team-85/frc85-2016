@@ -34,9 +34,6 @@ public class Auto {
 	
 	private double target;
 	
-	private int commandSubStage;	//on command_ of command array
-	private double[][] commandArray;//current runlist from DB input
-	
 	/*
 	for the switch cases, add run commands based on found values - conclude with 0,0,- and camera command
 	 */
@@ -46,6 +43,11 @@ public class Auto {
         //_driveQuadEncoderPos = _talons[1].getEncPosition();
 		//Note: if we are not using the PID loops for driving, we can
 		//connect the encoder directly to the roboRIO
+	_autoTimer = new Timer();
+	_autoTimer.start();
+	}
+        
+public void run()        {
         switch (obstacle) {
         case 0: //LowBar
 /*
@@ -114,20 +116,53 @@ public class Auto {
 		return false;
 	}
 	
-	public void addCommand(double lTarget, double rTarget, double time) {
-		/*
-		get three double fields from the DB and add them to the end of the command array
+	//the following is for obtaining drive command order and values
+	
+	Timer _autoTimer;
+	int commandSubStage;	//on command_ of command array
+	double[3][] commandArray;//current runlist from DB input
+	
+	public void checkSDB() {
+		boolean run = SmartDashboard.getBoolean("DB/Button 1", false);
+		if (run) {
+			runCommands();
+		}
+		if (SmartDashboard.getBoolean("DB/Button 2", false)) {
+			addCommand(
+				SmartDashboard.getNumber("DB/Slider 1", 0)
+				SmartDashboard.getNumber("DB/Slider 2", 0)
+				SmartDashboard.getNumber("DB/Slider 3", 0));
+			SmartDashboard.putBoolean("DB/Button 2", false);
+		} 
+		if (SmartDashboard.getBoolean("DB/Button 3", false)) {
+			clearCommands();
+			SmartDashboard.putBoolean("DB/Button 3", false);
+		}
+		if (SmartDashboard.getBoolean("DB/Button 4", false)) {
+			commnandSubStage = 0;
+			SmartDashboard.putBoolean("DB/Button 4", false);
+		}
 		
-		1st lt, rt, t
-		2nd lt, rt, t
-		etc.
-		 */
+	}
+	
+	public double addCommand(double lTarget, double rTarget, double timeToStop) {
+	
+		int i = commandArray[0].length;
+		
+		double[][] B = new double[3][i + 1];
+		B[0] = Arrays.copyOf(commndArray[0], i);
+		B[1] = Arrays.copyOf(commndArray[1], i);
+		B[2] = Arrays.copyOf(commndArray[2], i);
+		
+		B[0][i] = lTarget;
+		B[1][i] = rTarget;
+		B[2][i] = timeToStop;
+		
+		commandArray = B;
 	}
 	
 	public void clearCommands() {
-		/*
-		if some DB button is pressed, clear the command array and stop all
-		 */
+		commandArray = new double[][];
 	}
 	
 	public void runCommands() {
@@ -136,6 +171,17 @@ public class Auto {
 		//commandSubStage++
 		double lastLeftSet = _drive.getLeftAvgSpeed();
 		double lastRightSet = _drive.getRightAvgSpeed();
+		double leftTargetOutput = commandArray[0][commandSubStage];
+		double rightTargetOutput = commandArray[1][commandSubStage];
+		double timeToStop = commandArray[2][commandSubStage];
+		
+		if (_autoTimer.get() > timeToStop) {
+			commandSubStage++;
+		} else {
+			_drive.setMotors(
+				lastLeftSet + 1.0(leftTargetOutput -lastLeftSet),
+				lastRightSet + 1.0(rightTargetOutput -lastRightSet));
+		}
 		/*
 		use .get to find last attempted motor.set
 		ramp from there to target motor speeds
