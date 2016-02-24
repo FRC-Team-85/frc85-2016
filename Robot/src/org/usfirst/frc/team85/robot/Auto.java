@@ -124,11 +124,17 @@ public void run()        {
 	Timer _autoTimer;
 	int commandSubStage;	//on command_ of command array
 	double[][] commandArray;//current runlist from DB input
+	boolean init;
 	
 	public void checkSDB() {
-		boolean run = SmartDashboard.getBoolean("DB/Button 1", false);
-		if (run) {
+		if (SmartDashboard.getBoolean("DB/Button 1", false)) {
+			if (!init) {
+				init = true;
+				_autoTimer.reset();
+			}
 			runCommands();
+		} else {
+			init = false;
 		}
 		if (SmartDashboard.getBoolean("DB/Button 2", false)) {
 			addCommand(
@@ -145,8 +151,7 @@ public void run()        {
 			commandSubStage = 0;
 			SmartDashboard.putBoolean("DB/Button 4", false);
 		}
-		
-		
+		SmartDashboard.putNumber("DB/Slider 4", _autoTimer.get());
 	}
 	
 	public void putString() {
@@ -189,7 +194,12 @@ public void run()        {
 		double timeToStop = commandArray[2][commandSubStage];
 		
 		if (_autoTimer.get() > timeToStop) {
-			commandSubStage++;
+			if (commandSubStage < commandArray[0].length) {
+				commandSubStage++;
+			} else {
+				_drive.setMotors(0, 0);
+				SmartDashboard.putBoolean("DB/Button 1", false);
+			}
 		} else {
 			_drive.setMotors(
 				lastLeftSet + 1.0*(leftTargetOutput -lastLeftSet),
