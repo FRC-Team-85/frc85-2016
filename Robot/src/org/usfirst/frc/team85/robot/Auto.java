@@ -151,7 +151,7 @@ public void run()        {
 	
 	public void putString() {
 		for (int i = 0; i < commandArray[0].length; i++) {
-			SmartDashboard.putString("DB/String 0",
+			SmartDashboard.putString("DB/String " + i,
 					"lt: " + commandArray[0][i] +
 					"rt: " + commandArray[1][i] +
 					"stopAt: " + commandArray[2][i]);			
