@@ -1,11 +1,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
-/*
-"You're trash," (Smith).
-"Watching Craig play rocket league is like watching the special Olympics," (Costello)
-"Propper parenthetical citations are propper," (Costello)
-*/
+
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -82,8 +78,12 @@ public class TankDrive {
                                                                            
         turn = -1.15 * turnControlCubed +
                 0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified 0.8(-1.15x^3+0.38x^9)
-
-        if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
+        if(_controller.getRawButton(2)) {
+        	//Auto aim
+        	visionCenter();
+        	return;
+        }
+        else if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
       //  	thrust *= 1;
        // 	turn *= 1;
         } else if (_controller.getRawButton(5)) {
@@ -204,4 +204,20 @@ public class TankDrive {
     	}
     }
 */    
+    
+    public void visionCenter() {
+		if (ImageProcessing.contourFound /*_opStick.getRawButton()*/) {
+			if (ImageProcessing.centerX < 10) {
+				//move robot (to the right?) until centerX is less than 10  
+                setMotors(-1, 1);
+			} else if (ImageProcessing.centerX > -10) {
+				//move robot (to the left?) until centerX is more than -10
+				setMotors(1, -1);
+			}
+			
+			if (ImageProcessing.centerX > -10 && ImageProcessing.centerX < 10 /*and if the ball is in possession*/) {
+				//Shoot the ball
+			}
+		}
+	}    
 }
