@@ -101,6 +101,17 @@ public class Robot extends IterativeRobot {
     	//System.out.println("Robot Periodic was disabled!!!"); 
     	_imageProcessing.process();
     }
+    
+    //THE FOLLOWING IS ONLY FOR GETING AUTO VALUES
+    
+    private Auto _auto;
+    
+    public void testInit() {
+    	_auto = new Auto(_drive);
+    }
 
+    public void testPeriodic() {
+    	_auto.checkSDB();
+    }
 
 }

@@ -1,8 +1,11 @@
 package org.usfirst.frc.team85.robot;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Auto {
 	
@@ -120,7 +123,7 @@ public void run()        {
 	
 	Timer _autoTimer;
 	int commandSubStage;	//on command_ of command array
-	double[3][] commandArray;//current runlist from DB input
+	double[][] commandArray;//current runlist from DB input
 	
 	public void checkSDB() {
 		boolean run = SmartDashboard.getBoolean("DB/Button 1", false);
@@ -129,8 +132,8 @@ public void run()        {
 		}
 		if (SmartDashboard.getBoolean("DB/Button 2", false)) {
 			addCommand(
-				SmartDashboard.getNumber("DB/Slider 1", 0)
-				SmartDashboard.getNumber("DB/Slider 2", 0)
+				SmartDashboard.getNumber("DB/Slider 1", 0),
+				SmartDashboard.getNumber("DB/Slider 2", 0),
 				SmartDashboard.getNumber("DB/Slider 3", 0));
 			SmartDashboard.putBoolean("DB/Button 2", false);
 		} 
@@ -139,20 +142,30 @@ public void run()        {
 			SmartDashboard.putBoolean("DB/Button 3", false);
 		}
 		if (SmartDashboard.getBoolean("DB/Button 4", false)) {
-			commnandSubStage = 0;
+			commandSubStage = 0;
 			SmartDashboard.putBoolean("DB/Button 4", false);
 		}
 		
+		
 	}
 	
-	public double addCommand(double lTarget, double rTarget, double timeToStop) {
+	public void putString() {
+		for (int i = 0; i < commandArray[0].length; i++) {
+			SmartDashboard.putString("DB/String 0",
+					"lt: " + commandArray[0][i] +
+					"rt: " + commandArray[1][i] +
+					"stopAt: " + commandArray[2][i]);			
+		}
+	}
+	
+	public void addCommand(double lTarget, double rTarget, double timeToStop) {
 	
 		int i = commandArray[0].length;
 		
 		double[][] B = new double[3][i + 1];
-		B[0] = Arrays.copyOf(commndArray[0], i);
-		B[1] = Arrays.copyOf(commndArray[1], i);
-		B[2] = Arrays.copyOf(commndArray[2], i);
+		B[0] = Arrays.copyOf(commandArray[0], i);
+		B[1] = Arrays.copyOf(commandArray[1], i);
+		B[2] = Arrays.copyOf(commandArray[2], i);
 		
 		B[0][i] = lTarget;
 		B[1][i] = rTarget;
@@ -162,7 +175,7 @@ public void run()        {
 	}
 	
 	public void clearCommands() {
-		commandArray = new double[][];
+		commandArray = new double[3][];
 	}
 	
 	public void runCommands() {
@@ -179,8 +192,8 @@ public void run()        {
 			commandSubStage++;
 		} else {
 			_drive.setMotors(
-				lastLeftSet + 1.0(leftTargetOutput -lastLeftSet),
-				lastRightSet + 1.0(rightTargetOutput -lastRightSet));
+				lastLeftSet + 1.0*(leftTargetOutput -lastLeftSet),
+				lastRightSet + 1.0*(rightTargetOutput -lastRightSet));
 		}
 		/*
 		use .get to find last attempted motor.set
