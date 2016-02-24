@@ -119,39 +119,47 @@ public void run()        {
 		return false;
 	}
 	
+	//NOT FOR ACTUAL ROBOT USE
 	//the following is for obtaining drive command order and values
 	
-	Timer _autoTimer;
+	Timer _autoTimer;	//stage base cmd
 	int commandSubStage;	//on command_ of command array
 	double[][] commandArray;//current runlist from DB input
-	boolean init;
+	boolean init;	//run init toggle for Timer reset
 	
-	public void checkSDB() {
-		if (SmartDashboard.getBoolean("DB/Button 1", false)) {
+	public void checkSDB() {//MAIN
+		if (SmartDashboard.getBoolean("DB/Button 1", false)) {//RUN
 			if (!init) {
+				commandSubStage = 0;
 				init = true;
 				_autoTimer.reset();
 			}
 			runCommands();
-		} else {
-			init = false;
+		} else {//PAUSE - END
+			resetRun();
 		}
-		if (SmartDashboard.getBoolean("DB/Button 2", false)) {
+		if (SmartDashboard.getBoolean("DB/Button 2", false)) {//PULL
 			addCommand(
 				SmartDashboard.getNumber("DB/Slider 1", 0),
 				SmartDashboard.getNumber("DB/Slider 2", 0),
 				SmartDashboard.getNumber("DB/Slider 3", 0));
 			SmartDashboard.putBoolean("DB/Button 2", false);
 		} 
-		if (SmartDashboard.getBoolean("DB/Button 3", false)) {
+		if (SmartDashboard.getBoolean("DB/Button 3", false)) {//CLEAR
 			clearCommands();
-			SmartDashboard.putBoolean("DB/Button 3", false);
-		}
-		if (SmartDashboard.getBoolean("DB/Button 4", false)) {
-			commandSubStage = 0;
-			SmartDashboard.putBoolean("DB/Button 4", false);
+			resetRun();
 		}
 		SmartDashboard.putNumber("DB/Slider 4", _autoTimer.get());
+	}
+	
+	public void resetRun() {
+		commandSubStage = 0;
+		init = false;
+		SmartDashboard.putBoolean("DB/Button 1", false);
+		SmartDashboard.putBoolean("DB/Button 2", false);
+		SmartDashboard.putBoolean("DB/Button 3", false);
+		SmartDashboard.putBoolean("DB/Button 4", false);
+		_drive.setMotors(0, 0);		
 	}
 	
 	public void putString() {
@@ -197,13 +205,13 @@ public void run()        {
 			if (commandSubStage < commandArray[0].length) {
 				commandSubStage++;
 			} else {
-				_drive.setMotors(0, 0);
+				_drive.setMotors(0, 0);//FINISHED
 				SmartDashboard.putBoolean("DB/Button 1", false);
 			}
 		} else {
 			_drive.setMotors(
-				lastLeftSet + 1.0*(leftTargetOutput -lastLeftSet),
-				lastRightSet + 1.0*(rightTargetOutput -lastRightSet));
+				lastLeftSet + 1.0*(leftTargetOutput - lastLeftSet),
+				lastRightSet + 1.0*(rightTargetOutput - lastRightSet));
 		}
 		/*
 		use .get to find last attempted motor.set
