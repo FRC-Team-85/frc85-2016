@@ -46,8 +46,8 @@ public class Auto {
         //_driveQuadEncoderPos = _talons[1].getEncPosition();
 		//Note: if we are not using the PID loops for driving, we can
 		//connect the encoder directly to the roboRIO
-	_autoTimer = new Timer();
-	_autoTimer.start();
+        _autoTimer = new Timer();
+        _autoTimer.start();
 	}
         
 public void run()        {
@@ -150,6 +150,7 @@ public void run()        {
 			resetRun();
 		}
 		SmartDashboard.putNumber("DB/Slider 4", _autoTimer.get());
+		putString();
 	}
 	
 	public void resetRun() {
@@ -158,7 +159,6 @@ public void run()        {
 		SmartDashboard.putBoolean("DB/Button 1", false);
 		SmartDashboard.putBoolean("DB/Button 2", false);
 		SmartDashboard.putBoolean("DB/Button 3", false);
-		SmartDashboard.putBoolean("DB/Button 4", false);
 		_drive.setMotors(0, 0);		
 	}
 	
@@ -176,9 +176,9 @@ public void run()        {
 		int i = commandArray[0].length;
 		
 		double[][] B = new double[3][i + 1];
-		B[0] = Arrays.copyOf(commandArray[0], i);
-		B[1] = Arrays.copyOf(commandArray[1], i);
-		B[2] = Arrays.copyOf(commandArray[2], i);
+		B[0] = Arrays.copyOf(commandArray[0], i+1);
+		B[1] = Arrays.copyOf(commandArray[1], i+1);
+		B[2] = Arrays.copyOf(commandArray[2], i+1);
 		
 		B[0][i] = lTarget;
 		B[1][i] = rTarget;
@@ -205,8 +205,7 @@ public void run()        {
 			if (commandSubStage < commandArray[0].length) {
 				commandSubStage++;
 			} else {
-				_drive.setMotors(0, 0);//FINISHED
-				SmartDashboard.putBoolean("DB/Button 1", false);
+				resetRun();
 			}
 		} else {
 			_drive.setMotors(
