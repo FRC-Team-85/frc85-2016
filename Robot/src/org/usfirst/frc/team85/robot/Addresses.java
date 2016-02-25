@@ -42,7 +42,7 @@ public class Addresses {
     	//Intake
 	public class INTAKE {
 		public static final int LOAD_MOTOR = 3; //TODO: Relay output number
-
+		
 		public static final int LEFT_INTAKE_MOTOR = 7;
 		public static final int RIGHT_INTAKE_MOTOR = 8;
 	}

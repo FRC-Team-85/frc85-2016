@@ -13,6 +13,8 @@ public class TankDrive {
 	private boolean turnInit;
 	
     private Joystick _controller;
+    
+    private Relay greenLED = new Relay(0);
 
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
@@ -81,6 +83,7 @@ public class TankDrive {
         if(_controller.getRawButton(2)) {
         	//Auto aim
         	visionCenter();
+        	greenLED.set(Relay.Value.kForward);
         	return;
         }
         else if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
@@ -99,6 +102,7 @@ public class TankDrive {
         	turn *= 0.8;
         }
         
+        greenLED.set(Relay.Value.kOff);
 
         double left = thrust + turn;
         double right = thrust - turn;
