@@ -135,8 +135,9 @@ public class TatorCannon {
     	SmartDashboard.putData("Ball not present ", _ballNotPresentSensor);
     	if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
-    	} else if (_operatorStick.getRawButton(7)) {	//Left Trigger
-    		MODE = CannonMode.SPIT;
+    	} else if (_operatorStick.getRawButton(7) && !bottomDartLimit.get()
+    			/*Because We KNOW Better than to TRUST WIFI*/) {	//Left Trigger
+    		    		MODE = CannonMode.SPIT;
     	} else if (_operatorStick.getRawButton(8) && _ballNotPresentSensor.get()) {	//Right trigger
     		MODE = CannonMode.STORAGE;
     	} else if (_operatorStick.getRawButton(3) && _ballNotPresentSensor.get()) {	//Intake Button B
@@ -181,7 +182,9 @@ public class TatorCannon {
     			break;
     		case IN: //Sucks in ball
     	//		armMove(LOADPOS);
-    			armMove(0.4);
+    			if (bottomDartLimit.get()) {
+    				armMove(0.4);
+    			}
     			setOuter(LOADSPEED);
     			indexIn();
     			break;
