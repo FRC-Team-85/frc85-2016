@@ -30,12 +30,12 @@ public class ImageProcessing {
 			contourFound = (area>0) ? true : false;
 			centerX = _table.getNumberArray("centerX", new double[] {160})[0] - 160;
 			centerY = _table.getNumberArray("centerY", new double[] {120})[0] - 120;
-			if (area>0) {
+/*			if (area>0) {
 				System.out.println("Area: " + area);
 			} else {
 				System.out.println("No Contour Found");
 			}
-
+*/
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}

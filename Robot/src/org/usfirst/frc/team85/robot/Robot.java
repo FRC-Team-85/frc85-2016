@@ -87,6 +87,8 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+//    	_auto.checkSDB();
+//	/*	
     	PowerMonitoring.Monitor();
     	//_tatorCannon.armCheck();
     	_imageProcessing.process();
@@ -94,6 +96,7 @@ public class Robot extends IterativeRobot {
   		//_drive.turn180();
     	_intake.run(true);
     	_tatorCannon.run(false);
+//	*/	
     }
     
     public void disabledInit() {

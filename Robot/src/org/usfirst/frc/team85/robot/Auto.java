@@ -3,11 +3,27 @@ package org.usfirst.frc.team85.robot;
 import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Auto {
+	
+
+	//NOT FOR ACTUAL ROBOT USE
+	//the following is for obtaining drive command order and values
+	
+	Timer _autoTimer;	//stage base cmd
+	int commandSubStage;	//on command_ of command array
+	double[] lt = {0};
+	double[] rt = {0};
+	double[] st = {0};
+	boolean init = false;	//run init toggle for Timer reset
+	boolean DB1 = false;
+	boolean DB2 = false;
+	boolean DB3 = false;
+	double N1 = 0;
+	double N2 = 0;
+	double N3 = 0;
+	//==============================================================
 	
 	private TankDrive _drive;
 /*
@@ -119,16 +135,18 @@ public void run()        {
 		return false;
 	}
 	
-	//NOT FOR ACTUAL ROBOT USE
-	//the following is for obtaining drive command order and values
-	
-	Timer _autoTimer;	//stage base cmd
-	int commandSubStage;	//on command_ of command array
-	double[][] commandArray;//current runlist from DB input
-	boolean init;	//run init toggle for Timer reset
-	
 	public void checkSDB() {//MAIN
-		if (SmartDashboard.getBoolean("DB/Button 1", false)) {//RUN
+		try {
+			DB1 = SmartDashboard.getBoolean("DB/Button 1", false);
+			DB2 = SmartDashboard.getBoolean("DB/Button 2", false);
+			DB3 = SmartDashboard.getBoolean("DB/Button 3", false);
+			N1 = SmartDashboard.getNumber("DB/Slider 1", 0);
+			N2 = SmartDashboard.getNumber("DB/Slider 2", 0);
+			N3 = SmartDashboard.getNumber("DB/Slider 3", 0);
+		} catch (Exception ex) {
+			System.out.println(ex.toString());
+		}
+		if (DB1) {//RUN
 			if (!init) {
 				commandSubStage = 0;
 				init = true;
@@ -138,14 +156,11 @@ public void run()        {
 		} else {//PAUSE - END
 			resetRun();
 		}
-		if (SmartDashboard.getBoolean("DB/Button 2", false)) {//PULL
-			addCommand(
-				SmartDashboard.getNumber("DB/Slider 1", 0),
-				SmartDashboard.getNumber("DB/Slider 2", 0),
-				SmartDashboard.getNumber("DB/Slider 3", 0));
+		if (DB2) {//PULL
+			addCommand(N1, N2, N3);
 			SmartDashboard.putBoolean("DB/Button 2", false);
 		} 
-		if (SmartDashboard.getBoolean("DB/Button 3", false)) {//CLEAR
+		if (DB3) {//CLEAR
 			clearCommands();
 			resetRun();
 		}
@@ -159,36 +174,43 @@ public void run()        {
 		SmartDashboard.putBoolean("DB/Button 1", false);
 		SmartDashboard.putBoolean("DB/Button 2", false);
 		SmartDashboard.putBoolean("DB/Button 3", false);
+		DB1 = false;
+		DB2 = false;
+		DB3 = false;
 		_drive.setMotors(0, 0);		
 	}
 	
 	public void putString() {
-		for (int i = 0; i < commandArray[0].length; i++) {
+		for (int i = 0; i < lt.length; i++) {
 			SmartDashboard.putString("DB/String " + i,
-					"lt: " + commandArray[0][i] +
-					"rt: " + commandArray[1][i] +
-					"stopAt: " + commandArray[2][i]);			
+					"lt: " + lt[i] +
+					"rt: " + rt[i] +
+					"stopAt: " + st[i]);			
 		}
 	}
 	
 	public void addCommand(double lTarget, double rTarget, double timeToStop) {
 	
-		int i = commandArray[0].length;
+		int i = lt.length;
+
+		double[] newLT = Arrays.copyOf(lt, i+1);
+		double[] newRT = Arrays.copyOf(rt, i+1);
+		double[] newST = Arrays.copyOf(st, i+1);
 		
-		double[][] B = new double[3][i + 1];
-		B[0] = Arrays.copyOf(commandArray[0], i+1);
-		B[1] = Arrays.copyOf(commandArray[1], i+1);
-		B[2] = Arrays.copyOf(commandArray[2], i+1);
+		newLT[i] = lTarget;
+		newRT[i] = rTarget;
+		newST[i] = timeToStop;
 		
-		B[0][i] = lTarget;
-		B[1][i] = rTarget;
-		B[2][i] = timeToStop;
-		
-		commandArray = B;
+		lt = newLT;
+		rt = newRT;
+		st = newST;
 	}
 	
 	public void clearCommands() {
-		commandArray = new double[3][];
+		double[] poof = new double[] {0};
+		lt = poof;
+		rt = poof;
+		st = poof;
 	}
 	
 	public void runCommands() {
@@ -197,12 +219,12 @@ public void run()        {
 		//commandSubStage++
 		double lastLeftSet = _drive.getLeftAvgSpeed();
 		double lastRightSet = _drive.getRightAvgSpeed();
-		double leftTargetOutput = commandArray[0][commandSubStage];
-		double rightTargetOutput = commandArray[1][commandSubStage];
-		double timeToStop = commandArray[2][commandSubStage];
+		double leftTargetOutput = lt[commandSubStage];
+		double rightTargetOutput = rt[commandSubStage];
+		double timeToStop = st[commandSubStage];
 		
 		if (_autoTimer.get() > timeToStop) {
-			if (commandSubStage < commandArray[0].length) {
+			if (commandSubStage < lt.length-1) {
 				commandSubStage++;
 			} else {
 				resetRun();
