@@ -21,6 +21,7 @@ public class TatorCannon {
 	
 	private static final double ARM_LOW_LIMIT = 4.45;//4.70;//4.15;	//Rename these
 	private static final double ARM_HIGH_LIMIT = 2.65;//2.75;		//Rename these
+	private static final boolean WYATTSPRIVILEGE = false;
 	
 	private CannonMode MODE = CannonMode.OFF;
 	
@@ -135,9 +136,9 @@ public class TatorCannon {
     	SmartDashboard.putData("Ball not present ", _ballNotPresentSensor);
     	if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
-    	} else if (_operatorStick.getRawButton(7) && !bottomDartLimit.get()
+    	} else if (_operatorStick.getRawButton(7) && (WYATTSPRIVILEGE||!bottomDartLimit.get())
     			/*Because We KNOW Better than to TRUST WIFI*/) {	//Left Trigger
-    		    		MODE = CannonMode.SPIT;
+    		MODE = CannonMode.SPIT;
     	} else if (_operatorStick.getRawButton(8) && _ballNotPresentSensor.get()) {	//Right trigger
     		MODE = CannonMode.STORAGE;
     	} else if (_operatorStick.getRawButton(3) && _ballNotPresentSensor.get()) {	//Intake Button B
