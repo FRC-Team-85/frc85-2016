@@ -113,10 +113,10 @@ public class Intake {
 		return false;
 	}
 
-	private boolean intakeMove(double target) {
+	private boolean intakeMove(double target) {	//setMotors(+) goes down, setMotors(-) goes up
 		SmartDashboard.putNumber("Intake Position Target", target);
 		if (target==LOADPOS) {
-			if (_encPos < LOADPOS && _encPos > (LOADPOS-INTAKETOL)) {
+			if (_encPos > (LOADPOS-INTAKETOL) && _encPos < LOADPOS) {
 				setMotors(0.0);
 				return true;
 			}

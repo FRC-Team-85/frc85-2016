@@ -24,8 +24,8 @@ public class ImageProcessing {
 	
 	public void process() {
 		
-    	try {
-    		_table = NetworkTable.getTable("grip");
+//    	try {
+/*    		_table = NetworkTable.getTable("GRIP/contoursReport");
 			area = _table.getNumber("area", 0);
 			contourFound = (area>0) ? true : false;
 			centerX = _table.getNumber("centerX", 160) - 160;
@@ -35,14 +35,19 @@ public class ImageProcessing {
 			} else {
 				System.out.println("No Contour Found");
 			}
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
+*/
+//		} catch (Exception ex) {
+//			System.out.println(ex);
+//		}
+			area = SmartDashboard.getNumber("GRIP/contoursReport/area", 0);
+			contourFound = (area>0) ? true : false;
+			centerX = SmartDashboard.getNumber("GRIP/contoursReport/centerX", 160) - 160;
+			centerY = SmartDashboard.getNumber("GRIP/contoursReport/centerY", 120) - 120;
     	
-    	SmartDashboard.putNumber("Center X", centerX);
-    	SmartDashboard.putNumber("Center Y", centerY);
-    	SmartDashboard.putNumber("Area", area);
-    	SmartDashboard.putBoolean("Target Found", contourFound);
+    	SmartDashboard.putNumber("Vision/Center X", centerX);
+    	SmartDashboard.putNumber("Vision/Center Y", centerY);
+    	SmartDashboard.putNumber("Vision/Area", area);
+    	SmartDashboard.putBoolean("Vision/Target Found", contourFound);
 	}
 }
 

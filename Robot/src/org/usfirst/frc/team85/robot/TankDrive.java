@@ -9,12 +9,12 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 
 public class TankDrive {
 	
-	private int turnCount = 2000;
-	private boolean turnInit;
+//	private int turnCount = 2000;
+//	private boolean turnInit;
 	
     private Joystick _controller;
     
-    private Relay greenLED = new Relay(0);
+    private Relay greenLED = new Relay(0, Relay.Direction.kForward);
 
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
@@ -85,7 +85,7 @@ public class TankDrive {
         	visionCenter();
         	greenLED.set(Relay.Value.kForward);
         	return;
-        }
+        } 
         else if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
       //  	thrust *= 1;
        // 	turn *= 1;
@@ -210,6 +210,7 @@ public class TankDrive {
 */    
     
     public void visionCenter() {
+    	greenLED.set(Relay.Value.kForward);
 		if (ImageProcessing.contourFound /*_opStick.getRawButton()*/) {
 			if (ImageProcessing.centerX < 10) {
 				//move robot (to the right?) until centerX is less than 10  

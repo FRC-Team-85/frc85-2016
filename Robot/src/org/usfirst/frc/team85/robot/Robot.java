@@ -34,7 +34,9 @@ public class Robot extends IterativeRobot {
 	//Defines two controllers: One for tank drive, one for operator
     private Joystick _driveStick;
     private Joystick _operatorStick;
-
+    
+    private Auto _auto;
+    
     private TankDrive _drive;
     private Intake _intake;
     private TatorCannon _tatorCannon;
@@ -51,6 +53,7 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+    	_auto = new Auto(_drive);
 
         _driveStick = new Joystick(CONTROLLERS.DRIVESTICK);
         _operatorStick = new Joystick(CONTROLLERS.OPERATORSTICK);
@@ -103,12 +106,6 @@ public class Robot extends IterativeRobot {
     }
     
     //THE FOLLOWING IS ONLY FOR GETING AUTO VALUES
-    
-    private Auto _auto;
-    
-    public void testInit() {
-    	_auto = new Auto(_drive);
-    }
 
     public void testPeriodic() {
     	_auto.checkSDB();

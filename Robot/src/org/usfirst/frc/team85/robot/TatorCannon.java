@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class TatorCannon {
 
-	private double LOADPOS;		//auto load pos -- around 4.70
-	private double FIREPOS;		//auto fire pos -- around 2.70
+	private double LOADPOS;		//auto load pos -- 
+	private double FIREPOS;		//auto fire pos -- 
 	private double ARMTOL;		//auto angle tol
 
 	private double LOADSPEED = -1.0;	//loading speed
@@ -32,7 +32,6 @@ public class TatorCannon {
 	private CANTalon _outerTopMotor, _outerBottomMotor, _armMotor;
 	private Relay _innerTopMotor, _innerBottomMotor;
 	
-	private AnalogInput _armPot;
 	private Encoder _dartEncoder;
 	private Intake _intake;
 	
@@ -58,7 +57,6 @@ public class TatorCannon {
 		_outerTopMotor = new CANTalon(CANNON.OUTER_MOTOR_TOP);
 		_outerBottomMotor = new CANTalon(CANNON.OUTER_MOTOR_BOTTOM);
 		_armMotor = new CANTalon(CANNON.ARM_MOTOR);
-		_armPot = new AnalogInput(CANNON.ARM_POT);
 
 		_innerTopMotor = new Relay(CANNON.INNER_MOTOR_TOP, Relay.Direction.kBoth);
 		_innerBottomMotor = new Relay(CANNON.INNER_MOTOR_BOTTOM, Relay.Direction.kBoth);
@@ -135,12 +133,14 @@ public class TatorCannon {
     
     public void setCannonMode() {
     	SmartDashboard.putData("Ball not present ", _ballNotPresentSensor);
-    	if (_driveStick.getRawButton(7)) {				//Left bumper
+    	if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
-    	} else if (_operatorStick.getRawButton(7)) {
+    	} else if (_operatorStick.getRawButton(7)) {	//Left Trigger
     		MODE = CannonMode.SPIT;
-    	} else if ( (_operatorStick.getRawButton(8)||_operatorStick.getRawButton(3)) && _ballNotPresentSensor.get()) {	//Right trigger
+    	} else if (_operatorStick.getRawButton(8) && _ballNotPresentSensor.get()) {	//Right trigger
     		MODE = CannonMode.STORAGE;
+    	} else if (_operatorStick.getRawButton(3) && _ballNotPresentSensor.get()) {	//Intake Button B
+    		MODE = CannonMode.IN;
     	} else {
     		MODE = CannonMode.OFF;
     	}
@@ -176,6 +176,12 @@ public class TatorCannon {
     			}
     			break;
     		case STORAGE: //Sucks in ball
+    			setOuter(LOADSPEED);
+    			indexIn();
+    			break;
+    		case IN: //Sucks in ball
+    	//		armMove(LOADPOS);
+    			armMove(0.4);
     			setOuter(LOADSPEED);
     			indexIn();
     			break;
@@ -241,18 +247,20 @@ public class TatorCannon {
 		_innerBottomMotor.set(Relay.Value.kOff);
     }
     public void setArmMotor(double value) {
-		boolean topLimit = topDartLimit.get();
+		boolean topLimit = topDartLimit.get();		//open = TRUE
 		boolean botLimit = bottomDartLimit.get();
 		
-		if (value < .05 && topLimit == false) { 
-			_armMotor.set(0);
-		} else if (value > -.05 && botLimit == false) { 
-			_armMotor.set(0);
-		} else if (value < 0) {
-			_armMotor.set(value * 0.65);
-		} else if (value > 0) {
-			_armMotor.set(value * 0.4);
+		if ((value < .05 && topLimit == false) || (value > -.05 && botLimit == false) ){
+			value = 0;
+		} else if (value < 0) {		//DOWN
+			value *= 0.65;
+		} else if (value > 0) {		//UP
+			value *= 0.4;
 		}
+		
+		//DEADBAND
+		value = (Math.abs(value) < 0.05) ? 0 : value;
+		_armMotor.set(value);
 			
 	}
 }
