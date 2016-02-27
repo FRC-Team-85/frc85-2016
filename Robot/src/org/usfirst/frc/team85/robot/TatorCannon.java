@@ -29,7 +29,7 @@ public class TatorCannon {
 	private Joystick _operatorStick;
 	private Joystick _driveStick;
 
-	private CANTalon _outerTopMotor, _outerBottomMotor, _armMotor;
+	private CANTalon _outerTopMotor, _outerBottomMotor, _dartMotor;
 	private Relay _innerTopMotor, _innerBottomMotor;
 	
 	private Encoder _dartEncoder;
@@ -42,8 +42,8 @@ public class TatorCannon {
 	private static final double STORAGEDELAY = 0.5;
 	private boolean _spitInit, _loadInit, _loadComplete, _storageInit;
 		
-	DigitalInput topDartLimit = new DigitalInput(1);
-	DigitalInput bottomDartLimit = new DigitalInput(2);
+	DigitalInput _topDartLimit = new DigitalInput(1);
+	DigitalInput _bottomDartLimit = new DigitalInput(2);
 	DigitalInput _ballNotPresentSensor;
 
 	public TatorCannon(Joystick operatorStick, Joystick driveStick, Intake intake) {
@@ -51,16 +51,18 @@ public class TatorCannon {
 		_operatorStick = operatorStick;
 		_driveStick = driveStick;
 		
+		_intake = intake;
+		
 		_outerTopMotor = new CANTalon(CANNON.OUTER_MOTOR_TOP);
 		_outerBottomMotor = new CANTalon(CANNON.OUTER_MOTOR_BOTTOM);
-		_armMotor = new CANTalon(CANNON.ARM_MOTOR);
+		_dartMotor = new CANTalon(CANNON.DART_MOTOR);
 
 		_innerTopMotor = new Relay(CANNON.INNER_MOTOR_TOP, Relay.Direction.kBoth);
 		_innerBottomMotor = new Relay(CANNON.INNER_MOTOR_BOTTOM, Relay.Direction.kBoth);
 		
+		_topDartLimit = new DigitalInput(CANNON.DART_TOP_LIMIT);
+		_bottomDartLimit = new DigitalInput(CANNON.DART_BOTTOM_LIMIT);
 		_ballNotPresentSensor = new DigitalInput(CANNON.BALL_NOT_PRESENT_SENSOR);
-		
-		_intake = intake;
 		
 		_dartEncoder = new Encoder(Addresses.CANNON.DART_ENCODER_CH_A, Addresses.CANNON.DART_ENCODER_CH_B);
 		
@@ -99,7 +101,7 @@ public class TatorCannon {
 */
         _outerTopMotor.enableBrakeMode(false);
         _outerBottomMotor.enableBrakeMode(false);
-        _armMotor.enableBrakeMode(true);
+        _dartMotor.enableBrakeMode(true);
         System.out.println("TatorCannon Init Done");
         
     }
@@ -117,14 +119,14 @@ public class TatorCannon {
     }
     
     private boolean readyToLoad(){
-    	return (Math.abs(_armMotor.get() - LOADPOS) <= ARMTOL);
+    	return (Math.abs(_dartMotor.get() - LOADPOS) <= ARMTOL);
     }
 
     public boolean armMove(double target) {
-    	if ( Math.abs(_armMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
+    	if ( Math.abs(_dartMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
     		return true;									 //this entire if-block is probably unnecessary
     	}
-    	_armMotor.set(target);
+    	_dartMotor.set(target);
     	return false;
     }
     
@@ -132,7 +134,7 @@ public class TatorCannon {
     	SmartDashboard.putData("Ball not present ", _ballNotPresentSensor);
     	if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
-    	} else if (_operatorStick.getRawButton(7) && (WYATTSPRIVILEGE||!bottomDartLimit.get())
+    	} else if (_operatorStick.getRawButton(7) && (WYATTSPRIVILEGE||!_bottomDartLimit.get())
     			/*Because We KNOW Better than to TRUST WIFI*/) {	//Left Trigger
     		MODE = CannonMode.SPIT;
     	} else if (_operatorStick.getRawButton(8) && _ballNotPresentSensor.get()) {	//Right trigger
@@ -179,7 +181,7 @@ public class TatorCannon {
     			break;
     		case IN: //Sucks in ball
 //    			armMove(LOADPOS);
-    			if (bottomDartLimit.get()) {
+    			if (_bottomDartLimit.get()) {
     				armMove(0.4);
     			}
     			setOuter(LOADSPEED);
@@ -249,8 +251,8 @@ public class TatorCannon {
     public void manualArmMotor() {
     	double value = _operatorStick.getRawAxis(3);
     	
-		boolean topLimit = topDartLimit.get();		//open = TRUE
-		boolean botLimit = bottomDartLimit.get();
+		boolean topLimit = _topDartLimit.get();		//open = TRUE
+		boolean botLimit = _bottomDartLimit.get();
 		
 		if ((value < .05 && topLimit == false) || (value > -.05 && botLimit == false) ){
 			value = 0;
@@ -262,7 +264,7 @@ public class TatorCannon {
 				
 		//DEADBAND
 		value = (Math.abs(value) < 0.05) ? 0 : value;
-		_armMotor.set(value);
+		_dartMotor.set(value);
 			
 	}
 }

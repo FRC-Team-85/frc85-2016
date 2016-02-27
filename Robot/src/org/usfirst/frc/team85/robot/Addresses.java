@@ -30,9 +30,10 @@ public class Addresses {
 		public static final int INNER_MOTOR_TOP = 1;		//Relay
 		public static final int INNER_MOTOR_BOTTOM = 2;		//Relay
 
-		public static final int ARM_MOTOR = 9;
-		
-		public static final int ARM_POT = 0;
+		public static final int DART_MOTOR = 9;
+
+		public static final int DART_TOP_LIMIT = 1;
+		public static final int DART_BOTTOM_LIMIT = 2;		
 		public static final int BALL_NOT_PRESENT_SENSOR = 4;
 
 		public static final int DART_ENCODER_CH_A = 5;

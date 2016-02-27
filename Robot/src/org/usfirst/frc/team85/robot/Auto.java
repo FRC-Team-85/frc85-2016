@@ -13,9 +13,9 @@ public class Auto {
 	
 	Timer _autoTimer;	//stage base cmd
 	int commandSubStage;	//on command_ of command array
-	double[] lt = {0};
-	double[] rt = {0};
-	double[] st = {0};
+	double[] lt = {0,0.1};
+	double[] rt = {0,0.1};
+	double[] st = {0,15};
 	boolean init = false;	//run init toggle for Timer reset
 	boolean DB1 = false;
 	boolean DB2 = false;
@@ -178,6 +178,7 @@ public void run()        {
 		DB2 = false;
 		DB3 = false;
 		_drive.setMotors(0, 0);		
+		return;
 	}
 	
 	public void putString() {
