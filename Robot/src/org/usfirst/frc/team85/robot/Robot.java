@@ -90,10 +90,8 @@ public class Robot extends IterativeRobot {
 //    	_auto.checkSDB();
 //	/*	
     	PowerMonitoring.Monitor();
-    	//_tatorCannon.armCheck();
     	_imageProcessing.process();
   		_drive.drive();
-  		//_drive.turn180();
     	_intake.run(true);
     	_tatorCannon.run(false);
 //	*/	

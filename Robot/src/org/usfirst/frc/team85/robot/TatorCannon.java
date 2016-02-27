@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class TatorCannon {
 
-	private double LOADPOS;		//auto load pos -- 
-	private double FIREPOS;		//auto fire pos -- 
-	private double ARMTOL;		//auto angle tol
+	private static double LOADPOS;		//auto load pos -- 
+	private static double FIREPOS;		//auto fire pos -- 
+	private static double DARTTOL;		//auto angle tol
 	private static final double ARMMIN = 0;
 	private static final double ARMMAX = 0;
 	private static final boolean WYATTSPRIVILEGE = false;
 
-	private double LOADSPEED = -1.0;	//loading speed
+	private double LOADSPEED = -0.5;	//loading speed
 	private double SPITSPEED = 1.0;
 	private double FIRERPM = 1.0;		//outerMotor speed ---Voltage mode: 0.75
 	private double RPMTOL;				//outerMotor tol
@@ -42,8 +42,8 @@ public class TatorCannon {
 	private static final double STORAGEDELAY = 0.5;
 	private boolean _spitInit, _loadInit, _loadComplete, _storageInit;
 		
-	DigitalInput _topDartLimit = new DigitalInput(1);
-	DigitalInput _bottomDartLimit = new DigitalInput(2);
+	DigitalInput _topDartLimit;
+	DigitalInput _bottomDartLimit;
 	DigitalInput _ballNotPresentSensor;
 
 	public TatorCannon(Joystick operatorStick, Joystick driveStick, Intake intake) {
@@ -119,11 +119,11 @@ public class TatorCannon {
     }
     
     private boolean readyToLoad(){
-    	return (Math.abs(_dartMotor.get() - LOADPOS) <= ARMTOL);
+    	return (Math.abs(_dartMotor.get() - LOADPOS) <= DARTTOL);
     }
 
     public boolean armMove(double target) {
-    	if ( Math.abs(_dartMotor.get() - target) <= ARMTOL) { //Because we're using a PID loop for positioning,
+    	if ( Math.abs(_dartMotor.get() - target) <= DARTTOL) { //Because we're using a PID loop for positioning,
     		return true;									 //this entire if-block is probably unnecessary
     	}
     	_dartMotor.set(target);
@@ -253,6 +253,10 @@ public class TatorCannon {
     	
 		boolean topLimit = _topDartLimit.get();		//open = TRUE
 		boolean botLimit = _bottomDartLimit.get();
+
+    	if (!_bottomDartLimit.get()) {
+    		_dartEncoder.reset();
+    	}
 		
 		if ((value < .05 && topLimit == false) || (value > -.05 && botLimit == false) ){
 			value = 0;

@@ -17,12 +17,12 @@ public class Auto {
 	double[] rt = {0,0.1};
 	double[] st = {0,15};
 	boolean init = false;	//run init toggle for Timer reset
+	boolean DB0 = false;
 	boolean DB1 = false;
 	boolean DB2 = false;
-	boolean DB3 = false;
+	double N0 = 0;
 	double N1 = 0;
 	double N2 = 0;
-	double N3 = 0;
 	//==============================================================
 	
 	private TankDrive _drive;
@@ -66,7 +66,7 @@ public class Auto {
         _autoTimer.start();
 	}
         
-public void run()        {
+	public void run() {
         switch (obstacle) {
         case 0: //LowBar
 /*
@@ -137,16 +137,16 @@ public void run()        {
 	
 	public void checkSDB() {//MAIN
 		try {
+			DB0 = SmartDashboard.getBoolean("DB/Button 0", false);
 			DB1 = SmartDashboard.getBoolean("DB/Button 1", false);
 			DB2 = SmartDashboard.getBoolean("DB/Button 2", false);
-			DB3 = SmartDashboard.getBoolean("DB/Button 3", false);
+			N0 = SmartDashboard.getNumber("DB/Slider 0", 0);
 			N1 = SmartDashboard.getNumber("DB/Slider 1", 0);
 			N2 = SmartDashboard.getNumber("DB/Slider 2", 0);
-			N3 = SmartDashboard.getNumber("DB/Slider 3", 0);
 		} catch (Exception ex) {
 			System.out.println(ex.toString());
 		}
-		if (DB1) {//RUN
+		if (DB0) {//RUN
 			if (!init) {
 				commandSubStage = 0;
 				init = true;
@@ -156,27 +156,27 @@ public void run()        {
 		} else {//PAUSE - END
 			resetRun();
 		}
-		if (DB2) {//PULL
-			addCommand(N1, N2, N3);
-			SmartDashboard.putBoolean("DB/Button 2", false);
+		if (DB1) {//PULL
+			addCommand(N0, N1, N2);
+			SmartDashboard.putBoolean("DB/Button 1", false);
 		} 
-		if (DB3) {//CLEAR
+		if (DB2) {//CLEAR
 			clearCommands();
 			resetRun();
 		}
-		SmartDashboard.putNumber("DB/Slider 4", _autoTimer.get());
+		SmartDashboard.putNumber("DB/Slider 3", _autoTimer.get());
 		putString();
 	}
 	
 	public void resetRun() {
 		commandSubStage = 0;
 		init = false;
+		SmartDashboard.putBoolean("DB/Button 0", false);
 		SmartDashboard.putBoolean("DB/Button 1", false);
 		SmartDashboard.putBoolean("DB/Button 2", false);
-		SmartDashboard.putBoolean("DB/Button 3", false);
+		DB0 = false;
 		DB1 = false;
 		DB2 = false;
-		DB3 = false;
 		_drive.setMotors(0, 0);		
 		return;
 	}

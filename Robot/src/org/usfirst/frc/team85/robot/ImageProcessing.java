@@ -11,6 +11,8 @@ public class ImageProcessing {
 	
 	public static double area, height, width, centerX, centerY;
 	
+	public static final int IMGTOL = 10;
+	
 	public ImageProcessing() {		
 		
 		//Setup NetworkTables
@@ -49,5 +51,25 @@ public class ImageProcessing {
     	SmartDashboard.putNumber("Vision/Area", area);
     	SmartDashboard.putBoolean("Vision/Target Found", contourFound);
 	}
+	
+	public boolean center(boolean condition) {/*_opStick.getRawButton(), autonomous all ready*/
+		if (contourFound && condition) {
+			if (centerX < IMGTOL) {
+				//move robot (to the right?) until centerX is less than 10  
+                                //_drive.setMotors(FORWARD,BACKWARD);
+			} else if (centerX > -IMGTOL) {
+				//move robot (to the left?) until centerX is more than -10
+                                //_drive.setMotors(BACKWARD,FORWARD);
+			}
+			
+			if (centerX > -IMGTOL && centerX < IMGTOL /*and if the ball is in possession*/) {
+				//Shoot the ball
+				return true;	//In pos
+			}
+		}
+		return false;	//Not in pos
+	}
+	
+	
 }
 

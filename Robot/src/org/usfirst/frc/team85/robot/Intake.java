@@ -34,6 +34,7 @@ public class Intake {
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
 	private Relay loadMotor;
+	private boolean check;
 	
 	//private DigitalInput upIntakeLimit = new DigitalInput(1);
 
@@ -69,6 +70,16 @@ public class Intake {
 	} 
 
 	public boolean run(boolean cannonReady) {
+		
+		if (!check) {
+			if (!upIntakeLimit.get()) {
+				setMotors(-0.3);
+			} else {
+				check = true;
+				rightAngleMotor.setEncPosition(0);
+			}
+			return false;
+		}
 		
 		_encPos = rightAngleMotor.getEncPosition();
 		
@@ -145,11 +156,11 @@ public class Intake {
 		boolean topLimit = upIntakeLimit.get();
 		boolean botLimit = downIntakeLimit.get();
 		
-		if (value < 0 && topLimit == true) { //positive value goes down
+		if (value < 0 && topLimit == true) { //negative value goes up
 			leftAngleMotor.set(0);
 			rightAngleMotor.set(0);
 			rightAngleMotor.setEncPosition(0);
-		} else if (value > 0 && botLimit == true) { //negative value goes up
+		} else if (value > 0 && botLimit == true) { //positive value goes down
 			leftAngleMotor.set(0);
 			rightAngleMotor.set(0);
 		} else {
@@ -161,5 +172,6 @@ public class Intake {
 			rightAngleMotor.set(value);
 		}			
 	}
+	
 }
 
