@@ -71,6 +71,7 @@ public class Intake {
 	public boolean run(boolean cannonReady) {
 		
 		_encPos = rightAngleMotor.getEncPosition();
+		
 		if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
 			return loadCannon(cannonReady);
 		}
@@ -100,11 +101,6 @@ public class Intake {
 		return false;
 	}
 	
-	private void badPickUpLine() {	//Attempts to pick up loitering boulders 
-		intakeMove(LOADPOS);
-		loadMotor.set(Relay.Value.kForward);
-	}
-
 	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
 		loadMotor.set(Relay.Value.kForward);
 		if (intakeMove(LOADPOS) && cannonReady) {

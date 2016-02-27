@@ -13,15 +13,14 @@ public class TatorCannon {
 	private double LOADPOS;		//auto load pos -- 
 	private double FIREPOS;		//auto fire pos -- 
 	private double ARMTOL;		//auto angle tol
+	private static final double ARMMIN = 0;
+	private static final double ARMMAX = 0;
+	private static final boolean WYATTSPRIVILEGE = false;
 
 	private double LOADSPEED = -1.0;	//loading speed
 	private double SPITSPEED = 1.0;
 	private double FIRERPM = 1.0;		//outerMotor speed ---Voltage mode: 0.75
 	private double RPMTOL;				//outerMotor tol
-	
-	private static final double ARM_LOW_LIMIT = 4.45;//4.70;//4.15;	//Rename these
-	private static final double ARM_HIGH_LIMIT = 2.65;//2.75;		//Rename these
-	private static final boolean WYATTSPRIVILEGE = false;
 	
 	private CannonMode MODE = CannonMode.OFF;
 	
@@ -42,10 +41,7 @@ public class TatorCannon {
 	private static final double LOADTIME = 1.0;	// = 0.0;	//milliseconds
 	private static final double STORAGEDELAY = 0.5;
 	private boolean _spitInit, _loadInit, _loadComplete, _storageInit;
-	
-	private double _currentPosition;
-	private double _armAxis;
-	
+		
 	DigitalInput topDartLimit = new DigitalInput(1);
 	DigitalInput bottomDartLimit = new DigitalInput(2);
 	DigitalInput _ballNotPresentSensor;
@@ -111,7 +107,7 @@ public class TatorCannon {
     public void run(boolean Autonomous) {	//main method
     	AutoOR = Autonomous;
     	if (!AutoOR) {
-    		setArmMotor(_operatorStick.getRawAxis(3));
+    		manualArmMotor();
     		setCannonMode();
     		runCannonMode();
     	} else {
@@ -182,7 +178,7 @@ public class TatorCannon {
     			indexIn();
     			break;
     		case IN: //Sucks in ball
-    	//		armMove(LOADPOS);
+//    			armMove(LOADPOS);
     			if (bottomDartLimit.get()) {
     				armMove(0.4);
     			}
@@ -250,7 +246,9 @@ public class TatorCannon {
 		_innerTopMotor.set(Relay.Value.kOff);
 		_innerBottomMotor.set(Relay.Value.kOff);
     }
-    public void setArmMotor(double value) {
+    public void manualArmMotor() {
+    	double value = _operatorStick.getRawAxis(3);
+    	
 		boolean topLimit = topDartLimit.get();		//open = TRUE
 		boolean botLimit = bottomDartLimit.get();
 		
@@ -261,7 +259,7 @@ public class TatorCannon {
 		} else if (value > 0) {		//UP
 			value *= 0.4;
 		}
-		
+				
 		//DEADBAND
 		value = (Math.abs(value) < 0.05) ? 0 : value;
 		_armMotor.set(value);
