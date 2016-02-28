@@ -24,6 +24,7 @@ public class Addresses {
 
     	//Cannon
 	public class CANNON {
+		
 		public static final int OUTER_MOTOR_TOP = 11;
 		public static final int OUTER_MOTOR_BOTTOM = 10;
 
@@ -43,9 +44,12 @@ public class Addresses {
     	//Intake
 	public class INTAKE {
 		public static final int LOAD_MOTOR = 3; //TODO: Relay output number
-		
+
 		public static final int LEFT_INTAKE_MOTOR = 7;
 		public static final int RIGHT_INTAKE_MOTOR = 8;
+		
+		public static final int UP_INTAKE_LIMIT = 0;
+		public static final int DOWN_INTAKE_LIMIT = 3;
 	}
 
 }

@@ -74,6 +74,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
+    	_auto.run();
     	//add the getpos for quadRatureEncoder here? -Matthew
     }
 

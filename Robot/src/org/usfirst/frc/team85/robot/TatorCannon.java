@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class TatorCannon {
 
-	private static double LOADPOS;		//auto load pos -- 
-	private static double FIREPOS;		//auto fire pos -- 
-	private static double DARTTOL;		//auto angle tol
-	private static final double ARMMIN = 0;
-	private static final double ARMMAX = 0;
+	private static final double LOADPOS = 0;		//auto load pos -- 
+	private static double FIREPOS = 170;		//auto fire pos -- 
+	private static final double DARTTOL = 3;		//auto angle tol
+	private static final double DARTSLOW = 10;
+	private static final double DARTMAX = 248;
 	private static final boolean WYATTSPRIVILEGE = false;
 
 	private double LOADSPEED = -0.5;	//loading speed
@@ -115,7 +115,16 @@ public class TatorCannon {
     	} else {
     		//Senpai make it do
     	}
+    	SmartDashboard.putNumber("View Robot/Dart Enc", _dartEncoder.get());
+    	SmartDashboard.putBoolean("View Robot/Ball In Storage", !_ballNotPresentSensor.get());
+
     	SmartDashboard.putData("Dart Encoder", _dartEncoder);
+    	SmartDashboard.putData("Ball not present", _ballNotPresentSensor);
+    	
+    	if (_operatorStick.getRawButton(9)){
+    		armMove(150);
+    	}
+    	
     }
     
     private boolean readyToLoad(){
@@ -123,15 +132,16 @@ public class TatorCannon {
     }
 
     public boolean armMove(double target) {
-    	if ( Math.abs(_dartMotor.get() - target) <= DARTTOL) { //Because we're using a PID loop for positioning,
+    	if ( Math.abs(_dartEncoder.get() - target) <= DARTTOL) { //Because we're using a PID loop for positioning,
     		return true;									 //this entire if-block is probably unnecessary
     	}
-    	_dartMotor.set(target);
+    	double speed = ((_dartEncoder.get() - target) > 0) ? 0.5 : -0.8;
+//    	double mult = (Math.abs(_dartEncoder.get() - target) <= DARTSLOW) ? 0.5 : 1.0;
+    	_dartMotor.set(speed);
     	return false;
     }
     
     public void setCannonMode() {
-    	SmartDashboard.putData("Ball not present ", _ballNotPresentSensor);
     	if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
     	} else if (_operatorStick.getRawButton(7) && (WYATTSPRIVILEGE||!_bottomDartLimit.get())
@@ -180,9 +190,8 @@ public class TatorCannon {
     			indexIn();
     			break;
     		case IN: //Sucks in ball
-//    			armMove(LOADPOS);
     			if (_bottomDartLimit.get()) {
-    				armMove(0.4);
+        			armMove(LOADPOS);
     			}
     			setOuter(LOADSPEED);
     			indexIn();
@@ -260,10 +269,10 @@ public class TatorCannon {
 		
 		if ((value < .05 && topLimit == false) || (value > -.05 && botLimit == false) ){
 			value = 0;
-		} else if (value < 0) {		//DOWN
-			value *= 0.65;
-		} else if (value > 0) {		//UP
-			value *= 0.4;
+		} else if (value < 0) {		//UP
+			value *= 0.8;
+		} else if (value > 0) {		//DOWN
+			value *= 0.5;
 		}
 				
 		//DEADBAND

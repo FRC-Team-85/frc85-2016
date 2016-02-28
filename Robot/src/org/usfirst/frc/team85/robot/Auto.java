@@ -32,7 +32,7 @@ public class Auto {
 */
 	private int obstacle /*= button.get*/;
 
-	private int FORWARD = 0;
+	private double FORWARD = .5;
 /*
 	//various distances of int and jazz
 	private final int 12FEET =  23468	//.35128852
@@ -69,6 +69,13 @@ public class Auto {
 	public void run() {
         switch (obstacle) {
         case 0: //LowBar
+        	
+        	if(_autoTimer.get() < 2) {
+        		_drive.setMotors(FORWARD, FORWARD);
+        	}
+        	else {
+        		
+        	}
 /*
         	if (_driveQuadEncoderPos <= 3000) {
         		_drive.setMotors(FORWARD, FORWARD);

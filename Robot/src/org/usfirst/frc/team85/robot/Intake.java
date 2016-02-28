@@ -14,15 +14,14 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 
 public class Intake {
 
-	DigitalInput upIntakeLimit = new DigitalInput(0);
-	DigitalInput downIntakeLimit = new DigitalInput(3);
+	DigitalInput upIntakeLimit;
+	DigitalInput downIntakeLimit;
 	
 	private Joystick opStick;
 
-	public final int DART_LIMIT = -267371;
-	public final int LOADPOS = -605000; //-550k
+	public final int LOADPOS = -555000;
 	public final int LIFTHEIGHT = -880000;
-	public final int OPENDOOR = -784380;
+	public final int FLOOR = -785000;
 	public final int HOME = 1000;
 	
 	int _encPos;
@@ -46,6 +45,9 @@ public class Intake {
 		rightAngleMotor = new CANTalon(INTAKE.RIGHT_INTAKE_MOTOR);
 		loadMotor = new Relay(INTAKE.LOAD_MOTOR);
 
+		upIntakeLimit = new DigitalInput(INTAKE.UP_INTAKE_LIMIT);
+		downIntakeLimit = new DigitalInput(INTAKE.DOWN_INTAKE_LIMIT);
+		
 		//leftAngleMotor.changeControlMode(TalonControlMode.Position);
 		//rightAngleMotor.changeControlMode(TalonControlMode.Position);
 
@@ -65,12 +67,14 @@ public class Intake {
 */
 		leftAngleMotor.enableBrakeMode(true);
 		rightAngleMotor.enableBrakeMode(true);
+		
+		check = false;
         	
         System.out.println("Intake Init Done");
 	} 
 
 	public boolean run(boolean cannonReady) {
-		
+/*		
 		if (!check) {
 			if (!upIntakeLimit.get()) {
 				setMotors(-0.3);
@@ -80,8 +84,9 @@ public class Intake {
 			}
 			return false;
 		}
-		
+	*/	
 		_encPos = rightAngleMotor.getEncPosition();
+		SmartDashboard.putNumber("View Robot/Intake Enc", _encPos);
 		
 		if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
 			return loadCannon(cannonReady);
@@ -93,7 +98,7 @@ public class Intake {
 			intakeMove(LIFTHEIGHT);
 		}
 		else if (opStick.getPOV() == 90) {
-			intakeMove(OPENDOOR);
+			intakeMove(FLOOR);
 		}
 		else if (opStick.getPOV() == 270) {
 			intakeMove(LOADPOS);

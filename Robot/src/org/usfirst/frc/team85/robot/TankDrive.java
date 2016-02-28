@@ -212,14 +212,16 @@ public class TankDrive {
     public void visionCenter() {
     	greenLED.set(Relay.Value.kForward);
 		if (ImageProcessing.contourFound /*_opStick.getRawButton()*/) {
-			if (ImageProcessing.centerX < 10) {
-				//move robot (to the right?) until centerX is less than 10  
-                setMotors(-1, 1);
-			} else if (ImageProcessing.centerX > -10) {
-				//move robot (to the left?) until centerX is more than -10
-				setMotors(1, -1);
+			if (ImageProcessing.centerX < 10 && ImageProcessing.centerX > -10) {
+		
+			} else if (ImageProcessing.centerX > 10) {
+
+//				setMotors(0.6, -0.6); //right
 			}
-			
+			else if (ImageProcessing.centerX < -10){
+//				setMotors(-0.6, 0.6); //left
+			}
+			SmartDashboard.putNumber("Vision/Relative X", ImageProcessing.centerX);
 			if (ImageProcessing.centerX > -10 && ImageProcessing.centerX < 10 /*and if the ball is in possession*/) {
 				//Shoot the ball
 			}
