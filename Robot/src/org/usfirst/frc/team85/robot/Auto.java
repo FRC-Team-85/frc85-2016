@@ -11,7 +11,7 @@ public class Auto {
 	//NOT FOR ACTUAL ROBOT USE
 	//the following is for obtaining drive command order and values
 	
-	Timer _autoTimer;	//stage base cmd
+//	Timer _autoTimer;	//stage base cmd
 	int commandSubStage;	//on command_ of command array
 	double[] lt = {0,0.1};
 	double[] rt = {0,0.1};
@@ -25,14 +25,8 @@ public class Auto {
 	double N2 = 0;
 	//==============================================================
 	
-	private TankDrive _drive;
-/*
-	private JoystickButton _controller2;
-		_controller2 = Button;
-*/
-	private int obstacle /*= button.get*/;
-
-	private double FORWARD = .5;
+	
+//	private double FORWARD = .5;
 /*
 	//various distances of int and jazz
 	private final int 12FEET =  23468	//.35128852
@@ -49,99 +43,166 @@ public class Auto {
 	private final int 2INCH  =  325 	//.94932345
 	private final int 1INCH  =  162 	//.97466173
 */	
-	private double _driveQuadEncoderPos;
+//	private double _driveQuadEncoderPos;
 	
-	private double target;
+//	private double target;
 	
 	/*
 	for the switch cases, add run commands based on found values - conclude with 0,0,- and camera command
 	 */
+
+	Timer _autoTimer;	
+	private TankDrive _drive;
+	private Intake _intake;
+	private TatorCannon _cannon;
 	
-	public Auto(TankDrive drive) {
+	private final int OBSTACLE;
+	
+	private boolean timerInit;
+	private double whatTimeIsIt;
+
+	private double timerReference;
+	
+	boolean readyForVision;
+	private int stage = 0;
+	
+	public Auto(TankDrive drive, Intake intake, TatorCannon cannon) {
         _drive = drive;
-        //_driveQuadEncoderPos = _talons[1].getEncPosition();
-		//Note: if we are not using the PID loops for driving, we can
-		//connect the encoder directly to the roboRIO
+    	_drive.setVoltageRamp(4.0); //Limits controllers to _V/sec
+        _drive.setBrakeMode(true);
+        _intake = intake;
+        _cannon = cannon;
+        OBSTACLE = (int) SmartDashboard.getNumber("DB/Slider 0", 0);
         _autoTimer = new Timer();
         _autoTimer.start();
 	}
         
 	public void run() {
-        switch (obstacle) {
-        case 0: //LowBar
-        	
-        	if(_autoTimer.get() < 2) {
-        		_drive.setMotors(FORWARD, FORWARD);
-        	}
-        	else {
-        		
-        	}
-/*
-        	if (_driveQuadEncoderPos <= 3000) {
-        		_drive.setMotors(FORWARD, FORWARD);
-        	}
-        	_drive.setBrakeMode(true);
-*/
-        	target = 1000;
-            
-        	break;
-        case 1: //Portcullis
-/*
-        	if (_driveQuadEncoderPos <= 3000) {
-        		_drive.setMotors(FORWARD, FORWARD);
-        	}
-        	_drive.setBrakeMode(true);
-        	intakeMove(OPENDOOR);
-        	//_drive.setMotors(1INCH, 1INCH);
-        	//intakeMove(HOME);
-        	//_drive.setMotors(FORWARD, FORWARD);
-*/
-            break;
-        case 2: //Cheval de Frise
-
-
-            break;
-        case 3: //Moat
-
-
-            break;
-        case 4: //Ramparts
-
-
-        	break;
-        case 5: //Drawbridge
-
-
-            break;
-        case 6: //Sally Port
-
-
-            break;
-        case 7: //Rock Wall
-
-
-            break;
-        case 8: //Rough Terrain
-
-            break;
-        }
-        /*
-        standard method for movement after clearing any of the obstacles, with clearance for 
-        various overshoots per obstacles, input distance over barrier into enemy territory
-         */
-	}
-
-	public void resetAutoDriveDist() {
+		if (!timerInit) {
+			_autoTimer.reset();
+			timerInit = true;
+			return;
+		}
 		
+		whatTimeIsIt = _autoTimer.get();
+		SmartDashboard.putString("DB/String 0", whatTimeIsIt + "sec");
+		SmartDashboard.putString("DB/String 1", "We are at stage " + stage);
+    	SmartDashboard.putString("DB/String 2", "Ready for Vision? " + readyForVision);
+		if (!readyForVision) {
+	        switch (OBSTACLE) {
+	        //=====================================================================================
+	        case 0: //DEAD
+	        	break;
+	        //=====================================================================================
+	        case 1: //LowBar
+	        	switch (stage) {
+	        	case 0:
+	            	if (_intake.intakeMove(Intake.LOADPOS)) {
+	            		stage++;
+	            	}
+	        		break;
+	        	case 1:
+	            	if (_cannon.armMove(TatorCannon.ALITTLEOFFTHGROUND)) {
+	            		setChronicReferencePoint();
+	            		stage++;
+	            	}        	
+	        		break;
+	        	case 2:
+	        		if (autoDrive(0.5, 0.5, 3)) {
+	        			stage++;
+	        		}
+	        		break;
+	        	case 3:
+	        		if (autoDrive(-0.25, -0.25, 1)) {
+	        			stage = 99;
+	        		}
+	        		break;
+	        	case 99:
+	        		setChronicReferencePoint();
+	        		readyForVision = true;
+	        		break;
+	        	}
+	        	break;
+		    //=====================================================================================
+	        case 2: //Portcullis
+	
+	            break;
+		    //=====================================================================================
+	        case 3: //Cheval de Frise
+	
+	
+	            break;
+		    //=====================================================================================
+	        case 4: //Moat
+	
+	
+	            break;
+		    //=====================================================================================
+	        case 5: //Ramparts
+	
+	
+	        	break;
+		    //=====================================================================================
+	        case 6: //Drawbridge
+	
+	
+	            break;
+		    //=====================================================================================
+	        case 7: //Sally Port
+	
+	
+	            break;
+		    //=====================================================================================
+	        case 8: //Rock Wall
+	
+	
+	            break;
+		    //=====================================================================================
+	        case 9: //Rough Terrain
+	
+	            break;
+	        }
+	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	        /*	
+				CCCC	 AA 	SSSS	EEEE	
+				C		A  A	SS		EE		
+				C		AA A	  SS	E		
+				CCCC	A  A	SSSS	EEEE	
+	         */	
+	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		} else {
+	        /*
+	        standard method for movement after clearing any of the obstacles
+	         */
+			_drive.ledToggle(true);
+			if (ImageProcessing.contourFound) {
+				if (_cannon.runAs(CannonMode.VISION) && _drive.visionCenter()) {
+					
+				}
+			} else {
+				autoDrive(0.6, -0.6, 15);
+			}
+			
+		}
 	}
 	
-	public boolean autoDrive(double target) {
-		if (/*target >= distance*/true) {
+	private void setChronicReferencePoint() {
+		timerReference = _autoTimer.get();		
+	}
+
+	private boolean autoDrive(double lTarget, double rTarget, double time) {
+		if (whatTimeIsIt >= timerReference && whatTimeIsIt < (timerReference + time)) {
+			_drive.setMotors(-lTarget, -rTarget);
+			return false;
+		} else {
 			return true;
-		} 
-		return false;
+		}
 	}
 	
+	
+	//============================================================================
+	
+	/*
 	public void checkSDB() {//MAIN
 		try {
 			DB0 = SmartDashboard.getBoolean("DB/Button 0", false);
@@ -247,7 +308,7 @@ public class Auto {
 		ramp from there to target motor speeds
 		until Timer.get > last command end + time for command
 			then commandSubStage++
-		 */
+		 
 	}
-	
+*/
 }

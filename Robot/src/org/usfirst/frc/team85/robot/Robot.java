@@ -53,8 +53,6 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-    	_auto = new Auto(_drive);
-
         _driveStick = new Joystick(CONTROLLERS.DRIVESTICK);
         _operatorStick = new Joystick(CONTROLLERS.OPERATORSTICK);
 
@@ -63,19 +61,20 @@ public class Robot extends IterativeRobot {
         _tatorCannon = new TatorCannon(_operatorStick,_driveStick, _intake);
         
         _imageProcessing = new ImageProcessing();
+        
     }
 
     public void autonomousInit() {
-    	_drive.setVoltageRamp(2.0); //Limits controllers to 2V/sec
-        _drive.setBrakeMode(true);
+    	_auto = new Auto(_drive, _intake, _tatorCannon);
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	_auto.run();
-    	//add the getpos for quadRatureEncoder here? -Matthew
+    	if (_intake.init() && _tatorCannon.init()) {
+    		_auto.run();
+    	}
     }
 
     public void teleopInit() {
@@ -107,10 +106,5 @@ public class Robot extends IterativeRobot {
     	_imageProcessing.process();
     }
     
-    //THE FOLLOWING IS ONLY FOR GETING AUTO VALUES
-
-    public void testPeriodic() {
-    	_auto.checkSDB();
-    }
 
 }

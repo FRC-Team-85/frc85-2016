@@ -10,10 +10,14 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class TatorCannon {
 
-	private static final double LOADPOS = 0;		//auto load pos -- 
-	private static double FIREPOS = 170;		//auto fire pos -- 
+	public static final int LOADPOS = 0;		//auto load pos -- 
+	public static final int FIREPOS = 170;		//auto fire pos -- 
+	public static final int ALITTLEOFFTHGROUND = 25;
+	
 	private static final double DARTTOL = 3;		//auto angle tol
 	private static final double DARTSLOW = 10;
+	private static final double DARTMIN = 0;
+	private static final double DARTCAPSLOW = 45;
 	private static final double DARTMAX = 248;
 	private static final boolean WYATTSPRIVILEGE = false;
 
@@ -45,6 +49,8 @@ public class TatorCannon {
 	DigitalInput _topDartLimit;
 	DigitalInput _bottomDartLimit;
 	DigitalInput _ballNotPresentSensor;
+	
+	private boolean init;
 
 	public TatorCannon(Joystick operatorStick, Joystick driveStick, Intake intake) {
 
@@ -105,13 +111,29 @@ public class TatorCannon {
         System.out.println("TatorCannon Init Done");
         
     }
+	
+	public boolean init() {
+		if (!init) {
+			if (!_bottomDartLimit.get()) {
+				_dartMotor.set(0);
+				_dartEncoder.reset();
+				init = true;
+			} else {
+				_dartMotor.set(0.3);				
+			}
+		}
+		System.out.println("Cannon init:" + init);
+		return init;
+	}
 
     public void run(boolean Autonomous) {	//main method
     	AutoOR = Autonomous;
+    	    	
     	if (!AutoOR) {
-    		manualArmMotor();
+    		manualArmMotor(_operatorStick.getRawAxis(3));
     		setCannonMode();
     		runCannonMode();
+    		buttonHeights();
     	} else {
     		//Senpai make it do
     	}
@@ -121,10 +143,23 @@ public class TatorCannon {
     	SmartDashboard.putData("Dart Encoder", _dartEncoder);
     	SmartDashboard.putData("Ball not present", _ballNotPresentSensor);
     	
-    	if (_operatorStick.getRawButton(9)){
-    		armMove(150);
-    	}
     	
+    }
+    
+    private void buttonHeights() {
+    	if (_operatorStick.getRawButton(4)){
+    		armMove(178);
+    		return;
+    	} else if (_operatorStick.getRawButton(9)) {
+    		
+    		return;
+    	} else if (_operatorStick.getRawButton(2)) {
+    		
+    		return;
+    	} else if (_operatorStick.getRawButton(1)) {
+    		
+    		return;
+    	}
     }
     
     private boolean readyToLoad(){
@@ -132,8 +167,9 @@ public class TatorCannon {
     }
 
     public boolean armMove(double target) {
-    	if ( Math.abs(_dartEncoder.get() - target) <= DARTTOL) { //Because we're using a PID loop for positioning,
-    		return true;									 //this entire if-block is probably unnecessary
+    	if ( Math.abs(_dartEncoder.get() - target) <= DARTTOL) {
+        	_dartMotor.set(0);
+    		return true;
     	}
     	double speed = ((_dartEncoder.get() - target) > 0) ? 0.5 : -0.8;
 //    	double mult = (Math.abs(_dartEncoder.get() - target) <= DARTSLOW) ? 0.5 : 1.0;
@@ -141,8 +177,15 @@ public class TatorCannon {
     	return false;
     }
     
+    public boolean runAs(CannonMode mode) {
+    	MODE = mode;
+    	return runCannonMode();
+    }
+    
     public void setCannonMode() {
-    	if (_driveStick.getRawButton(7)) {		//Left bumper
+    	if (_driveStick.getRawButton(2)) {		//VISION
+    		MODE = CannonMode.VISION;
+    	} else if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
     	} else if (_operatorStick.getRawButton(7) && (WYATTSPRIVILEGE||!_bottomDartLimit.get())
     			/*Because We KNOW Better than to TRUST WIFI*/) {	//Left Trigger
@@ -160,9 +203,22 @@ public class TatorCannon {
     	}
     }
     
-    public void runCannonMode() {
+    public boolean runCannonMode() {
     		
     	switch (MODE) {
+    		case VISION:
+    			if (ImageProcessing.contourFound /*_opStick.getRawButton()*/) {
+    				if (ImageProcessing.centerY < 25 && ImageProcessing.centerY > -25) {
+    					manualArmMotor(0.0);
+    					return true;
+    				} else if (ImageProcessing.centerY > 25) {
+    					manualArmMotor(0.5);
+    				}
+    				else if (ImageProcessing.centerY < -25){
+    					manualArmMotor(-0.8);
+    				}
+    			}
+    			break;
     		case CHARGE:
 /*    			
  				Starts the firing motors, driver waits for it to speed up,
@@ -239,6 +295,7 @@ public class TatorCannon {
     	        //return _loadComplete;
     			break;
     	}
+    	return false;
     }
 
     private void setOuter(double speed) {
@@ -257,8 +314,7 @@ public class TatorCannon {
 		_innerTopMotor.set(Relay.Value.kOff);
 		_innerBottomMotor.set(Relay.Value.kOff);
     }
-    public void manualArmMotor() {
-    	double value = _operatorStick.getRawAxis(3);
+    public void manualArmMotor(double value) {
     	
 		boolean topLimit = _topDartLimit.get();		//open = TRUE
 		boolean botLimit = _bottomDartLimit.get();
@@ -269,10 +325,14 @@ public class TatorCannon {
 		
 		if ((value < .05 && topLimit == false) || (value > -.05 && botLimit == false) ){
 			value = 0;
-		} else if (value < 0) {		//UP
-			value *= 0.8;
-		} else if (value > 0) {		//DOWN
+		} else if (value < 0 && _dartEncoder.get() > DARTMAX - DARTCAPSLOW) {
 			value *= 0.5;
+		} else if (value < 0) {		//UP
+			value *= 1.0;	//0.8
+		} else if (value > 0 && _dartEncoder.get() < DARTMIN + DARTCAPSLOW) {
+			value *= 0.3;
+		} else if (value > 0) {		//DOWN
+			value *= 0.8;	//0.5
 		}
 				
 		//DEADBAND

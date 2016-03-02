@@ -13,6 +13,8 @@ public class Addresses {
 
         //Drive
 	public class DRIVE {
+		public static final int LED = 0;
+		
 		public static final int LEFT_FRONT_MOTOR = 1;
 		public static final int LEFT_MID_MOTOR = 2;
 		public static final int LEFT_BACK_MOTOR = 3;

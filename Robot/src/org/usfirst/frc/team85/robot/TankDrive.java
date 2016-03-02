@@ -14,12 +14,14 @@ public class TankDrive {
 	
     private Joystick _controller;
     
-    private Relay greenLED = new Relay(0, Relay.Direction.kForward);
+    private Relay greenLED;
 
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
     
     public TankDrive(Joystick DriveController) {
+    	 greenLED = new Relay(DRIVE.LED, Relay.Direction.kForward);
+    	
         _controller = DriveController;
         _masterLeftMotor = new CANTalon(DRIVE.LEFT_FRONT_MOTOR);	//MASTER LEFT
         _masterLeftMotor.enableBrakeMode(false);
@@ -83,7 +85,6 @@ public class TankDrive {
         if(_controller.getRawButton(2)) {
         	//Auto aim
         	visionCenter();
-        	greenLED.set(Relay.Value.kForward);
         	return;
         } 
         else if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
@@ -101,8 +102,8 @@ public class TankDrive {
        // 	thrust *= 1;
         	turn *= 0.8;
         }
-        
-        greenLED.set(Relay.Value.kOff);
+
+        ledToggle(false);
 
         double left = thrust + turn;
         double right = thrust - turn;
@@ -207,24 +208,31 @@ public class TankDrive {
     		turnInit = false;
     	}
     }
+    
+    
 */    
     
-    public void visionCenter() {
-    	greenLED.set(Relay.Value.kForward);
-		if (ImageProcessing.contourFound /*_opStick.getRawButton()*/) {
-			if (ImageProcessing.centerX < 10 && ImageProcessing.centerX > -10) {
-		
-			} else if (ImageProcessing.centerX > 10) {
-
-//				setMotors(0.6, -0.6); //right
+    public void ledToggle(boolean on) {
+    	if (on) {
+        	greenLED.set(Relay.Value.kForward);
+       	} else {
+       		greenLED.set(Relay.Value.kOff);
+       	}
+    }
+    
+    public boolean visionCenter() {
+    	ledToggle(true);
+		if (ImageProcessing.contourFound) {
+			if (ImageProcessing.centerX < 25 && ImageProcessing.centerX > -25) {
+				setMotors(0.0, 0.0);
+				return true;
+			} else if (ImageProcessing.centerX > 25) {
+				setMotors(-0.4, 0.4); //right
 			}
-			else if (ImageProcessing.centerX < -10){
-//				setMotors(-0.6, 0.6); //left
-			}
-			SmartDashboard.putNumber("Vision/Relative X", ImageProcessing.centerX);
-			if (ImageProcessing.centerX > -10 && ImageProcessing.centerX < 10 /*and if the ball is in possession*/) {
-				//Shoot the ball
+			else if (ImageProcessing.centerX < -25){
+				setMotors(0.4, -0.4); //left
 			}
 		}
+		return false;
 	}    
 }

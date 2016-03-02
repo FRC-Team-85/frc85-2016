@@ -19,21 +19,24 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	public final int LOADPOS = -555000;
-	public final int LIFTHEIGHT = -880000;
-	public final int FLOOR = -785000;
-	public final int HOME = 1000;
+	public static final int LOADPOS = 		-555000;
+	public static final int LIFTHEIGHT = 	-880000;
+	public static final int FLOOR = 		-785000;
+	public static final int HOME = 			   1000;
+
+	public static final int HORIZONTAL = 	-555000;
+	public static final int FORTYFIVE =  	-277500;
 	
 	int _encPos;
 	
-	private double DEADBAND = 0.05;
+	private double DEADBAND = 0.15;
 	
 	private double INTAKESLOWRANGE = 40000;	//35k
 	private double INTAKETOL = 10000;	//10k
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
 	private Relay loadMotor;
-	private boolean check;
+	private boolean init;
 	
 	//private DigitalInput upIntakeLimit = new DigitalInput(1);
 
@@ -67,27 +70,28 @@ public class Intake {
 */
 		leftAngleMotor.enableBrakeMode(true);
 		rightAngleMotor.enableBrakeMode(true);
-		
-		check = false;
-        	
+				     	
         System.out.println("Intake Init Done");
 	} 
+	
+	public boolean init() {
+		if (!init) {
+			if (upIntakeLimit.get()) {
+				leftAngleMotor.set(0);
+				rightAngleMotor.set(0);
+				rightAngleMotor.setEncPosition(0);
+				init = true;
+			} else {
+				leftAngleMotor.set(-0.2);
+				rightAngleMotor.set(-0.2);
+			}
+		}
+		System.out.println("Intake init:" + init);
+		return init;
+	}
 
 	public boolean run(boolean cannonReady) {
-/*		
-		if (!check) {
-			if (!upIntakeLimit.get()) {
-				setMotors(-0.3);
-			} else {
-				check = true;
-				rightAngleMotor.setEncPosition(0);
-			}
-			return false;
-		}
-	*/	
-		_encPos = rightAngleMotor.getEncPosition();
-		SmartDashboard.putNumber("View Robot/Intake Enc", _encPos);
-		
+
 		if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
 			return loadCannon(cannonReady);
 		}
@@ -125,27 +129,29 @@ public class Intake {
 		return false;
 	}
 
-	private boolean intakeMove(double target) {	//setMotors(+) goes down, setMotors(-) goes up
+	public boolean intakeMove(double target) {	//setMotors(+) goes down, setMotors(-) goes up
+		_encPos = rightAngleMotor.getEncPosition();
 		SmartDashboard.putNumber("Intake Position Target", target);
 		if (target==LOADPOS) {
-			if (_encPos > (LOADPOS-INTAKETOL) && _encPos < LOADPOS) {
+			if (_encPos >= (LOADPOS-INTAKETOL) && _encPos <= LOADPOS) {
 				setMotors(0.0);
 				return true;
 			}
 		} else {
 			if (Math.abs(_encPos-target) <= INTAKETOL) {
+				setMotors(0.0);
 				return true;
 			}
 		}
 		if(_encPos < target) {
 			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
-				setMotors(-0.3);
+				setMotors(-0.5);
 			} else {
 				setMotors(-1);
 			}
 		} else if(_encPos > target) {
 			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
-				setMotors(0.3);
+				setMotors(0.5);
 			} else {
 				setMotors(1);
 			}
@@ -162,20 +168,27 @@ public class Intake {
 		boolean botLimit = downIntakeLimit.get();
 		
 		if (value < 0 && topLimit == true) { //negative value goes up
-			leftAngleMotor.set(0);
-			rightAngleMotor.set(0);
-			rightAngleMotor.setEncPosition(0);
+			setArmMotors(0);
+			resetPos();
 		} else if (value > 0 && botLimit == true) { //positive value goes down
-			leftAngleMotor.set(0);
-			rightAngleMotor.set(0);
+			setArmMotors(0);
 		} else {
 			value *= 0.5;
 			if (Math.abs(value) < DEADBAND) {
 				value = 0;
 			}
-			leftAngleMotor.set(value);
-			rightAngleMotor.set(value);
+			setArmMotors(value);
 		}			
+	}
+	
+	private void setArmMotors(double value) {
+		leftAngleMotor.set(value);
+		rightAngleMotor.set(value);
+		SmartDashboard.putNumber("ArmMotor Output", value);
+	}
+	
+	public void resetPos() {
+		rightAngleMotor.setEncPosition(0);
 	}
 	
 }
