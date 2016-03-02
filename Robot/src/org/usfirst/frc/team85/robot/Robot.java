@@ -73,6 +73,7 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
     	if (_intake.init() && _tatorCannon.init()) {
+    		_imageProcessing.process();
     		_auto.run();
     	}
     }
@@ -91,7 +92,7 @@ public class Robot extends IterativeRobot {
 //	/*	
     	PowerMonitoring.Monitor();
     	_imageProcessing.process();
-  		_drive.drive();
+  		_drive.manualDrive();
     	_intake.run(true);
     	_tatorCannon.run(false);
 //	*/	

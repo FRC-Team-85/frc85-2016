@@ -9,9 +9,6 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 
 public class TankDrive {
 	
-//	private int turnCount = 2000;
-//	private boolean turnInit;
-	
     private Joystick _controller;
     
     private Relay greenLED;
@@ -74,7 +71,7 @@ public class TankDrive {
         }
     }
 
-    public void drive() {
+    public void manualDrive() {
         double thrust = _controller.getY();
         double turn;
         double turnControl = _controller.getZ();
@@ -149,68 +146,6 @@ public class TankDrive {
                 _slaveRightMotorA.get() +
                 _slaveRightMotorB.get())/3;
     }
-  /*  
-    public boolean setDriveTargetLinear(double target, double tolerance) {
-    	return setDriveTarget(target, tolerance, target, tolerance);
-    }
-    
-    public boolean setDriveTarget(double lTarget, double lTolerance, double rTarget, double rTolerance) {
-    	_masterLeftMotor.set(lTarget);
-    	_masterRightMotor.set(rTarget);
-    	return ( ((getLeftDist()-lTarget)<lTolerance) && ((getRightDist()-rTarget)<rTolerance) );
-    }
-    
-    public double getLeftDist() {
-    	double enc = _masterLeftMotor.getEncPosition();
-    	SmartDashboard.putNumber("Left Encoder Position:", enc);
-    	return enc;
-    }
-    
-    public double getRightDist() {
-    	double enc = _masterRightMotor.getEncPosition();
-    	SmartDashboard.putNumber("Right Encoder Position:", enc);
-    	return enc;
-    }
-    
-    public void resetDriveEncoders() {
-    	_masterLeftMotor.reset();
-    	_masterRightMotor.reset();
-    }
-    
-    public void setPositionMode() {
-        _masterLeftMotor.changeControlMode(TalonControlMode.Position);
-        _masterRightMotor.changeControlMode(TalonControlMode.Position);
-        System.out.println("Mode Changed to Position for Auto");
-    }
-    
-    public void setVoltageMode() {
-        _masterLeftMotor.changeControlMode(TalonControlMode.Voltage);
-        _masterRightMotor.changeControlMode(TalonControlMode.Voltage);
-        System.out.println("Mode Changed to Voltage for Teleop");
-    }
-
-    public void turn180() {
-    	if (_controller.getRawButton(1) && !_controller.getRawButton(3)) { //180 Left
-			if (!turnInit) {
-  				resetDriveEncoders();
- 				turnInit = true;
- 			} else if (getLeftDist() < 2000 && getRightDist()> -2000) {
- 				setMotors(1,-1);
- 			}
-    	} else if (_controller.getRawButton(3) && !_controller.getRawButton(1)) { //180 Right
-			if (!turnInit) {
-  				resetDriveEncoders();
- 				turnInit = true;
- 			} else if (getLeftDist() > -2000 && getRightDist() < 2000) {
- 				setMotors(-1,1);
- 			}
-    	} else {
-    		turnInit = false;
-    	}
-    }
-    
-    
-*/    
     
     public void ledToggle(boolean on) {
     	if (on) {
@@ -223,13 +158,14 @@ public class TankDrive {
     public boolean visionCenter() {
     	ledToggle(true);
 		if (ImageProcessing.contourFound) {
-			if (ImageProcessing.centerX < 25 && ImageProcessing.centerX > -25) {
+			if (ImageProcessing.centerX < ImageProcessing.IMGXOFFSET + ImageProcessing.IMGXTOL
+					&& ImageProcessing.centerX > ImageProcessing.IMGXOFFSET - ImageProcessing.IMGXTOL) {
 				setMotors(0.0, 0.0);
 				return true;
-			} else if (ImageProcessing.centerX > 25) {
+			} else if (ImageProcessing.centerX > ImageProcessing.IMGXOFFSET + ImageProcessing.IMGXTOL) {
 				setMotors(-0.4, 0.4); //right
 			}
-			else if (ImageProcessing.centerX < -25){
+			else if (ImageProcessing.centerX < ImageProcessing.IMGXOFFSET - ImageProcessing.IMGXTOL){
 				setMotors(0.4, -0.4); //left
 			}
 		}

@@ -6,73 +6,38 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Auto {
-	
-
-	//NOT FOR ACTUAL ROBOT USE
-	//the following is for obtaining drive command order and values
-	
-//	Timer _autoTimer;	//stage base cmd
-	int commandSubStage;	//on command_ of command array
-	double[] lt = {0,0.1};
-	double[] rt = {0,0.1};
-	double[] st = {0,15};
-	boolean init = false;	//run init toggle for Timer reset
-	boolean DB0 = false;
-	boolean DB1 = false;
-	boolean DB2 = false;
-	double N0 = 0;
-	double N1 = 0;
-	double N2 = 0;
-	//==============================================================
-	
-	
-//	private double FORWARD = .5;
-/*
-	//various distances of int and jazz
-	private final int 12FEET =  23468	//.35128852
-	private final int 8FEET  =  15645	//.56752568
-	private final int 6FEET  =  11734	//.17564426
-	private final int 4FEET  =  7822	//.78376284
-	private final int 3FEET  =  5867	//.08782213
-	private final int 2FEET  =  3911	//.39188142
-	private final int 1FOOT  =  1955	//.69594071
-	private final int 8INCH  =  1303	//.79729381
-	private final int 6INCH  =  977 	//.84797036
-	private final int 4INCH  =  651 	//.89864690
-	private final int 3INCH  =  488 	//.92398518
-	private final int 2INCH  =  325 	//.94932345
-	private final int 1INCH  =  162 	//.97466173
-*/	
-//	private double _driveQuadEncoderPos;
-	
-//	private double target;
-	
+		
 	/*
 	for the switch cases, add run commands based on found values - conclude with 0,0,- and camera command
 	 */
 
-	Timer _autoTimer;	
-	private TankDrive _drive;
-	private Intake _intake;
-	private TatorCannon _cannon;
-	
-	private final int OBSTACLE;
-	
+		Timer _autoTimer;	
 	private boolean timerInit;
 	private double whatTimeIsIt;
 
 	private double timerReference;
+	
+		private TankDrive _drive;
+	private final double DEFAULTRAMPRATE = 4.0;
+	
+		private Intake _intake;
+	
+		private TatorCannon _cannon;
+	
+	private final int OBSTACLE;
+	private final boolean SEEKLEFT;
 	
 	boolean readyForVision;
 	private int stage = 0;
 	
 	public Auto(TankDrive drive, Intake intake, TatorCannon cannon) {
         _drive = drive;
-    	_drive.setVoltageRamp(4.0); //Limits controllers to _V/sec
+    	_drive.setVoltageRamp(DEFAULTRAMPRATE); //Limits controllers to _V/sec
         _drive.setBrakeMode(true);
         _intake = intake;
         _cannon = cannon;
         OBSTACLE = (int) SmartDashboard.getNumber("DB/Slider 0", 0);
+        SEEKLEFT = SmartDashboard.getBoolean("DB/Button 0", false);
         _autoTimer = new Timer();
         _autoTimer.start();
 	}
@@ -161,15 +126,34 @@ public class Auto {
 	        case 9: //Rough Terrain
 	
 	            break;
-	        }
+	        
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	        /*	
-				CCCC	 AA 	SSSS	EEEE	
-				C		A  A	SS		EE		
-				C		AA A	  SS	E		
-				CCCC	A  A	SSSS	EEEE	
+				CCCC	 AA 	SSSS	EEEE		 111	0000	0000	 ''		SSSS
+				C		A  A	SS		EE			1 11	0  0	0  0	 ''		SS
+				C		AA A	  SS	E			  11	0  0	0  0			  SS
+				CCCC	A  A	SSSS	EEEE		1111	0000	0000	  		SSSS	
 	         */	
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	        case 100:
+	        	
+	        	break;
+	        	
+	        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+	        	
+	        case -1:
+	        	runSDB();
+	        	break;
+	        	
+	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	        /*	
+				CCCC	 AA 	SSSS	EEEE		CCCC	L		OOOO	SSSS	EEEE	DDD	
+				C		A  A	SS		EE			C		L		O  O	SS		EE		D  D
+				C		AA A	  SS	E			C		L		O  O	  SS	E		D  D
+				CCCC	A  A	SSSS	EEEE		CCCC	LLLL	OOOO	SSSS	EEEE	DDD	
+	         */	
+	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	        }
 		} else {
 	        /*
 	        standard method for movement after clearing any of the obstacles
@@ -179,10 +163,11 @@ public class Auto {
 				if (_cannon.runAs(CannonMode.VISION) && _drive.visionCenter()) {
 					
 				}
-			} else {
+			} else if (!ImageProcessing.contourFound && SEEKLEFT){
+				autoDrive(-0.6, 0.6, 15);
+			} else if (!ImageProcessing.contourFound && !SEEKLEFT){
 				autoDrive(0.6, -0.6, 15);
 			}
-			
 		}
 	}
 	
@@ -191,6 +176,17 @@ public class Auto {
 	}
 
 	private boolean autoDrive(double lTarget, double rTarget, double time) {
+		_drive.setVoltageRamp(DEFAULTRAMPRATE);
+		if (whatTimeIsIt >= timerReference && whatTimeIsIt < (timerReference + time)) {
+			_drive.setMotors(-lTarget, -rTarget);
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	private boolean autoDrive(double lTarget, double rTarget, double rampRate, double time) {
+		_drive.setVoltageRamp(rampRate);
 		if (whatTimeIsIt >= timerReference && whatTimeIsIt < (timerReference + time)) {
 			_drive.setMotors(-lTarget, -rTarget);
 			return false;
@@ -201,20 +197,41 @@ public class Auto {
 	
 	
 	//============================================================================
+
+
+	//NOT FOR ACTUAL ROBOT USE
+	//the following is for obtaining drive command order and values
 	
-	/*
+	boolean init;
+	int commandSubStage;	//on command_ of command array
+	double[] lt = {0,0.1};
+	double[] rt = {0,0.1};
+	double[] st = {0,15};
+	boolean DB1 = false;
+	boolean DB2 = false;
+	boolean DB3 = false;
+	double N1 = 0;
+	double N2 = 0;
+	double N3 = 0;
+	//==============================================================
+	
+	public void runSDB() {
+		
+	}
+	
+	
 	public void checkSDB() {//MAIN
 		try {
-			DB0 = SmartDashboard.getBoolean("DB/Button 0", false);
 			DB1 = SmartDashboard.getBoolean("DB/Button 1", false);
 			DB2 = SmartDashboard.getBoolean("DB/Button 2", false);
-			N0 = SmartDashboard.getNumber("DB/Slider 0", 0);
+			DB3 = SmartDashboard.getBoolean("DB/Button 3", false);
 			N1 = SmartDashboard.getNumber("DB/Slider 1", 0);
 			N2 = SmartDashboard.getNumber("DB/Slider 2", 0);
+			N3 = SmartDashboard.getNumber("DB/Slider 3", 0);
 		} catch (Exception ex) {
 			System.out.println(ex.toString());
 		}
-		if (DB0) {//RUN
+		if (DB1) {//RUN
 			if (!init) {
 				commandSubStage = 0;
 				init = true;
@@ -224,33 +241,32 @@ public class Auto {
 		} else {//PAUSE - END
 			resetRun();
 		}
-		if (DB1) {//PULL
-			addCommand(N0, N1, N2);
-			SmartDashboard.putBoolean("DB/Button 1", false);
+		if (DB2) {//PULL
+			addCommand(N1, N2, N3);
+			SmartDashboard.putBoolean("DB/Button 2", false);
 		} 
-		if (DB2) {//CLEAR
+		if (DB3) {//CLEAR
 			clearCommands();
 			resetRun();
 		}
-		SmartDashboard.putNumber("DB/Slider 3", _autoTimer.get());
 		putString();
 	}
 	
 	public void resetRun() {
 		commandSubStage = 0;
 		init = false;
-		SmartDashboard.putBoolean("DB/Button 0", false);
 		SmartDashboard.putBoolean("DB/Button 1", false);
 		SmartDashboard.putBoolean("DB/Button 2", false);
-		DB0 = false;
+		SmartDashboard.putBoolean("DB/Button 3", false);
 		DB1 = false;
 		DB2 = false;
+		DB3 = false;
 		_drive.setMotors(0, 0);		
 		return;
 	}
 	
 	public void putString() {
-		for (int i = 0; i < lt.length; i++) {
+		for (int i = 1; i < lt.length+1; i++) {
 			SmartDashboard.putString("DB/String " + i,
 					"lt: " + lt[i] +
 					"rt: " + rt[i] +
@@ -308,7 +324,7 @@ public class Auto {
 		ramp from there to target motor speeds
 		until Timer.get > last command end + time for command
 			then commandSubStage++
-		 
+		 */
 	}
-*/
+
 }

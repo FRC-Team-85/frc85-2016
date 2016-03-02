@@ -208,13 +208,14 @@ public class TatorCannon {
     	switch (MODE) {
     		case VISION:
     			if (ImageProcessing.contourFound /*_opStick.getRawButton()*/) {
-    				if (ImageProcessing.centerY < 25 && ImageProcessing.centerY > -25) {
+    				if (ImageProcessing.centerY < ImageProcessing.IMGYOFFSET + ImageProcessing.IMGYTOL
+    						&& ImageProcessing.centerY > ImageProcessing.IMGYOFFSET - ImageProcessing.IMGYTOL) {
     					manualArmMotor(0.0);
     					return true;
-    				} else if (ImageProcessing.centerY > 25) {
+    				} else if (ImageProcessing.centerY > ImageProcessing.IMGYOFFSET + ImageProcessing.IMGYTOL) {
     					manualArmMotor(0.5);
     				}
-    				else if (ImageProcessing.centerY < -25){
+    				else if (ImageProcessing.centerY < ImageProcessing.IMGYOFFSET - ImageProcessing.IMGYTOL){
     					manualArmMotor(-0.8);
     				}
     			}
