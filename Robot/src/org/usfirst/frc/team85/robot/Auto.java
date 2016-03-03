@@ -75,7 +75,6 @@ public class Auto {
 	        	case 2:
 	        		if (autoDrive(0.5, 0.5, 3)) {
 	        			setChronicReferencePoint();
-	        			stage = 99;
 		        		readyForVision = true;
 	        		}
 	        		break;
@@ -147,7 +146,10 @@ public class Auto {
 	        case 104:
 	        	
 	        	break;
-	        	
+	        case 200: //moat Zac
+	        	if (autoDrive(0.5, 0.5, 3)) {
+	        	}
+	        	break;
 	        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 	        	
 	        case -1:
