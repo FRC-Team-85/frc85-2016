@@ -79,10 +79,10 @@ public class Auto {
 	        		break;
 	        	case 3:
 	        		if (autoDrive(-0.25, -0.25, 1)) {
-	        			stage = 99;
+	        			stage++;
 	        		}
 	        		break;
-	        	case 99:
+	        	case 4:
 	        		setChronicReferencePoint();
 	        		readyForVision = true;
 	        		break;
