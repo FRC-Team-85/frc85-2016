@@ -1,10 +1,6 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
-//import edu.wpi.first.wpilibj.CANTalon.DonaldTrump; why?
-//import edu.wpi.first.wpilibj.CANTalon.BernieSanders.getFreeMoney(19039640481000);
-import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,19 +15,20 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	public static final int LOADPOS = 		-555000;
-	public static final int LIFTHEIGHT = 	-880000;
-	public static final int FLOOR = 		-785000;
+	public static final int LOADPOS = 		-515000;
+//	public static final int LIFTHEIGHT = 	-880000;
+	public static final int FLOOR = 		-690000;
 	public static final int HOME = 			   1000;
 
-	public static final int HORIZONTAL = 	-555000;
-	public static final int FORTYFIVE =  	-277500;
+	public static final int HORIZONTAL = 	-500000;
+	public static final int FORTYFIVE =  	-250000;
+	public static final int AUTOANGLE =  	-330000;
 	
 	int _encPos;
 	
 	private double DEADBAND = 0.15;
 	
-	private double INTAKESLOWRANGE = 40000;	//35k
+	private double INTAKESLOWRANGE = 35000;	//35k
 	private double INTAKETOL = 10000;	//10k
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
@@ -100,9 +97,9 @@ public class Intake {
 		else if (opStick.getPOV() == 0){ 
 			intakeMove(HOME);
 		} 
-		else if (opStick.getPOV() == 180) {
-			intakeMove(LIFTHEIGHT);
-		}
+//		else if (opStick.getPOV() == 180) {
+//			intakeMove(LIFTHEIGHT);
+//		}
 		else if (opStick.getPOV() == 90) {
 			intakeMove(FLOOR);
 		}
@@ -192,6 +189,10 @@ public class Intake {
 	
 	public void resetPos() {
 		rightAngleMotor.setEncPosition(0);
+	}
+	
+	public boolean belowFortyFive() {
+		return (rightAngleMotor.getEncPosition() < FORTYFIVE);
 	}
 	
 }

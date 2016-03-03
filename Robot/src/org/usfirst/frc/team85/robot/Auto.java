@@ -25,6 +25,7 @@ public class Auto {
 		private TatorCannon _cannon;
 	
 	private final int OBSTACLE;
+	private final boolean GOWITHOUTVISION;
 	private final boolean SEEKLEFT;
 	
 	boolean readyForVision;
@@ -37,7 +38,8 @@ public class Auto {
         _intake = intake;
         _cannon = cannon;
         OBSTACLE = (int) SmartDashboard.getNumber("DB/Slider 0", 0);
-        SEEKLEFT = SmartDashboard.getBoolean("DB/Button 0", false);
+        GOWITHOUTVISION = SmartDashboard.getBoolean("DB/Button 0", false);
+        SEEKLEFT = SmartDashboard.getBoolean("DB/Button 1", false);
         _autoTimer = new Timer();
         _autoTimer.start();
 	}
@@ -59,7 +61,7 @@ public class Auto {
 	        case 0: //DEAD
 	        	break;
 	        //=====================================================================================
-	        case 1: //LowBar
+	        case 1: //LowBar =better code below
 	        	switch (stage) {
 	        	case 0:
 	            	if (_intake.intakeMove(Intake.LOADPOS)) {
@@ -90,14 +92,51 @@ public class Auto {
 	
 	            break;
 		    //=====================================================================================
-	        case 4: //Moat
-	
-	
-	            break;
+	        case 4://Moat =needs stop before vision
+	        	switch(stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.65, 0.65, 4, 3)) {
+	        			goVision();
+	        		}
+	        		break;
+	        	}
+	        	break;
 		    //=====================================================================================
-	        case 5: //Ramparts
-	
-	
+	        case 5://rampart =TOTALY DONE
+	        	switch (stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.4, 0.4, 4, 1.5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if (autoDrive(0.4, 0.6, 4, 1.5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:
+	        		if (autoDrive(0, 0, 4, 1.5)) {
+	        			goVision();
+	        		}
+	        	}
 	        	break;
 		    //=====================================================================================
 	        case 6: //Drawbridge
@@ -110,15 +149,54 @@ public class Auto {
 	
 	            break;
 		    //=====================================================================================
-	        case 8: //Rock Wall
-	
-	
-	            break;
+	        case 8://Rock Wall
+	        	switch(stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.4, 0.4, 4, 3.5)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if (autoDrive(0.7, 0.7, 6, 1.5)){
+	        			goVision();
+	        		}
+	        		break;
+//		       	case 3://not tested
+//		       		if (autoDrive(0, 0, 6, 1)){
+//		       			goVision();
+//		        	}
+//		        	break;
+	        		
+	        	}
+	        	break;
 		    //=====================================================================================
-	        case 9: //Rough Terrain
-	
-	            break;
-	        
+	        case 9://Rough Terrain =may need stop b vision
+	        	switch(stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.4, 0.4, 5, 4)) {
+	        			goVision();
+	        		}
+	        		break;
+	        	}
+	        	break;
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	        /*	
 				CCCC	 AA 	SSSS	EEEE		 111	0000	0000	 ''		SSSS
@@ -127,24 +205,152 @@ public class Auto {
 				CCCC	A  A	SSSS	EEEE		1111	0000	0000	  		SSSS	
 	         */	
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	        case 100:
+	        case 100://low
+	        	switch (stage) {
+	        	
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.HORIZONTAL);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHGROUND) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(
+	        				SmartDashboard.getNumber("DB/Slider 1", 0.5), 
+	        				SmartDashboard.getNumber("DB/Slider 1", 0.5),
+	        				SmartDashboard.getNumber("DB/Slider 2", 4),
+	        				SmartDashboard.getNumber("DB/Slider 3", 3))) {
+	        			goVision();
+	        		}
+	        		break;
+	        	}
 	        	
 	        	break;
 	        	
-	        case 101:
-	        	
+	        case 110://rampart
+	        	switch (stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.4, 0.4, 4, 1.5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if (autoDrive(
+	        				0.5 - SmartDashboard.getNumber("DB/Slider 1", 0.1), 
+	        				0.5 + SmartDashboard.getNumber("DB/Slider 1", 0.1),
+	        				SmartDashboard.getNumber("DB/Slider 2", 4),
+	        				SmartDashboard.getNumber("DB/Slider 3", 1.5))) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:
+	        		if (autoDrive(0, 0, 4, 1.5)) {
+	        			goVision();
+	        		}
+	        	}
 	        	break;
 	        	
-	        case 102:
-	        	
+	        case 120://wall
+	        	switch(stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.4, 0.4, 4, 3.5)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if (autoDrive(0.7, 0.7, 6, 1.5)){
+	        			rtns();
+	        		}
+	        		break;
+		       	case 3://not tested
+		       		if (autoDrive(0, 0, 6, 1)){
+		       			goVision();
+		        	}
+		        	break;
+	        		
+	        	}
+	        	break;
+
+	        case 130://rough
+	        	switch(stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.4, 0.4, 5, 4)) {
+	        			goVision();
+	        		}
+	        		break;
+	        	}
+	        	break;
+
+	        case 140://moat
+	        	switch(stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.65, 0.65, 4, 3)) {
+	        			goVision();
+	        		}
+	        		break;
+	        	}
 	        	break;
 	        	
-	        case 103:
-	        	
-	        	break;
-	        	
-	        case 104:
-	        	
+	        case 40://moat
+	        	switch(stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(
+	        				SmartDashboard.getNumber("DB/Slider 1", 0.65), 
+	        				SmartDashboard.getNumber("DB/Slider 1", 0.65),
+	        				SmartDashboard.getNumber("DB/Slider 2", 4),
+	        				SmartDashboard.getNumber("DB/Slider 3", 3))) {
+	        			goVision();
+	        		}
+	        		break;
+	        	}
 	        	break;
 	        case 200: //moat Zac
 	        	if (autoDrive(0.5, 0.5, 3)) {
@@ -182,21 +388,37 @@ public class Auto {
 	        /*
 	        standard method for movement after clearing any of the obstacles
 	         */
-			_drive.ledToggle(true);
-			if (ImageProcessing.contourFound) {
-				if (_cannon.runAs(CannonMode.VISION) && _drive.visionCenter()) {
-					
+			if (!GOWITHOUTVISION) {
+				_drive.ledToggle(true);
+				if (ImageProcessing.contourFound) {
+					if (_cannon.runAs(CannonMode.VISION) && _drive.visionCenter()) {
+						
+					}
+				} else if (!ImageProcessing.contourFound && SEEKLEFT){
+					autoDrive(-0.6, 0.6, 15);
+				} else if (!ImageProcessing.contourFound && !SEEKLEFT){
+					autoDrive(0.6, -0.6, 15);
 				}
-			} else if (!ImageProcessing.contourFound && SEEKLEFT){
-				autoDrive(-0.6, 0.6, 15);
-			} else if (!ImageProcessing.contourFound && !SEEKLEFT){
-				autoDrive(0.6, -0.6, 15);
+			} else {
+				
+				//remember SEEKLEFT
+				
 			}
 		}
 	}
 	
 	private void setChronicReferencePoint() {
 		timerReference = _autoTimer.get();		
+	}
+	
+	private void rtns() {//resetTimeNextStage
+		timerReference = _autoTimer.get();		
+		stage++;
+	}
+	
+	private void goVision() {
+		setChronicReferencePoint();
+		readyForVision = true;
 	}
 
 	private boolean autoDrive(double lTarget, double rTarget, double time) {
@@ -257,6 +479,8 @@ public class Auto {
 				setChronicReferencePoint();
 			}
 			runCommands();
+		} else {
+			resetRun();
 		}
 	}
 	

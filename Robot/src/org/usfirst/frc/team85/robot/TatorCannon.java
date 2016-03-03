@@ -13,6 +13,7 @@ public class TatorCannon {
 	public static final int LOADPOS = 0;		//auto load pos -- 
 	public static final int FIREPOS = 170;		//auto fire pos -- 
 	public static final int ALITTLEOFFTHGROUND = 25;
+	public static final int AUTOHEIGHT = 132;
 	
 	private static final double DARTTOL = 3;		//auto angle tol
 	private static final double DARTSLOW = 10;
