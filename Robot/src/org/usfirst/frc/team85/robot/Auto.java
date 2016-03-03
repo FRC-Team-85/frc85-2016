@@ -150,6 +150,19 @@ public class Auto {
 	        	if (autoDrive(0.5, 0.5, 3)) {
 	        	}
 	        	break;
+	        case 420: //rockwall Matthew
+	        	switch (stage) {
+	        		case 1: 
+	        			if (autoDrive(0.5, 0.5, 1.5)) {
+	        				stage++;
+	        			}
+	        			break;
+	        		case 2:
+	        			if (autoDrive(0.9, 0.9, 2)) {
+	        				
+	        			}
+	        			break;
+	        	break;
 	        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 	        	
 	        case -1:
