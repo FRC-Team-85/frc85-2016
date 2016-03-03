@@ -74,17 +74,10 @@ public class Auto {
 	        		break;
 	        	case 2:
 	        		if (autoDrive(0.5, 0.5, 3)) {
-	        			stage++;
-	        		}
-	        		break;
-	        	case 3:
-	        		if (autoDrive(-0.25, -0.25, 1)) {
+	        			setChronicReferencePoint();
 	        			stage = 99;
+		        		readyForVision = true;
 	        		}
-	        		break;
-	        	case 99:
-	        		setChronicReferencePoint();
-	        		readyForVision = true;
 	        		break;
 	        	}
 	        	break;
@@ -136,6 +129,22 @@ public class Auto {
 	         */	
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	        case 100:
+	        	
+	        	break;
+	        	
+	        case 101:
+	        	
+	        	break;
+	        	
+	        case 102:
+	        	
+	        	break;
+	        	
+	        case 103:
+	        	
+	        	break;
+	        	
+	        case 104:
 	        	
 	        	break;
 	        	
@@ -204,8 +213,8 @@ public class Auto {
 	
 	boolean init;
 	int commandSubStage;	//on command_ of command array
-	double[] lt = {0,0.1};
-	double[] rt = {0,0.1};
+	double[] lt = {0,0.2};
+	double[] rt = {0,0.2};
 	double[] st = {0,15};
 	boolean DB1 = false;
 	boolean DB2 = false;
@@ -216,7 +225,24 @@ public class Auto {
 	//==============================================================
 	
 	public void runSDB() {
-		
+		try {
+			DB1 = SmartDashboard.getBoolean("DB/Button 1", false);
+			DB2 = SmartDashboard.getBoolean("DB/Button 2", false);
+			DB3 = SmartDashboard.getBoolean("DB/Button 3", false);
+			N1 = SmartDashboard.getNumber("DB/Slider 1", 0);
+			N2 = SmartDashboard.getNumber("DB/Slider 2", 0);
+			N3 = SmartDashboard.getNumber("DB/Slider 3", 0);
+		} catch (Exception ex) {
+			System.out.println(ex.toString());
+		}
+		if (DB1) {
+			if(!init) {
+				commandSubStage = 0;
+				init = true;
+				setChronicReferencePoint();
+			}
+			runCommands();
+		}
 	}
 	
 	

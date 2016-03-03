@@ -91,6 +91,8 @@ public class Intake {
 	}
 
 	public boolean run(boolean cannonReady) {
+		_encPos = rightAngleMotor.getEncPosition();
+		SmartDashboard.putNumber("Intake Position", _encPos);
 
 		if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
 			return loadCannon(cannonReady);
@@ -131,6 +133,7 @@ public class Intake {
 
 	public boolean intakeMove(double target) {	//setMotors(+) goes down, setMotors(-) goes up
 		_encPos = rightAngleMotor.getEncPosition();
+		SmartDashboard.putNumber("Intake Position", _encPos);
 		SmartDashboard.putNumber("Intake Position Target", target);
 		if (target==LOADPOS) {
 			if (_encPos >= (LOADPOS-INTAKETOL) && _encPos <= LOADPOS) {
