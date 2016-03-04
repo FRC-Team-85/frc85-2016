@@ -94,7 +94,7 @@ public class Robot extends IterativeRobot {
     	_imageProcessing.process();
   		_drive.manualDrive();
     	_intake.run(true);
-    	_tatorCannon.run(false);
+    	_tatorCannon.run(false);	//Always last, has priority control over intake
 //	*/	
     }
     

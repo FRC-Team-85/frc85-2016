@@ -3,6 +3,7 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -15,8 +16,8 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	public static final int LOADPOS = 		-515000;
-//	public static final int LIFTHEIGHT = 	-880000;
+	public static final int LOADPOS = 		-510000;
+	public static final int LIFTHEIGHT = 	-744000;
 	public static final int FLOOR = 		-690000;
 	public static final int HOME = 			   1000;
 
@@ -28,12 +29,17 @@ public class Intake {
 	
 	private double DEADBAND = 0.15;
 	
-	private double INTAKESLOWRANGE = 35000;	//35k
+	private double INTAKESLOWRANGE = 40000;	//35k
 	private double INTAKETOL = 10000;	//10k
 	private CANTalon leftAngleMotor, rightAngleMotor;
 	
 	private Relay loadMotor;
 	private boolean init;
+	public static boolean hasBeenInit;
+	
+	private Timer _delayTimer;
+	private boolean intakeInit;
+	private double INTAKEDELAY = 0.5;
 	
 	//private DigitalInput upIntakeLimit = new DigitalInput(1);
 
@@ -67,6 +73,9 @@ public class Intake {
 */
 		leftAngleMotor.enableBrakeMode(true);
 		rightAngleMotor.enableBrakeMode(true);
+		
+		_delayTimer = new Timer();
+		_delayTimer.start();
 				     	
         System.out.println("Intake Init Done");
 	} 
@@ -78,6 +87,7 @@ public class Intake {
 				rightAngleMotor.set(0);
 				rightAngleMotor.setEncPosition(0);
 				init = true;
+				hasBeenInit = true;
 			} else {
 				leftAngleMotor.set(-0.2);
 				rightAngleMotor.set(-0.2);
@@ -91,19 +101,19 @@ public class Intake {
 		_encPos = rightAngleMotor.getEncPosition();
 		SmartDashboard.putNumber("Intake Position", _encPos);
 
-		if(opStick.getRawButton(3)) { //Uses button B, loads the cannon
+		if(opStick.getRawButton(3) && hasBeenInit) { //Uses button B, loads the cannon
 			return loadCannon(cannonReady);
 		}
-		else if (opStick.getPOV() == 0){ 
-			intakeMove(HOME);
+		else if (opStick.getPOV() == 0 && hasBeenInit){ //auto heights both
+			intakeMove(AUTOANGLE);
 		} 
-//		else if (opStick.getPOV() == 180) {
-//			intakeMove(LIFTHEIGHT);
-//		}
-		else if (opStick.getPOV() == 90) {
+		else if (opStick.getPOV() == 180 && hasBeenInit) { // on tower ramp
+			intakeMove(LIFTHEIGHT);
+		}
+		else if (opStick.getPOV() == 90 && hasBeenInit) { //right
 			intakeMove(FLOOR);
 		}
-		else if (opStick.getPOV() == 270) {
+		else if (opStick.getPOV() == 270 && hasBeenInit) { //left
 			intakeMove(LOADPOS);
 		}
 		else {
@@ -117,11 +127,17 @@ public class Intake {
 		} else {
 			loadMotor.set(Relay.Value.kOff);
 		}
+		intakeInit = false;
 		return false;
 	}
 	
 	private boolean loadCannon(boolean cannonReady) { //returns if loadMotor is trying to load the cannon
-		loadMotor.set(Relay.Value.kForward);
+		if (!intakeInit) {
+			_delayTimer.reset();
+			intakeInit = true;
+		} else if (intakeInit && _delayTimer.get() > INTAKEDELAY) {
+			loadMotor.set(Relay.Value.kForward);
+		}
 		if (intakeMove(LOADPOS) && cannonReady) {
 			return true;
 		}
@@ -189,6 +205,7 @@ public class Intake {
 	
 	public void resetPos() {
 		rightAngleMotor.setEncPosition(0);
+		hasBeenInit = true;
 	}
 	
 	public boolean belowFortyFive() {

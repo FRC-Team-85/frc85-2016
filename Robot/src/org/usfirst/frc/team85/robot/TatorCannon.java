@@ -3,16 +3,13 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.*;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
-
-import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
-import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class TatorCannon {
 
 	public static final int LOADPOS = 0;		//auto load pos -- 
 	public static final int FIREPOS = 170;		//auto fire pos -- 
-	public static final int ALITTLEOFFTHGROUND = 25;
+	public static final int ALITTLEOFFTHEGROUND = 25;
 	public static final int AUTOHEIGHT = 132;
 	
 	private static final double DARTTOL = 3;		//auto angle tol
@@ -21,6 +18,8 @@ public class TatorCannon {
 	private static final double DARTCAPSLOW = 45;
 	private static final double DARTMAX = 248;
 	private static final boolean WYATTSPRIVILEGE = false;
+	
+	public static boolean hasBeenInit;
 
 	private double LOADSPEED = -0.5;	//loading speed
 	private double SPITSPEED = 1.0;
@@ -119,6 +118,7 @@ public class TatorCannon {
 				_dartMotor.set(0);
 				_dartEncoder.reset();
 				init = true;
+				hasBeenInit = true;
 			} else {
 				_dartMotor.set(0.3);				
 			}
@@ -150,6 +150,7 @@ public class TatorCannon {
     private void buttonHeights() {
     	if (_operatorStick.getRawButton(4)){
     		armMove(178);
+    		_intake.intakeMove(Intake.LOADPOS);
     		return;
     	} else if (_operatorStick.getRawButton(9)) {
     		
@@ -160,7 +161,13 @@ public class TatorCannon {
     	} else if (_operatorStick.getRawButton(1)) {
     		
     		return;
-    	}
+    	} else if (_operatorStick.getPOV() == 0){ //auto heights both
+			armMove(AUTOHEIGHT);
+			return;
+		} else if (_operatorStick.getPOV() == 270) { //left
+			armMove(ALITTLEOFFTHEGROUND);
+			return;
+		}
     }
     
     private boolean readyToLoad(){
@@ -168,13 +175,20 @@ public class TatorCannon {
     }
 
     public boolean armMove(double target) {
-    	if ( Math.abs(_dartEncoder.get() - target) <= DARTTOL) {
-        	_dartMotor.set(0);
-    		return true;
+    	if (hasBeenInit) {
+    		if ( Math.abs(_dartEncoder.get() - target) <= DARTTOL) {
+    			_dartMotor.set(0);
+    			return true;
+    		}
+    		double speed = ((_dartEncoder.get() - target) > 0) ? 0.5 : -0.8;
+//  	  	double mult = (Math.abs(_dartEncoder.get() - target) <= DARTSLOW) ? 0.5 : 1.0;
+        	if (Intake.hasBeenInit && !_intake.belowFortyFive()) {
+        		speed = 0;
+        		_intake.intakeMove(Intake.FORTYFIVE);
+        	}
+    		_dartMotor.set(speed);
     	}
-    	double speed = ((_dartEncoder.get() - target) > 0) ? 0.5 : -0.8;
-//    	double mult = (Math.abs(_dartEncoder.get() - target) <= DARTSLOW) ? 0.5 : 1.0;
-    	_dartMotor.set(speed);
+    	
     	return false;
     }
     
@@ -323,6 +337,7 @@ public class TatorCannon {
 
     	if (!_bottomDartLimit.get()) {
     		_dartEncoder.reset();
+    		hasBeenInit = true;
     	}
 		
 		if ((value < .05 && topLimit == false) || (value > -.05 && botLimit == false) ){
@@ -339,7 +354,14 @@ public class TatorCannon {
 				
 		//DEADBAND
 		value = (Math.abs(value) < 0.05) ? 0 : value;
+    	if (hasBeenInit && Intake.hasBeenInit) {
+    		if (value != 0 && !_intake.belowFortyFive()) {
+    			value = 0;
+    			_intake.intakeMove(Intake.FORTYFIVE);
+    		}
+    	}
 		_dartMotor.set(value);
 			
 	}
+    
 }

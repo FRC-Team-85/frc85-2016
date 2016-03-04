@@ -69,7 +69,7 @@ public class Auto {
 	            	}
 	        		break;
 	        	case 1:
-	            	if (_cannon.armMove(TatorCannon.ALITTLEOFFTHGROUND)) {
+	            	if (_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND)) {
 	            		setChronicReferencePoint();
 	            		stage++;
 	            	}        	
@@ -211,7 +211,7 @@ public class Auto {
 	        	case 0:
 	            	boolean c1 = _intake.intakeMove(Intake.HORIZONTAL);
 	        		boolean c2 = (_intake.belowFortyFive()) ? 
-	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHGROUND) : false;
+	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND) : false;
 	        			        		
 	        		if (c1 && c2) {
 	        			rtns();
