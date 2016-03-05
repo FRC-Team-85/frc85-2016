@@ -100,6 +100,16 @@ public class TankDrive {
         	turn *= 0.8;
         }
 
+        if (_controller.getRawButton(10)) {	
+        	ledToggle(true);
+        }
+        else {
+        	ledToggle(false);
+        }
+
+        ledToggle(false);
+        //ledToggle(false);
+        
         ledToggle(false);
 
         double left = thrust + turn;
