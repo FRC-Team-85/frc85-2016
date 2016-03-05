@@ -70,15 +70,20 @@ public class Auto {
 	        		break;
 	        	case 1:
 	            	if (_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND)) {
-	            		setChronicReferencePoint();
-	            		stage++;
+	            		rtns();
 	            	}        	
 	        		break;
 	        	case 2:
 	        		if (autoDrive(0.5, 0.5, 3)) {
-	        			setChronicReferencePoint();
-		        		readyForVision = true;
+	        			if (!GOWITHOUTVISION) {
+	        				goVision();
+	        			} else {
+	        				rtns();
+	        			}
 	        		}
+	        		break;
+	        	case 3:
+	        		autoDrive(0, 0, 15);
 	        		break;
 	        	}
 	        	break;
@@ -205,6 +210,7 @@ public class Auto {
 				CCCC	A  A	SSSS	EEEE		1111	0000	0000	  		SSSS	
 	         */	
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	       
 	        case 100://low
 	        	switch (stage) {
 	        	
@@ -218,11 +224,21 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 1:
-	        		if (autoDrive(
-	        				SmartDashboard.getNumber("DB/Slider 1", 0.5), 
-	        				SmartDashboard.getNumber("DB/Slider 1", 0.5),
-	        				SmartDashboard.getNumber("DB/Slider 2", 4),
-	        				SmartDashboard.getNumber("DB/Slider 3", 3))) {
+	        		if (autoDrive(0.5, 0.5, 4, 4)) {
+	        			if (!GOWITHOUTVISION) {
+	        				goVision();
+	        			} else {
+	        				rtns();
+	        			}
+	        		}
+	        		break;
+	        	case 2:
+	        		if (autoDrive(0, 0, 8, 1)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:
+	        		if (autoDrive(0.9, 0.1, 4, 2.75)) {
 	        			goVision();
 	        		}
 	        		break;
@@ -401,9 +417,7 @@ public class Auto {
 					autoDrive(0.6, -0.6, 15);
 				}
 			} else {
-				
-				//remember SEEKLEFT
-				
+				autoDrive(0, 0, 10, 15);
 			}
 		}
 	}
