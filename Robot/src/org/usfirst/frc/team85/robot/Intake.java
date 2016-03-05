@@ -16,7 +16,7 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	public static final int LOADPOS = 		-510000;
+	public static final int LOADPOS = 		-495000;
 	public static final int LIFTHEIGHT = 	-744000;
 	public static final int FLOOR = 		-690000;
 	public static final int HOME = 			   1000;
