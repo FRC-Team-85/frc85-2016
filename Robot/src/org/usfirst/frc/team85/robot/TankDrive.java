@@ -16,6 +16,8 @@ public class TankDrive {
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
     
+    private boolean LEDToggle, LEDToggled;
+    
     public TankDrive(Joystick DriveController) {
     	 greenLED = new Relay(DRIVE.LED, Relay.Direction.kForward);
     	
@@ -100,7 +102,16 @@ public class TankDrive {
         	turn *= 0.8;
         }
 
-        ledToggle(false);
+        if (_controller.getRawButton(10)) {	
+        	if (!LEDToggled){
+        		LEDToggle = !LEDToggle;
+        		LEDToggled = true;
+        	}
+        } else {
+        	LEDToggled = false;
+        }
+        ledToggle(LEDToggle);
+
 
         double left = thrust + turn;
         double right = thrust - turn;
