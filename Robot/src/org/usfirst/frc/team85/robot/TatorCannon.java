@@ -24,6 +24,7 @@ public class TatorCannon {
 	private double LOADSPEED = -0.5;	//loading speed
 	private double SPITSPEED = 1.0;
 	private double FIRERPM = 1.0;		//outerMotor speed ---Voltage mode: 0.75
+	private double CUSTOMFIRE;
 	private double RPMTOL;				//outerMotor tol
 	
 	private CannonMode MODE = CannonMode.OFF;
@@ -240,11 +241,16 @@ public class TatorCannon {
  				Starts the firing motors, driver waits for it to speed up,
     			then starts the index motors to feed the ball to the firing motors
     			Turns on outer firing motors
-*/    			
-    			setOuter(FIRERPM);    	    	
+*/    			if (SmartDashboard.getBoolean("DB/Button 3", false)) {
+					CUSTOMFIRE = (SmartDashboard.getNumber("DB/Slider 3", 1.0));
+					CUSTOMFIRE = (CUSTOMFIRE < 0 || CUSTOMFIRE > 1) ? 1.0 : CUSTOMFIRE;
+					setOuter(CUSTOMFIRE);
+				} else {
+	    			setOuter(FIRERPM);    	    	
+				}
     			if(_driveStick.getRawButton(8)) { //Turns on index motors
     	    		indexOut();
-    	    	}
+    	    	}						
     	    	break;
     		case SPIT:
     			if (!_spitInit) {
