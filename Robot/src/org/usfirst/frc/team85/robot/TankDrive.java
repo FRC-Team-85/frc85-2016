@@ -107,10 +107,6 @@ public class TankDrive {
         	ledToggle(false);
         }
 
-        ledToggle(false);
-        //ledToggle(false);
-        
-        ledToggle(false);
 
         double left = thrust + turn;
         double right = thrust - turn;
