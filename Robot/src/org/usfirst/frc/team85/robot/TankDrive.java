@@ -162,20 +162,33 @@ public class TankDrive {
        	}
     }
     
+    double previousError = 0;
+    
     public boolean visionCenter() {
-    	ledToggle(true);
-		if (!ImageProcessing.isVisionGone()) {
-			double xChange = ImageProcessing.xAxisChange();
-			if (xChange == 0) {
-				setMotors(0.0, 0.0);
-				return true;
-			} else if (xChange > 0) {
-				setMotors(-0.4, 0.4); //right
-			}
-			else if (xChange < 0){
-				setMotors(0.4, -0.4); //left
-			}
-		}
-		return false;
-	}    
+    	ledToggle(true);    	
+    	
+    	double Kp = 0.005;
+    	double Kd = 0;
+    	double error = ImageProcessing.xPixelsToTarget();
+    	double changeInError = error - previousError;
+    	previousError = error;
+    	if (ImageProcessing.withinXTolerance()) {
+    		setMotors(0, 0);
+    		return true;
+    	}
+    	double power = Kp * error + Kd * changeInError;
+    	System.out.println(error + " " + power);
+    	if (Math.abs(power) > 0.5) {
+    		if (power > 0.5) power = 0.5;
+    		else power = -0.5;
+    	}
+    	double minPower = 0.25;
+    	if (Math.abs(power) < minPower) {
+    		if (power > 0) power = minPower;
+    		else power = -minPower;
+    	}
+    	setMotors(power, -power);
+    	return false;
+    }    
 }
+

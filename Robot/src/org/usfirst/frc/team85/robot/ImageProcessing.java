@@ -87,20 +87,28 @@ public class ImageProcessing {
 		return (_visionUpdateTimer.get() > VISIONCAPTURETIMEOUT);
 	}
 	
-	private static double toX() {
+	private static double relX() {
 		return ((isVisionGone()) ? 160 : centerX) - 160;
 	}
 	
-	private static double toY() {
+	private static double relY() {
 		return ((isVisionGone()) ? 120 : centerY) - 120;
 	}
 	
-	public static double xAxisChange() {
-		return (Math.abs(toX()-IMGXOFFSET) < IMGXTOL) ? 0 : toX();
+	public static double xPixelsToTarget() {
+		return IMGXOFFSET - relX();
 	}
 	
-	public static double yAxisChange() {
-		return (Math.abs(toX()-IMGYOFFSET) < IMGYTOL) ? 0 : toY();
+	public static double yPixelsToTarget() {
+		return IMGYOFFSET - relY();
+	}
+	
+	public static boolean withinXTolerance() {
+		return xPixelsToTarget() < IMGXTOL;
+	}
+	
+	public static boolean withinYTolerance() {
+		return yPixelsToTarget() < IMGYTOL;
 	}
 	
 }
