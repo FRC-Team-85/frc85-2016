@@ -407,13 +407,13 @@ public class Auto {
 	         */
 			if (!GOWITHOUTVISION) {
 				_drive.ledToggle(true);
-				if (ImageProcessing.contourFound) {
+				if (!ImageProcessing.isVisionGone()) {
 					if (_cannon.runAs(CannonMode.VISION) && _drive.visionCenter()) {
 						
 					}
-				} else if (!ImageProcessing.contourFound && SEEKLEFT){
+				} else if (ImageProcessing.isVisionGone() && SEEKLEFT){
 					autoDrive(-0.6, 0.6, 15);
-				} else if (!ImageProcessing.contourFound && !SEEKLEFT){
+				} else if (ImageProcessing.isVisionGone() && !SEEKLEFT){
 					autoDrive(0.6, -0.6, 15);
 				}
 			} else {
@@ -582,8 +582,8 @@ public class Auto {
 		// based on
 		//for XXX comandArray[][]
 		//commandSubStage++
-		double lastLeftSet = _drive.getLeftAvgSpeed();
-		double lastRightSet = _drive.getRightAvgSpeed();
+		double lastLeftSet = _drive.getLeftSpeed();
+		double lastRightSet = _drive.getRightSpeed();
 		double leftTargetOutput = lt[commandSubStage];
 		double rightTargetOutput = rt[commandSubStage];
 		double timeToStop = st[commandSubStage];

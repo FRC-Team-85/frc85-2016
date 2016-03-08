@@ -141,21 +141,17 @@ public class TankDrive {
         _masterLeftMotor.set(lSpeed);
         _masterRightMotor.set(-rSpeed);
         SmartDashboard.putNumber("Lspeed.get(): ", lSpeed);
-        SmartDashboard.putNumber("Lspeed.set(): ", _masterLeftMotor.get());
+        SmartDashboard.putNumber("Lspeed.set(): ", getLeftSpeed());
         SmartDashboard.putNumber("Rspeed.get(): ", rSpeed);
-        SmartDashboard.putNumber("Rspeed.set(): ", _masterRightMotor.get());
+        SmartDashboard.putNumber("Rspeed.set(): ", getRightSpeed());
     }
 
-    public double getLeftAvgSpeed() {
-    	return (_masterLeftMotor.get() +
-    			_slaveLeftMotorA.get() +
-                _slaveLeftMotorB.get())/3;
+    public double getLeftSpeed() {
+    	return _masterLeftMotor.get();
     }
 
-    public double getRightAvgSpeed() {
-    	return (_masterRightMotor.get() +
-                _slaveRightMotorA.get() +
-                _slaveRightMotorB.get())/3;
+    public double getRightSpeed() {
+    	return _masterRightMotor.get();
     }
     
     public void ledToggle(boolean on) {
@@ -168,15 +164,15 @@ public class TankDrive {
     
     public boolean visionCenter() {
     	ledToggle(true);
-		if (ImageProcessing.contourFound) {
-			if (ImageProcessing.centerX < ImageProcessing.IMGXOFFSET + ImageProcessing.IMGXTOL
-					&& ImageProcessing.centerX > ImageProcessing.IMGXOFFSET - ImageProcessing.IMGXTOL) {
+		if (!ImageProcessing.isVisionGone()) {
+			double xChange = ImageProcessing.xAxisChange();
+			if (xChange == 0) {
 				setMotors(0.0, 0.0);
 				return true;
-			} else if (ImageProcessing.centerX > ImageProcessing.IMGXOFFSET + ImageProcessing.IMGXTOL) {
+			} else if (xChange > 0) {
 				setMotors(-0.4, 0.4); //right
 			}
-			else if (ImageProcessing.centerX < ImageProcessing.IMGXOFFSET - ImageProcessing.IMGXTOL){
+			else if (xChange < 0){
 				setMotors(0.4, -0.4); //left
 			}
 		}
