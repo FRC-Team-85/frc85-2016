@@ -12,9 +12,9 @@ public class ImageProcessing {
 	public static double area, height, width, centerX, centerY;
 
 	public static final int IMGXOFFSET = 0;
-	public static final int IMGXTOL = 25;
+	public static final int IMGXTOL = 5;
 	public static final int IMGYOFFSET = 0;
-	public static final int IMGYTOL = 25;
+	public static final int IMGYTOL = 10;
 	
 	
 	
