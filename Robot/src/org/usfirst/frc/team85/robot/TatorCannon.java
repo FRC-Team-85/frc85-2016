@@ -224,15 +224,15 @@ public class TatorCannon {
     	switch (MODE) {
     		case VISION:
     			if (!ImageProcessing.isVisionGone()) {
-    				double yChange = ImageProcessing.yAxisChange();
+    				double yChange = ImageProcessing.yPixelsToTarget();
     				if (yChange == 0) {
     					manualArmMotor(0.0);
     					return true;
-    				} else if (yChange > 0) {
-    					manualArmMotor(0.5);
+    				} else if (yChange < 0) {
+    					manualArmMotor(0.5);	//DOWN
     				}
-    				else if (yChange < 0){
-    					manualArmMotor(-0.8);
+    				else if (yChange > 0){
+    					manualArmMotor(-0.8);	//UP
     				}
     			}
     			break;
