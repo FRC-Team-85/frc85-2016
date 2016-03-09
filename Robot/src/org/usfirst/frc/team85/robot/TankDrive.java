@@ -163,12 +163,28 @@ public class TankDrive {
     }
     
     double previousError = 0;
+    double Kp = 0.005;
+    double Kd = 0;
+    double maxPower = 0.5, minPower = 0.25;
+    
+    public void initSafeCoding(){
+    	SmartDashboard.putNumber("ZZZ drive Kp", Kp);
+    	SmartDashboard.putNumber("ZZZ drive Kd", Kd);
+    	SmartDashboard.putNumber("ZZZ drive maxPower", maxPower);
+    	SmartDashboard.putNumber("ZZZ drive minPower", minPower);
+    }
+    
+    public void muchSafeCoding(){
+    	//Adjust with FX java on programming computer, along side Driver Station
+    	Kp = SmartDashboard.getNumber("ZZZ drive Kp", Kp);
+    	Kd = SmartDashboard.getNumber("ZZZ drive Kd", Kd);
+    	maxPower = SmartDashboard.getNumber("ZZZ drive maxPower", maxPower);
+    	minPower = SmartDashboard.getNumber("ZZZ drive minPower", minPower);
+    }
     
     public boolean visionCenter() {
     	ledToggle(true);    	
     	
-    	double Kp = 0.005;
-    	double Kd = 0;
     	double error = ImageProcessing.xPixelsToTarget();
     	double changeInError = error - previousError;
     	previousError = error;
@@ -178,11 +194,10 @@ public class TankDrive {
     	}
     	double power = Kp * error + Kd * changeInError;
     	System.out.println(error + " " + power);
-    	if (Math.abs(power) > 0.5) {
-    		if (power > 0.5) power = 0.5;
-    		else power = -0.5;
+    	if (Math.abs(power) > maxPower) {
+    		if (power > 0) power = maxPower;
+    		else power = -maxPower;
     	}
-    	double minPower = 0.25;
     	if (Math.abs(power) < minPower) {
     		if (power > 0) power = minPower;
     		else power = -minPower;
