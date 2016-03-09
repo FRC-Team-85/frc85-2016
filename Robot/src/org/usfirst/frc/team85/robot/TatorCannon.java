@@ -349,7 +349,7 @@ public class TatorCannon {
 		if ((value < .05 && topLimit == false) || (value > -.05 && botLimit == false) ){
 			value = 0;
 		} else if (value < 0 && _dartEncoder.get() > DARTMAX - DARTCAPSLOW) {
-			value *= 0.5;
+			value *= 0.65;
 		} else if (value < 0) {		//UP
 			value *= 1.0;	//0.8
 		} else if (value > 0 && _dartEncoder.get() < DARTMIN + DARTCAPSLOW) {

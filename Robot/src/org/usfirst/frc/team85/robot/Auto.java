@@ -109,7 +109,7 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 1:
-	        		if (autoDrive(0.65, 0.65, 4, 3)) {
+	        		if (autoDrive(0.65, 0.65, 4, 4)) {
 	        			goVision();
 	        		}
 	        		break;
@@ -175,11 +175,11 @@ public class Auto {
 	        			goVision();
 	        		}
 	        		break;
-//		       	case 3://not tested
-//		       		if (autoDrive(0, 0, 6, 1)){
-//		       			goVision();
-//		        	}
-//		        	break;
+		       	case 3://not tested
+		       		if (autoDrive(0, 0, 6, 1)){
+		       			goVision();
+		        	}
+		        	break;
 	        		
 	        	}
 	        	break;
