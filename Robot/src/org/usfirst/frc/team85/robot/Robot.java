@@ -81,6 +81,12 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         _drive.setVoltageRamp(0.0); //Removes voltage ramp limit
         _drive.setBrakeMode(false);
+        
+        //
+        _drive.initSafeCoding();
+        _imageProcessing.initSafeCoding();
+        _tatorCannon.initSafeCoding();
+        //
        
     }
 
@@ -95,6 +101,14 @@ public class Robot extends IterativeRobot {
   		_drive.manualDrive();
     	_intake.run(true);
     	_tatorCannon.run(false);	//Always last, has priority control over intake
+    	
+    	if (_driveStick.getRawButton(9)) {
+    		_imageProcessing.muchSafeCoding();
+        	_drive.muchSafeCoding();
+        	_drive.visionCenter();
+        	_tatorCannon.muchSafeCoding();
+    		_tatorCannon.runAs(CannonMode.VISION);
+    	}
 //	*/	
     }
     

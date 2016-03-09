@@ -3,6 +3,7 @@ package org.usfirst.frc.team85.robot;
 import edu.wpi.first.wpilibj.*;
 
 import org.usfirst.frc.team85.robot.Addresses.*;
+
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class TatorCannon {
@@ -46,6 +47,9 @@ public class TatorCannon {
 	private static final double LOADTIME = 1.0;	// = 0.0;	//milliseconds
 	private static final double STORAGEDELAY = 0.5;
 	private boolean _spitInit, _loadInit, _loadComplete, _storageInit;
+	
+	private boolean _justFireInit;
+	private static final double JUSTFIREDELAY = 1.0, JUSTFIREALLDONE = 2.0;
 		
 	DigitalInput _topDartLimit;
 	DigitalInput _bottomDartLimit;
@@ -218,24 +222,70 @@ public class TatorCannon {
     		
     	}
     }
+    //====================
+    double previousError = 0;
+    double upKp = 0.012;
+    double upKd = 0;
+    double downKp = 0.12;
+    double downKd = 0;
+    double maxUpPower = -1, minUpPower = -0.0;
+    double maxDownPower = 1, minDownPower = 0.0;
     
+    public void initSafeCoding(){
+    	SmartDashboard.putNumber("ZZZ tc upKp", upKp);
+    	SmartDashboard.putNumber("ZZZ tc upKd", upKd);
+    	SmartDashboard.putNumber("ZZZ tc downKp", downKp);
+    	SmartDashboard.putNumber("ZZZ tc downKd", downKd);
+    	SmartDashboard.putNumber("ZZZ tc maxUpPower", maxUpPower);
+    	SmartDashboard.putNumber("ZZZ tc minUpPower", minUpPower);
+    	SmartDashboard.putNumber("ZZZ tc maxDownPower", maxDownPower);
+    	SmartDashboard.putNumber("ZZZ tc minDownPower", minDownPower);
+    }
+    
+    public void muchSafeCoding(){
+    	//Adjust with FX java on programming computer, along side Driver Station
+    	upKp = SmartDashboard.getNumber("ZZZ tc upKp", upKp);
+    	upKd = SmartDashboard.getNumber("ZZZ tc upKd", upKd);
+    	downKp = SmartDashboard.getNumber("ZZZ tc downKp", downKp);
+    	downKd = SmartDashboard.getNumber("ZZZ tc downKd", downKd);
+    	maxUpPower = SmartDashboard.getNumber("ZZZ tc maxUpPower", maxUpPower);
+    	minUpPower = SmartDashboard.getNumber("ZZZ tc minUpPower", minUpPower);
+    	maxDownPower = SmartDashboard.getNumber("ZZZ tc maxDownPower", maxDownPower);
+    	minDownPower = SmartDashboard.getNumber("ZZZ tc minDownPower", minDownPower);
+    }
+    //=====================
     public boolean runCannonMode() {
     		
     	switch (MODE) {
     		case VISION:
-    			if (!ImageProcessing.isVisionGone()) {
-    				double yChange = ImageProcessing.yPixelsToTarget();
-    				if (yChange == 0) {
-    					manualArmMotor(0.0);
-    					return true;
-    				} else if (yChange < 0) {
-    					manualArmMotor(0.5);	//DOWN
-    				}
-    				else if (yChange > 0){
-    					manualArmMotor(-0.8);	//UP
-    				}
-    			}
-    			break;
+    			double error = ImageProcessing.yPixelsToTarget();
+    	    	double changeInError = error - previousError;
+    	    	previousError = error;
+    	    	if (ImageProcessing.withinYTolerance()) {
+    	    		manualArmMotor(0.0);
+    	    		return true;
+    	    	}
+    	    	double power = (double) ((error > 0) ?
+    	    		upKp * error + upKd * changeInError
+    	    		:downKp * error + downKd * changeInError);
+    	    	
+    	    	System.out.println("tc " + error + " " + power);
+    	    	
+    	    	power = (power > 0) ?
+/*Up*/				(power > maxUpPower) ?
+						maxUpPower
+						: (power < minUpPower) ?
+							minUpPower
+							: power
+/*Down*/			:(power < maxDownPower) ?
+						maxDownPower
+						: (power > minDownPower) ?
+							minDownPower
+							: power;
+    	    	
+    	    	manualArmMotor(power);
+    	    	return false;
+//    			break;
     		case CHARGE:
 /*    			
  				Starts the firing motors, driver waits for it to speed up,
@@ -315,6 +365,19 @@ public class TatorCannon {
     	        	_loadComplete = false;
     	        }
     	        //return _loadComplete;
+    			break;
+    		case JUSTFIRE:
+    			if (!_justFireInit) {
+    				_justFireInit = true;
+    				_delayTimer.reset();
+    			} else {
+					setOuter(FIRERPM);
+					if (_delayTimer.get() > JUSTFIREALLDONE) {
+						indexOff();
+					} else if (_delayTimer.get() > JUSTFIREDELAY) {
+    					indexOut();
+    				}
+    			}
     			break;
     	}
     	return false;

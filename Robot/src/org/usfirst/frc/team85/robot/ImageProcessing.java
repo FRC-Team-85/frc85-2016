@@ -12,14 +12,30 @@ public class ImageProcessing {
 	
 	private static double area, height, width, centerX, centerY, aspectRatio;
 
-	private static final int IMGXOFFSET = 0, IMGXTOL = 5;
-	private static final int IMGYOFFSET = 0, IMGYTOL = 10;
+	private static int IMGXOFFSET = 0, IMGXTOL = 5;
+	private static int IMGYOFFSET = 0, IMGYTOL = 10;
 	
 	private static final double TARGETASPECTRATIO = 2.0; //	width/height
 	
 	private static final double VISIONCAPTURETIMEOUT = 0.10;
 	
 	private static Timer _visionUpdateTimer;
+	
+    public void initSafeCoding(){
+    	SmartDashboard.putNumber("ZZZ vision xOff", IMGXOFFSET);
+    	SmartDashboard.putNumber("ZZZ vision xTol", IMGXTOL);
+    	SmartDashboard.putNumber("ZZZ vision yOff", IMGYOFFSET);
+    	SmartDashboard.putNumber("ZZZ vision yTol", IMGYTOL);
+    }
+    
+    public void muchSafeCoding(){
+    	//Adjust with FX java on programming computer, along side Driver Station
+    	IMGXOFFSET = (int) SmartDashboard.getNumber("ZZZ vision xOff", IMGXOFFSET);
+    	IMGXTOL = (int) SmartDashboard.getNumber("ZZZ vision xTol", IMGXTOL);
+    	IMGYOFFSET = (int) SmartDashboard.getNumber("ZZZ vision yOff", IMGYOFFSET);
+    	IMGYTOL = (int) SmartDashboard.getNumber("ZZZ vision yTol", IMGYTOL);
+    }
+    
 	
 	public ImageProcessing() {		
 		
