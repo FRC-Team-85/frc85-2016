@@ -12,8 +12,8 @@ public class ImageProcessing {
 	
 	private static double area, height, width, centerX, centerY, aspectRatio;
 
-	private static int IMGXOFFSET = 0, IMGXTOL = 5;
-	private static int IMGYOFFSET = 0, IMGYTOL = 10;
+	private static int IMGXOFFSET = 0, IMGXTOL = 10;
+	private static int IMGYOFFSET = 0, IMGYTOL = 20;
 	
 	private static final double TARGETASPECTRATIO = 2.0; //	width/height
 	
@@ -51,15 +51,17 @@ public class ImageProcessing {
         _visionUpdateTimer.start();
 	}
 	
+	double[] areaArray = {0}, heightArray = {1}, widthArray = {1}, centerXArray = {160}, centerYArray = {120};
+	
 	public void process() {
 		
     	try {
     		_table = NetworkTable.getTable("GRIP/contoursReport");
-			double[] areaArray = _table.getNumberArray("area", new double[] {0});
-			double[] heightArray = _table.getNumberArray("height", new double[] {1});	//avoid /0
-			double[] widthArray = _table.getNumberArray("width", new double[] {0});
-			double[] centerXArray = _table.getNumberArray("centerX", new double[] {160});
-			double[] centerYArray = _table.getNumberArray("centerY", new double[] {120});
+			areaArray = _table.getNumberArray("area", areaArray);
+			heightArray = _table.getNumberArray("height", heightArray);	//avoid /0
+			widthArray = _table.getNumberArray("width", widthArray);
+			centerXArray = _table.getNumberArray("centerX", centerXArray);
+			centerYArray = _table.getNumberArray("centerY", centerYArray);
 			
 			double[] aspectRatioArray = new double[areaArray.length];
 			int bestIndex = 0;
@@ -120,11 +122,11 @@ public class ImageProcessing {
 	}
 	
 	public static boolean withinXTolerance() {
-		return xPixelsToTarget() < IMGXTOL;
+		return Math.abs(xPixelsToTarget()) < IMGXTOL;
 	}
 	
 	public static boolean withinYTolerance() {
-		return yPixelsToTarget() < IMGYTOL;
+		return Math.abs(yPixelsToTarget()) < IMGYTOL;
 	}
 	
 }

@@ -217,19 +217,15 @@ public class TatorCannon {
     	} else {
     		MODE = CannonMode.OFF;
     	}
-    	
-    	if (AutoOR) {
-    		
-    	}
-    }
+    	    }
     //====================
     double previousError = 0;
-    double upKp = 0.012;
+    double upKp = 1/15;
     double upKd = 0;
-    double downKp = 0.12;
+    double downKp = 1/15;
     double downKd = 0;
-    double maxUpPower = -1, minUpPower = -0.0;
-    double maxDownPower = 1, minDownPower = 0.0;
+    double maxUpPower = -1.0, minUpPower = -0.65;
+    double maxDownPower = 0.8, minDownPower = 0.5;
     
     public void initSafeCoding(){
     	SmartDashboard.putNumber("ZZZ tc upKp", upKp);
