@@ -10,16 +10,19 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 public class TankDrive {
 	
     private Joystick _controller;
-    
+
     private Relay greenLED;
+    private Relay bigLED;
 
     private CANTalon _masterLeftMotor, _slaveLeftMotorA, _slaveLeftMotorB,
     				_masterRightMotor, _slaveRightMotorA, _slaveRightMotorB;
-    
+
     private boolean LEDToggle, LEDToggled;
+    private boolean bigLEDToggle, bigLEDToggled;
     
     public TankDrive(Joystick DriveController) {
-    	 greenLED = new Relay(DRIVE.LED, Relay.Direction.kForward);
+   	 greenLED = new Relay(DRIVE.LED, Relay.Direction.kForward);
+	 bigLED = new Relay(1, Relay.Direction.kForward);
     	
         _controller = DriveController;
         _masterLeftMotor = new CANTalon(DRIVE.LEFT_FRONT_MOTOR);	//MASTER LEFT
@@ -112,6 +115,16 @@ public class TankDrive {
         }
         ledToggle(LEDToggle);
 
+        if (_controller.getRawButton(4)) {	
+        	if (!bigLEDToggled){
+        		bigLEDToggle = !bigLEDToggle;
+        		bigLEDToggled = true;
+        	}
+        } else {
+        	bigLEDToggled = false;
+        }
+        bigLedToggle(bigLEDToggle);
+
 
         double left = thrust + turn;
         double right = thrust - turn;
@@ -159,6 +172,14 @@ public class TankDrive {
         	greenLED.set(Relay.Value.kForward);
        	} else {
        		greenLED.set(Relay.Value.kOff);
+       	}
+    }
+    
+    public void bigLedToggle(boolean on) {
+    	if (on) {
+        	bigLED.set(Relay.Value.kForward);
+       	} else {
+       		bigLED.set(Relay.Value.kOff);
        	}
     }
     

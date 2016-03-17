@@ -42,6 +42,8 @@ public class Robot extends IterativeRobot {
     private TatorCannon _tatorCannon;
 
     private ImageProcessing _imageProcessing;
+    
+    private CameraServer _server;
 
     private final static String[] GRIP_ARGS = new String[] {
             "/usr/local/frc/JRE/bin/java", "-jar",
@@ -66,6 +68,31 @@ public class Robot extends IterativeRobot {
         _imageProcessing.initSafeCoding();
         _tatorCannon.initSafeCoding();
         //
+        
+        SmartDashboard.putNumber("autocase", 0);
+        
+        try {
+        	_server = CameraServer.getInstance();
+        	_server.startAutomaticCapture();
+        }
+        catch(Exception ex) {
+        	System.out.println(ex.toString());
+        }
+        
+        /*
+         public void presidentialElection() {
+         
+         if president.get("Donald Trump") {
+         	get(Popcorn);
+         }
+         else if president.get("Hillary Clinton) || president.get("Bernie Spenders") {
+         	move(Canada);
+         }
+         else {
+         
+         }
+         
+         */
         
     }
 
@@ -96,7 +123,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
 //    	_auto.checkSDB();
 //	/*	
-    	PowerMonitoring.Monitor();
+    	//PowerMonitoring.Monitor();
     	_imageProcessing.process();
   		_drive.manualDrive();
     	_intake.run(true);
@@ -107,6 +134,7 @@ public class Robot extends IterativeRobot {
 		_imageProcessing.muchSafeCoding();
     	_drive.muchSafeCoding();
     	_tatorCannon.muchSafeCoding();
+    	
     	if (_driveStick.getRawButton(9)) {
         	_drive.visionCenter();
     		_tatorCannon.runAs(CannonMode.VISION);

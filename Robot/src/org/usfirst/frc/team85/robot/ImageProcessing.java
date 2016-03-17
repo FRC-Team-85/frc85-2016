@@ -17,7 +17,7 @@ public class ImageProcessing {
 	
 	private static final double TARGETASPECTRATIO = 2.0; //	width/height
 	
-	private static final double VISIONCAPTURETIMEOUT = 0.10;
+	private static final double VISIONCAPTURETIMEOUT = 0.05;
 	
 	private static Timer _visionUpdateTimer;
 	
