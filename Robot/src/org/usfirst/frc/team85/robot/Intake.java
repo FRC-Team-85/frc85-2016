@@ -16,14 +16,15 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	public static final int LOADPOS = 		-495000;
+	public static final int LOADPOS = 		-487048;
 	public static final int LIFTHEIGHT = 	-744000;
 	public static final int FLOOR = 		-690000;
 	public static final int HOME = 			   1000;
-
+	public static final int PORTDOWN =		0000000000000000; //down position
+	public static final int PORTUP =			0000000000000; //for portcolus
 	public static final int HORIZONTAL = 	-500000;
 	public static final int FORTYFIVE =  	-250000;
-	public static final int AUTOANGLE =  	-330000;
+	public static final int AUTOANGLE =  	-265000;//-330000
 	
 	int _encPos;
 	
@@ -31,9 +32,7 @@ public class Intake {
 	
 	private double INTAKESLOWRANGE = 40000;	//35k
 	private double INTAKETOL = 10000;	//10k
-	private CANTalon leftAngleMotor, rightAngleMotor;
-	
-	private Relay loadMotor;
+	private CANTalon leftAngleMotor, rightAngleMotor, loadMotor;
 	private boolean init;
 	public static boolean hasBeenInit;
 	
@@ -49,7 +48,7 @@ public class Intake {
 		
 		leftAngleMotor = new CANTalon(INTAKE.LEFT_INTAKE_MOTOR);
 		rightAngleMotor = new CANTalon(INTAKE.RIGHT_INTAKE_MOTOR);
-		loadMotor = new Relay(INTAKE.LOAD_MOTOR);
+		loadMotor = new CANTalon(INTAKE.LOAD_MOTOR);
 
 		upIntakeLimit = new DigitalInput(INTAKE.UP_INTAKE_LIMIT);
 		downIntakeLimit = new DigitalInput(INTAKE.DOWN_INTAKE_LIMIT);
@@ -121,11 +120,11 @@ public class Intake {
 		}		
 		
 		if (opStick.getRawButton(5)) {
-			loadMotor.set(Relay.Value.kReverse);
+			loadMotor.set(-1);
 		} else if (opStick.getRawButton(6)) {
-			loadMotor.set(Relay.Value.kForward);
+			loadMotor.set(1);
 		} else {
-			loadMotor.set(Relay.Value.kOff);
+			loadMotor.set(0);
 		}
 		intakeInit = false;
 		return false;
@@ -136,7 +135,7 @@ public class Intake {
 			_delayTimer.reset();
 			intakeInit = true;
 		} else if (intakeInit && _delayTimer.get() > INTAKEDELAY) {
-			loadMotor.set(Relay.Value.kForward);
+			loadMotor.set(1);
 		}
 		if (intakeMove(LOADPOS) && cannonReady) {
 			return true;
@@ -161,7 +160,7 @@ public class Intake {
 		}
 		if(_encPos < target) {
 			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
-				setMotors(-0.5);
+				setMotors(-0.8);
 			} else {
 				setMotors(-1);
 			}

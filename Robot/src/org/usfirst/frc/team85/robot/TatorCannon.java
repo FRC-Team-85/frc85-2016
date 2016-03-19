@@ -10,35 +10,40 @@ public class TatorCannon {
 
 	public static final int LOADPOS = 0;		//auto load pos -- 
 	public static final int FIREPOS = 170;		//auto fire pos -- 
-	public static final int ALITTLEOFFTHEGROUND = 25;
-	public static final int AUTOHEIGHT = 132;
+	public static final int CLOSEFIRE = 247; //firing from right up to tower ramp
+	public static final int YBUTTONHEIGHT = 175;
+	public static final int ALITTLEOFFTHEGROUND = 1;
+	public static final int AUTOHEIGHT = 100;
 	
-	private static final double DARTTOL = 3;		//auto angle tol
+	private static final double DARTTOL = 1.25;		//auto angle tolerance
 	private static final double DARTSLOW = 10;
 	private static final double DARTMIN = 0;
 	private static final double DARTCAPSLOW = 45;
 	private static final double DARTMAX = 248;
 	private static final boolean WYATTSPRIVILEGE = false;
 	
+	private static boolean resetAtTop;
+	
 	public static boolean hasBeenInit;
 
-	private double LOADSPEED = -0.5;	//loading speed
+	private double LOADSPEED = -1.0;	//loading speed
 	private double SPITSPEED = 1.0;
 	private double FIRERPM = 1.0;		//outerMotor speed ---Voltage mode: 0.75
 	private double CUSTOMFIRE;
 	private double RPMTOL;				//outerMotor tol
 	
-	private CannonMode MODE = CannonMode.OFF;
+	private CannonMode MODE;
 	
 	private boolean AutoOR = false;
 	
 	private Joystick _operatorStick;
 	private Joystick _driveStick;
 
-	private CANTalon _outerTopMotor, _outerBottomMotor, _dartMotor;
-	private Relay _innerTopMotor, _innerBottomMotor;
+	private CANTalon _outerTopMotor, _outerBottomMotor, _dartMotor, _innerTopMotor, _innerBottomMotor;
 	
 	private Encoder _dartEncoder;
+	
+	
 	private Intake _intake;
 	
 	private Timer _delayTimer;
@@ -68,8 +73,8 @@ public class TatorCannon {
 		_outerBottomMotor = new CANTalon(CANNON.OUTER_MOTOR_BOTTOM);
 		_dartMotor = new CANTalon(CANNON.DART_MOTOR);
 
-		_innerTopMotor = new Relay(CANNON.INNER_MOTOR_TOP, Relay.Direction.kBoth);
-		_innerBottomMotor = new Relay(CANNON.INNER_MOTOR_BOTTOM, Relay.Direction.kBoth);
+		_innerTopMotor = new CANTalon(CANNON.INNER_MOTOR_TOP);
+		_innerBottomMotor = new CANTalon(CANNON.INNER_MOTOR_BOTTOM);
 		
 		_topDartLimit = new DigitalInput(CANNON.DART_TOP_LIMIT);
 		_bottomDartLimit = new DigitalInput(CANNON.DART_BOTTOM_LIMIT);
@@ -121,7 +126,7 @@ public class TatorCannon {
 		if (!init) {
 			if (!_bottomDartLimit.get()) {
 				_dartMotor.set(0);
-				_dartEncoder.reset();
+				setEncoderBot();
 				init = true;
 				hasBeenInit = true;
 			} else {
@@ -136,14 +141,12 @@ public class TatorCannon {
     	AutoOR = Autonomous;
     	    	
     	if (!AutoOR) {
-    		manualArmMotor(_operatorStick.getRawAxis(3));
     		setCannonMode();
     		runCannonMode();
-    		buttonHeights();
     	} else {
     		//Senpai make it do
     	}
-    	SmartDashboard.putNumber("View Robot/Dart Enc", _dartEncoder.get());
+    	SmartDashboard.putNumber("Dart Enc", getEncoderValue());
     	SmartDashboard.putBoolean("View Robot/Ball In Storage", !_ballNotPresentSensor.get());
 
     	SmartDashboard.putData("Dart Encoder", _dartEncoder);
@@ -154,7 +157,7 @@ public class TatorCannon {
     
     private void buttonHeights() {
     	if (_operatorStick.getRawButton(4)){
-    		armMove(178);
+    		armMove(YBUTTONHEIGHT);
     		_intake.intakeMove(Intake.LOADPOS);
     		return;
     	} else if (_operatorStick.getRawButton(9)) {
@@ -164,7 +167,7 @@ public class TatorCannon {
     		
     		return;
     	} else if (_operatorStick.getRawButton(1)) {
-    		
+    		armMove(CLOSEFIRE);
     		return;
     	} else if (_operatorStick.getPOV() == 0){ //auto heights both
 			armMove(AUTOHEIGHT);
@@ -172,6 +175,9 @@ public class TatorCannon {
 		} else if (_operatorStick.getPOV() == 270) { //left
 			armMove(ALITTLEOFFTHEGROUND);
 			return;
+		} else {
+    		manualArmMotor(_operatorStick.getRawAxis(3));
+    		return;
 		}
     }
     
@@ -181,17 +187,17 @@ public class TatorCannon {
 
     public boolean armMove(double target) {
     	if (hasBeenInit) {
-    		if ( Math.abs(_dartEncoder.get() - target) <= DARTTOL) {
-    			_dartMotor.set(0);
+    		if ( Math.abs(getEncoderValue() - target) <= DARTTOL) {
+    			manualArmMotor(0);
     			return true;
     		}
-    		double speed = ((_dartEncoder.get() - target) > 0) ? 0.5 : -0.8;
+    		double speed = ((getEncoderValue() - target) > 0) ? 1.0 : -1.0;
 //  	  	double mult = (Math.abs(_dartEncoder.get() - target) <= DARTSLOW) ? 0.5 : 1.0;
         	if (Intake.hasBeenInit && !_intake.belowFortyFive()) {
         		speed = 0;
         		_intake.intakeMove(Intake.FORTYFIVE);
         	}
-    		_dartMotor.set(speed);
+    		manualArmMotor(speed);
     	}
     	
     	return false;
@@ -204,7 +210,7 @@ public class TatorCannon {
     
     public void setCannonMode() {
     	if (_driveStick.getRawButton(2)) {		//VISION
-    		MODE = CannonMode.VISION;
+  //  		MODE = CannonMode.VISION;
     	} else if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
     	} else if (_operatorStick.getRawButton(7) && (WYATTSPRIVILEGE||!_bottomDartLimit.get())
@@ -215,7 +221,7 @@ public class TatorCannon {
     	} else if (_operatorStick.getRawButton(3) && _ballNotPresentSensor.get()) {	//Intake Button B
     		MODE = CannonMode.IN;
     	} else {
-    		MODE = CannonMode.OFF;
+    		MODE = CannonMode.MANUAL;
     	}
     	    }
     //====================
@@ -297,6 +303,7 @@ public class TatorCannon {
     			if(_driveStick.getRawButton(8)) { //Turns on index motors
     	    		indexOut();
     	    	}						
+        		buttonHeights();
     	    	break;
     		case SPIT:
     			if (!_spitInit) {
@@ -314,13 +321,12 @@ public class TatorCannon {
     			indexIn();
     			break;
     		case IN: //Sucks in ball
-    			if (_bottomDartLimit.get()) {
-        			armMove(LOADPOS);
-    			}
+        		armMove(LOADPOS);
     			setOuter(LOADSPEED);
     			indexIn();
     			break;
-    		case OFF: //Turns everything off
+    		case MANUAL: //Turns everything off
+        		buttonHeights();
     			setOuter(0.0);
     			indexOff();
         		_spitInit = false;
@@ -384,16 +390,16 @@ public class TatorCannon {
 		_outerBottomMotor.set(speed);
     }
     private void indexOut() {	//Ready and Aim and Fire
-		_innerTopMotor.set(Relay.Value.kForward);
-		_innerBottomMotor.set(Relay.Value.kForward);
+		_innerTopMotor.set(1);
+		_innerBottomMotor.set(1);
     }
     private void indexIn() {	//Bring into Storage
-		_innerTopMotor.set(Relay.Value.kReverse);
-		_innerBottomMotor.set(Relay.Value.kReverse);
+		_innerTopMotor.set(-1);
+		_innerBottomMotor.set(-1);
     }
     private void indexOff() {	//Free to Shove around
-		_innerTopMotor.set(Relay.Value.kOff);
-		_innerBottomMotor.set(Relay.Value.kOff);
+		_innerTopMotor.set(0);
+		_innerBottomMotor.set(0);
     }
     public void manualArmMotor(double value) {
     	
@@ -401,17 +407,21 @@ public class TatorCannon {
 		boolean botLimit = _bottomDartLimit.get();
 
     	if (!_bottomDartLimit.get()) {
-    		_dartEncoder.reset();
+    		setEncoderBot();
     		hasBeenInit = true;
+    	}
+    	
+    	if (!_topDartLimit.get()) {
+    		setEncoderTop();
     	}
 		
 		if ((value < .05 && topLimit == false) || (value > -.05 && botLimit == false) ){
 			value = 0;
-		} else if (value < 0 && _dartEncoder.get() > DARTMAX - DARTCAPSLOW) {
+		} else if (value < 0 && getEncoderValue() > DARTMAX - DARTCAPSLOW) {
 			value *= 0.65;
 		} else if (value < 0) {		//UP
 			value *= 1.0;	//0.8
-		} else if (value > 0 && _dartEncoder.get() < DARTMIN + DARTCAPSLOW) {
+		} else if (value > 0 && getEncoderValue() <= DARTMIN + DARTCAPSLOW) {
 			value *= 0.3;
 		} else if (value > 0) {		//DOWN
 			value *= 0.8;	//0.5
@@ -428,5 +438,19 @@ public class TatorCannon {
 		_dartMotor.set(value);
 			
 	}
+    
+    private void setEncoderBot() {
+    	_dartEncoder.reset();
+    	resetAtTop = false;
+    }
+    
+    private void setEncoderTop() {
+    	_dartEncoder.reset();
+    	resetAtTop = true;
+    }
+    
+    private double getEncoderValue() {
+    	return resetAtTop ? _dartEncoder.get() + DARTMAX : _dartEncoder.get();
+    }
     
 }

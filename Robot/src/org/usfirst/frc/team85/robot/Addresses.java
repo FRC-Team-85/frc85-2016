@@ -30,8 +30,8 @@ public class Addresses {
 		public static final int OUTER_MOTOR_TOP = 11;
 		public static final int OUTER_MOTOR_BOTTOM = 10;
 
-		public static final int INNER_MOTOR_TOP = 1;		//Relay
-		public static final int INNER_MOTOR_BOTTOM = 2;		//Relay
+		public static final int INNER_MOTOR_TOP = 13;		//NOT Relay	////////////////////////////////////////
+		public static final int INNER_MOTOR_BOTTOM = 14;		//NOT Relay ///////////////////////////////////////
 
 		public static final int DART_MOTOR = 9;
 
@@ -45,7 +45,7 @@ public class Addresses {
 
     	//Intake
 	public class INTAKE {
-		public static final int LOAD_MOTOR = 3; //TODO: Relay output number
+		public static final int LOAD_MOTOR = 12; //NOT Relay output number	///////////////////////////
 
 		public static final int LEFT_INTAKE_MOTOR = 7;
 		public static final int RIGHT_INTAKE_MOTOR = 8;

@@ -1,3 +1,4 @@
+
 package org.usfirst.frc.team85.robot;
 
 import java.util.Arrays;
@@ -24,9 +25,9 @@ public class Auto {
 	
 		private TatorCannon _cannon;
 	
-	private final int OBSTACLE;
-	private final boolean GOWITHOUTVISION;
-	private final boolean SEEKLEFT;
+	private int OBSTACLE = 0;
+	private boolean GOWITHOUTVISION = true;
+	private boolean SEEKLEFT = false;
 	
 	boolean readyForVision;
 	private int stage = 0;
@@ -37,11 +38,30 @@ public class Auto {
         _drive.setBrakeMode(true);
         _intake = intake;
         _cannon = cannon;
-        OBSTACLE = (int) SmartDashboard.getNumber("DB/Slider 0", 0);
-        GOWITHOUTVISION = SmartDashboard.getBoolean("DB/Button 0", false);
-        SEEKLEFT = SmartDashboard.getBoolean("DB/Button 1", false);
+//        OBSTACLE = (int) SmartDashboard.getNumber("AUTO/autocase", 0);
+ //       GOWITHOUTVISION = SmartDashboard.getBoolean("AUTO/gowithoutvision", true);
+//        SEEKLEFT = SmartDashboard.getBoolean("AUTO/seekleft", false);
         _autoTimer = new Timer();
-        _autoTimer.start();
+	    _autoTimer.start();
+			if (true) {
+		        SmartDashboard.putString("AutoManual/case 0", "CASE 0: DEAD");
+		        SmartDashboard.putString("AutoManual/case 1", "CASE 1: Low Bar");
+		        SmartDashboard.putString("AutoManual/case 2", "CASE 2: DEAD");
+		        SmartDashboard.putString("AutoManual/case 3", "CASE 3: DEAD");
+		        SmartDashboard.putString("AutoManual/case 4", "CASE 4: Moat");
+		        SmartDashboard.putString("AutoManual/case 5", "CASE 5: Rampart");
+		        SmartDashboard.putString("AutoManual/case 6", "CASE 6: DEAD");
+		        SmartDashboard.putString("AutoManual/case 7", "CASE 7: DEAD");
+		        SmartDashboard.putString("AutoManual/case 8", "CASE 8: Rock Wall");
+		        SmartDashboard.putString("AutoManual/case 9", "CASE 9: Rough Terrain");
+	        }
+			if (true) {
+				SmartDashboard.putNumber("autoMod 1", 4);
+				SmartDashboard.putNumber("autoMod 2", 0);
+				SmartDashboard.putNumber("autoMod 3", 0);
+				SmartDashboard.putNumber("autoMod 4", 0);
+				SmartDashboard.putNumber("autoMod 5", 0);
+			}
 	}
         
 	public void run() {
@@ -50,11 +70,20 @@ public class Auto {
 			timerInit = true;
 			return;
 		}
+
+        OBSTACLE = (int) SmartDashboard.getNumber("autocase", OBSTACLE);
+        GOWITHOUTVISION = true;//SmartDashboard.getBoolean("AUTO/gowithoutvision", true);
+        SEEKLEFT = false;//SmartDashboard.getBoolean("AUTO/seekleft", false);
 		
 		whatTimeIsIt = _autoTimer.get();
 		SmartDashboard.putString("DB/String 0", whatTimeIsIt + "sec");
 		SmartDashboard.putString("DB/String 1", "We are at stage " + stage);
     	SmartDashboard.putString("DB/String 2", "Ready for Vision? " + readyForVision);
+
+    	SmartDashboard.putString("AUTO/obs", "obstacle " + OBSTACLE);
+    	SmartDashboard.putString("AUTO/nv", "no vision " + GOWITHOUTVISION);
+    	SmartDashboard.putString("AUTO/tryleft", "seek left " + SEEKLEFT);
+    	
 		if (!readyForVision) {
 	        switch (OBSTACLE) {
 	        //=====================================================================================
@@ -109,9 +138,17 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 1:
-	        		if (autoDrive(0.65, 0.65, 4, 4)) {
-	        			goVision();
+	        		//autoDrive(Lspeed, Rspeed, Ramp, Time)
+	        		if (autoDrive(0.65, 0.65, 4, 3.5)) { 
+	        			if (!GOWITHOUTVISION) {
+	        				goVision();
+	        			} else {
+	        				rtns();
+	        			}
 	        		}
+	        		break;
+	        	case 2:
+	        		autoDrive(0, 0, 15);
 	        		break;
 	        	}
 	        	break;
@@ -138,9 +175,22 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 3:
-	        		if (autoDrive(0, 0, 4, 1.5)) {
-	        			goVision();
+	        		if (autoDrive(0.4, 0.4, 4, 1.5)) {
+	        			rtns();
 	        		}
+	        		break;
+	        	case 4:
+	        		if (autoDrive(0, 0, 4, 1.5)) {
+	        			if (!GOWITHOUTVISION) {
+	        				goVision();
+	        			} else {
+	        				rtns();
+	        			}
+	        		}
+	        		break;
+	        	case 5:
+	        		autoDrive(0, 0, 15);
+	        		break;
 	        	}
 	        	break;
 		    //=====================================================================================
@@ -172,15 +222,21 @@ public class Auto {
 	        		break;
 	        	case 2:
 	        		if (autoDrive(0.7, 0.7, 6, 1.5)){
-	        			goVision();
+	        			rtns();
 	        		}
 	        		break;
 		       	case 3://not tested
 		       		if (autoDrive(0, 0, 6, 1)){
-		       			goVision();
+	        			if (!GOWITHOUTVISION) {
+	        				goVision();
+	        			} else {
+	        				rtns();
+	        			}
 		        	}
 		        	break;
-	        		
+		       	case 4:
+		       		autoDrive(0, 0, 15);
+		       		break;
 	        	}
 	        	break;
 		    //=====================================================================================
@@ -197,8 +253,15 @@ public class Auto {
 	        		break;
 	        	case 1:
 	        		if (autoDrive(0.4, 0.4, 5, 4)) {
-	        			goVision();
+	        			if (!GOWITHOUTVISION) {
+	        				goVision();
+	        			} else {
+	        				rtns();
+	        			}
 	        		}
+	        		break;
+	        	case 2:
+	        		autoDrive(0, 0, 15);
 	        		break;
 	        	}
 	        	break;
@@ -372,6 +435,45 @@ public class Auto {
 	        	if (autoDrive(0.5, 0.5, 3)) {
 	        	}
 	        	break;
+	        	
+	        case 96:
+	        	switch (stage) {
+	        	case 0:
+	            	if (_intake.intakeMove(Intake.PORTDOWN)) {
+	            		rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.4, 0.4, 5, 4)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		boolean c1 = (_intake.intakeMove(Intake.PORTUP));
+	        		boolean c2 = (autoDrive(0.5, 0.5, 5, 
+	        				SmartDashboard.getNumber("autoMod 1", 4)));
+	        		
+	        		if (c1 && c2){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:
+	        		if (autoDrive(0, 0, 0, 15)) {
+	        			if (!GOWITHOUTVISION) {
+	        				goVision();
+	        			} else {
+	        				rtns();
+	        			}
+	        		}
+	        		break;
+	        	case 4:
+	        		autoDrive(0, 0, 15);
+	        		break;
+	        	}
+	        	break;
+	      
+	        	
+	        	
 	        case 420: //rockwall Matthew
 	        	switch (stage) {
 	        		case 1: 
