@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
         //
         _drive.initSafeCoding();
         _imageProcessing.initSafeCoding();
-        _tatorCannon.initSafeCoding();
+        //_tatorCannon.initSafeCoding();
         //
         
         SmartDashboard.putNumber("autocase", 0);
