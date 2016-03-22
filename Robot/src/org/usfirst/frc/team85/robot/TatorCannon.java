@@ -158,7 +158,7 @@ public class TatorCannon {
     private void buttonHeights() {
     	if (_operatorStick.getRawButton(4)){
     		armMove(YBUTTONHEIGHT);
-    		_intake.intakeMove(Intake.LOADPOS);
+    		_intake.intakeMove(Intake.HORIZONTAL);
     		return;
     	} else if (_operatorStick.getRawButton(9)) {
     		
@@ -167,7 +167,11 @@ public class TatorCannon {
     		
     		return;
     	} else if (_operatorStick.getRawButton(1)) {
-    		armMove(CLOSEFIRE);
+    		if (armMove(CLOSEFIRE)) {
+    			_intake.intakeMove(Intake.HOME);
+    		} else {
+    			_intake.intakeMove(Intake.FORTYFIVE);
+    		}
     		return;
     	} else if (_operatorStick.getPOV() == 0){ //auto heights both
 			armMove(AUTOHEIGHT);
