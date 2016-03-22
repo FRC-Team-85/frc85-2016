@@ -22,7 +22,7 @@ public class TankDrive {
     
     public TankDrive(Joystick DriveController) {
    	 greenLED = new Relay(DRIVE.LED, Relay.Direction.kForward);
-	 bigLED = new Relay(1, Relay.Direction.kForward);
+	 bigLED = new Relay(DRIVE.BIGLIGHT, Relay.Direction.kForward);
     	
         _controller = DriveController;
         _masterLeftMotor = new CANTalon(DRIVE.LEFT_FRONT_MOTOR);	//MASTER LEFT
@@ -75,6 +75,8 @@ public class TankDrive {
             motor.enableBrakeMode(enabled);
         }
     }
+    
+    private boolean centered;
 
     public void manualDrive() {
         double thrust = _controller.getY();
@@ -88,8 +90,7 @@ public class TankDrive {
         	//Auto aim
         	visionCenter();
         	return;
-        } 
-        else if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
+        } else if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
       //  	thrust *= 1;
        // 	turn *= 1;
         } else if (_controller.getRawButton(5)) {
@@ -104,6 +105,8 @@ public class TankDrive {
        // 	thrust *= 1;
         	turn *= 0.8;
         }
+        
+        
 
         if (_controller.getRawButton(10)) {	
         	if (!LEDToggled){

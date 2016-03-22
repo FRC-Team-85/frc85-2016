@@ -12,12 +12,12 @@ public class ImageProcessing {
 	
 	private static double area, height, width, centerX, centerY, aspectRatio;
 
-	private static int IMGXOFFSET = 0, IMGXTOL = 10;
-	private static int IMGYOFFSET = 0, IMGYTOL = 20;
+	private static int IMGXOFFSET = -20, IMGXTOL = 10;
+	private static int IMGYOFFSET = 50, IMGYTOL = 10;
 	
 	private static final double TARGETASPECTRATIO = 2.0; //	width/height
 	
-	private static final double VISIONCAPTURETIMEOUT = 0.05;
+	private static final double VISIONCAPTURETIMEOUT = 0.01;
 	
 	private static Timer _visionUpdateTimer;
 	

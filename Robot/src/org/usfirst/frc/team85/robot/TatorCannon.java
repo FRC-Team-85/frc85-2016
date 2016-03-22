@@ -210,7 +210,7 @@ public class TatorCannon {
     
     public void setCannonMode() {
     	if (_driveStick.getRawButton(2)) {		//VISION
-  //  		MODE = CannonMode.VISION;
+    		MODE = CannonMode.VISION;
     	} else if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
     	} else if (_operatorStick.getRawButton(7) && (WYATTSPRIVILEGE||!_bottomDartLimit.get())
@@ -230,10 +230,10 @@ public class TatorCannon {
     double upKd = 0;
     double downKp = 0.005;//1/15;
     double downKd = 0;
-    double maxUpPower = -1.0, minUpPower = -0.65;
-    double maxDownPower = 0.8, minDownPower = 0.5;
+    double maxUpPower = -0.3, minUpPower = -0.1;
+    double maxDownPower = 0.28, minDownPower = 0.05;
     
-   /* public void initSafeCoding(){
+   public void initSafeCoding(){
     	SmartDashboard.putNumber("ZZZ tc upKp", upKp);
     	SmartDashboard.putNumber("ZZZ tc upKd", upKd);
     	SmartDashboard.putNumber("ZZZ tc downKp", downKp);
@@ -243,7 +243,6 @@ public class TatorCannon {
     	SmartDashboard.putNumber("ZZZ tc maxDownPower", maxDownPower);
     	SmartDashboard.putNumber("ZZZ tc minDownPower", minDownPower);
     }
-    */
     
     public void muchSafeCoding(){
     	//Adjust with FX java on programming computer, along side Driver Station
@@ -263,6 +262,11 @@ public class TatorCannon {
     		
     	switch (MODE) {
     		case VISION:
+    			
+    			if (ImageProcessing.isVisionGone()){
+    				armMove(175);
+    			}
+    			
     			double error = ImageProcessing.yPixelsToTarget();
     	    	double changeInError = error - previousError;
     	    	previousError = error;
