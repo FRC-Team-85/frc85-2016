@@ -16,7 +16,7 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	public static final int LOADPOS = 		-210000;//-487048;
+	public static final int LOADPOS = 		-215000;//-487048;
 	public static final int LIFTHEIGHT = 	-300000;//NOT TESTED//-744000;
 	public static final int FLOOR = 		-297000;//-690000;
 	public static final int HOME = 			   1000;
@@ -160,13 +160,13 @@ public class Intake {
 		}
 		if(_encPos < target) {
 			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
-				setMotors(-0.8);
+				setMotors(-0.4);//-0.8);
 			} else {
 				setMotors(-1);
 			}
 		} else if(_encPos > target) {
 			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
-				setMotors(0.5);
+				setMotors(.2);//0.5);
 			} else {
 				setMotors(1);
 			}

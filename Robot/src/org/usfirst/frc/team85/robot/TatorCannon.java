@@ -16,7 +16,7 @@ public class TatorCannon {
 	public static final int AUTOHEIGHT = 100;
 	
 	private static final double DARTTOL = 1.25;		//auto angle tolerance
-	private static final double DARTSLOW = 10;
+	private static final double DARTSLOW = 15;
 	private static final double DARTMIN = 0;
 	private static final double DARTCAPSLOW = 45;
 	private static final double DARTMAX = 248;
@@ -170,7 +170,7 @@ public class TatorCannon {
     		if (armMove(CLOSEFIRE)) {
     			_intake.intakeMove(Intake.HOME);
     		} else {
-    			_intake.intakeMove(Intake.FORTYFIVE);
+    			_intake.intakeMove(Intake.AUTOANGLE);
     		}
     		return;
     	} else if (_operatorStick.getPOV() == 0){ //auto heights both
@@ -196,12 +196,12 @@ public class TatorCannon {
     			return true;
     		}
     		double speed = ((getEncoderValue() - target) > 0) ? 1.0 : -1.0;
-//  	  	double mult = (Math.abs(_dartEncoder.get() - target) <= DARTSLOW) ? 0.5 : 1.0;
+    		double mult = (Math.abs(target - getEncoderValue()) <= DARTSLOW) ? 0.5 : 1.0;
         	if (Intake.hasBeenInit && !_intake.belowFortyFive()) {
         		speed = 0;
         		_intake.intakeMove(Intake.FORTYFIVE);
         	}
-    		manualArmMotor(speed);
+    		manualArmMotor(speed*mult);
     	}
     	
     	return false;
