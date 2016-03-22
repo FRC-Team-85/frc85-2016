@@ -230,14 +230,14 @@ public class TatorCannon {
     	    }
     //====================
     double previousError = 0;
-    double upKp = 1/15;
+    double upKp = 0.005;//1/15;
     double upKd = 0;
-    double downKp = 1/15;
+    double downKp = 0.005;//1/15;
     double downKd = 0;
     double maxUpPower = -1.0, minUpPower = -0.65;
     double maxDownPower = 0.8, minDownPower = 0.5;
     
-    public void initSafeCoding(){
+   /* public void initSafeCoding(){
     	SmartDashboard.putNumber("ZZZ tc upKp", upKp);
     	SmartDashboard.putNumber("ZZZ tc upKd", upKd);
     	SmartDashboard.putNumber("ZZZ tc downKp", downKp);
@@ -247,6 +247,7 @@ public class TatorCannon {
     	SmartDashboard.putNumber("ZZZ tc maxDownPower", maxDownPower);
     	SmartDashboard.putNumber("ZZZ tc minDownPower", minDownPower);
     }
+    */
     
     public void muchSafeCoding(){
     	//Adjust with FX java on programming computer, along side Driver Station
@@ -258,6 +259,8 @@ public class TatorCannon {
     	minUpPower = SmartDashboard.getNumber("ZZZ tc minUpPower", minUpPower);
     	maxDownPower = SmartDashboard.getNumber("ZZZ tc maxDownPower", maxDownPower);
     	minDownPower = SmartDashboard.getNumber("ZZZ tc minDownPower", minDownPower);
+    	
+
     }
     //=====================
     public boolean runCannonMode() {
