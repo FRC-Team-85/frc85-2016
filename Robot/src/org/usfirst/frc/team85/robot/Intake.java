@@ -16,22 +16,22 @@ public class Intake {
 	
 	private Joystick opStick;
 
-	public static final int LOADPOS = 		-487048;
-	public static final int LIFTHEIGHT = 	-744000;
-	public static final int FLOOR = 		-690000;
+	public static final int LOADPOS = 		-210000;//-487048;
+	public static final int LIFTHEIGHT = 	-300000;//NOT TESTED//-744000;
+	public static final int FLOOR = 		-297000;//-690000;
 	public static final int HOME = 			   1000;
 	public static final int PORTDOWN =		0000000000000000; //down position
 	public static final int PORTUP =			0000000000000; //for portcolus
-	public static final int HORIZONTAL = 	-500000;
-	public static final int FORTYFIVE =  	-250000;
-	public static final int AUTOANGLE =  	-265000;//-330000
+	public static final int HORIZONTAL = 	-220000;//-500000;
+	public static final int FORTYFIVE =  	-111000;//-250000;
+	public static final int AUTOANGLE =  	-150000;//-265000;//-330000
 	
 	int _encPos;
 	
 	private double DEADBAND = 0.15;
 	
-	private double INTAKESLOWRANGE = 40000;	//35k
-	private double INTAKETOL = 10000;	//10k
+	private double INTAKESLOWRANGE = 20000;	//40k
+	private double INTAKETOL = 5000;	//10k
 	private CANTalon leftAngleMotor, rightAngleMotor, loadMotor;
 	private boolean init;
 	public static boolean hasBeenInit;
