@@ -49,6 +49,9 @@ public class ImageProcessing {
         
         _visionUpdateTimer = new Timer();
         _visionUpdateTimer.start();
+        
+        widthTimer = new Timer();
+        widthTimer.start();
 	}
 	
 	double[] areaArray = {0}, heightArray = {1}, widthArray = {1}, centerXArray = {160}, centerYArray = {120};
@@ -99,6 +102,17 @@ public class ImageProcessing {
 	    SmartDashboard.putNumber("Vision/Center X", centerX);
 	    SmartDashboard.putNumber("Vision/Center Y", centerY);
 	    SmartDashboard.putNumber("Vision/AspectRatio", aspectRatio);
+	}
+	
+	private static Timer widthTimer;
+	private static double latestWidth;
+	
+	public static double largestRecentWidth() {
+		if (widthTimer.get() > 0.01 || width > latestWidth) {
+			widthTimer.reset();
+			latestWidth = width;
+		}
+		return latestWidth;
 	}
 	
 	public static boolean isVisionGone() {
