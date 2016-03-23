@@ -84,6 +84,9 @@ public class Auto {
     	SmartDashboard.putString("AUTO/nv", "no vision " + GOWITHOUTVISION);
     	SmartDashboard.putString("AUTO/tryleft", "seek left " + SEEKLEFT);
     	
+
+		SmartDashboard.putString("Stage", "We are at stage " + stage);
+    	
 		if (!readyForVision) {
 	        switch (OBSTACLE) {
 	        //=====================================================================================
@@ -265,6 +268,26 @@ public class Auto {
 	        		break;
 	        	}
 	        	break;
+	        //==============================================
+	        case 10://SPYBOT
+	        	switch (stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = _cannon.armMove(TatorCannon.CORNERHEIGHT);
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		
+	        		break;
+	        	}
+	        	break;
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	        /*	
 				CCCC	 AA 	SSSS	EEEE		 111	0000	0000	 ''		SSSS
@@ -309,7 +332,7 @@ public class Auto {
 	        	
 	        	break;
 	        	
-	        case 101://low mod
+	        /*case 101://low mod
 	        	switch (stage) {
 	        	
 	        	case 0:
@@ -337,21 +360,59 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 4:
-	        		if (_cannon.armMove(216)){
+	        		if (autoDrive(0, 0, 8, 4)){
 	        			rtns();
 	        		}
 	        		break;
 	        	case 5:
-	        		if (_drive.visionCenter()) {
-						rtns();
-					}
+	        		if (_cannon.armMove(216)){
+	        			rtns();
+	        		}
 	        		break;
-	        	case 6:
+	      //  	case 6:
+	      //  		if (_drive.visionCenter()) {
+		//				rtns();
+		//			}
+	     //   		break;
+	        	case 6: //case 7:
 	        		_cannon.runAs(CannonMode.JUSTFIRE);
 	        		break;
 	        	}
 	        	
 	        	break;
+	        */
+	        case 102:
+	        	switch (stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.CORNERHEIGHT) : false;
+	        				
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if (autoDrive(SmartDashboard.getNumber("autoMod 1", 0.5),
+	        				SmartDashboard.getNumber("autoMod 2", 0.2),
+	        				SmartDashboard.getNumber("autoMod 3", 4),
+	        				SmartDashboard.getNumber("autoMod 4", 3))){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:
+	        		autoDrive(0, 0, 8, 4);
+	        		break;
+	        	}
+	        	break;
+	        	
+	        	
+	        	
 	        case 110://rampart
 	        	switch (stage) {
 	        	case 0:

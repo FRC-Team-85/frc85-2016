@@ -79,6 +79,10 @@ public class Intake {
         System.out.println("Intake Init Done");
 	} 
 	
+	public void bootInit(){
+		init = false;
+	}
+	
 	public boolean init() {
 		if (!init) {
 			if (upIntakeLimit.get()) {

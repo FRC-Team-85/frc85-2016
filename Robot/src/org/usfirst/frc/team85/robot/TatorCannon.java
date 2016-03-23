@@ -14,6 +14,7 @@ public class TatorCannon {
 	public static final int YBUTTONHEIGHT = 175;
 	public static final int ALITTLEOFFTHEGROUND = 1;
 	public static final int AUTOHEIGHT = 100;
+	public static final int CORNERHEIGHT = 185;
 	
 	private static final double DARTTOL = 1.25;		//auto angle tolerance
 	private static final double DARTSLOW = 15;
@@ -121,6 +122,10 @@ public class TatorCannon {
         System.out.println("TatorCannon Init Done");
         
     }
+	
+	public void bootInit() {
+		init = false;
+	}
 	
 	public boolean init() {
 		if (!init) {
@@ -343,6 +348,7 @@ public class TatorCannon {
         		_spitInit = false;
         		_loadInit = false;
         		_storageInit = false;
+        		_justFireInit = false;
     			break;
     /*		case AUTOFIRE:
     			if (autoFireInit) {
@@ -391,6 +397,7 @@ public class TatorCannon {
 					if (_delayTimer.get() > JUSTFIREALLDONE) {
 						indexOff();
 						setOuter(0.0);
+						return true;
 					} else if (_delayTimer.get() > JUSTFIREDELAY) {
     					indexOut();
     					setOuter(FIRERPM);

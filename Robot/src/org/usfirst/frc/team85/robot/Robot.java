@@ -98,13 +98,15 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
     	_auto = new Auto(_drive, _intake, _tatorCannon);
+    	_intake.bootInit();
+    	_tatorCannon.bootInit();
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	if (_intake.init() && _tatorCannon.init()) {
+    	if (_tatorCannon.init() && _intake.init()) {
     		_imageProcessing.process();
     		_auto.run();
     	}
