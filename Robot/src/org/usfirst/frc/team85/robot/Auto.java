@@ -309,6 +309,49 @@ public class Auto {
 	        	
 	        	break;
 	        	
+	        case 101://low mod
+	        	switch (stage) {
+	        	
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.HORIZONTAL);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.5, 0.5, 4, 4)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if (autoDrive(0, 0, 8, 1)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:
+	        		if (autoDrive(0.9, 0.1, 4, 2.75)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 4:
+	        		if (_cannon.armMove(216)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 5:
+	        		if (_drive.visionCenter()) {
+						rtns();
+					}
+	        		break;
+	        	case 6:
+	        		_cannon.runAs(CannonMode.JUSTFIRE);
+	        		break;
+	        	}
+	        	
+	        	break;
 	        case 110://rampart
 	        	switch (stage) {
 	        	case 0:

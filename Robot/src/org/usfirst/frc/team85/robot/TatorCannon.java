@@ -344,20 +344,24 @@ public class TatorCannon {
         		_loadInit = false;
         		_storageInit = false;
     			break;
-    		case AUTOFIRE:
-    			if (true) {	//opButton or Auto
-    				if (armMove(FIREPOS) &&
-        					(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) &&
-        					(Math.abs(_outerTopMotor.get()-FIRERPM) <= RPMTOL) ) {
+    /*		case AUTOFIRE:
+    			if (autoFireInit) {
+    				if (autoFireTimer.get() > AUTOFIRETIME){
+    					setOuter(0.0);
+    					indexOff();
+    				} else if (autoFireTimer.get() > AUTOFIRE){
+    					setOuter(FIRERPM);
     					indexOut();
-        				//MODE = asdfasdfasdfas;
     				} else {
         				setOuter(FIRERPM);
         				indexOff();
         			}
+    			} else {
+    				autoFireTimer.reset();
+    				autoFireInit = true;
     			}
     			break;
-    		case AUTOLOAD:
+    	*/	case AUTOLOAD:
     			if (_intake.run(readyToLoad()) && (true) && !_loadComplete) {	//opButton or Auto
     	        	// if _intake is trying to load the cannon, wants to load, and not done loading
     	        	if (!_loadInit) {
@@ -384,11 +388,15 @@ public class TatorCannon {
     				_justFireInit = true;
     				_delayTimer.reset();
     			} else {
-					setOuter(FIRERPM);
 					if (_delayTimer.get() > JUSTFIREALLDONE) {
 						indexOff();
+						setOuter(0.0);
 					} else if (_delayTimer.get() > JUSTFIREDELAY) {
     					indexOut();
+    					setOuter(FIRERPM);
+    				} else {
+    					indexOff();
+    					setOuter(FIRERPM);
     				}
     			}
     			break;
