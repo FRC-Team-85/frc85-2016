@@ -178,7 +178,8 @@ public class TatorCannon {
     			_intake.intakeMove(Intake.AUTOANGLE);
     		}
     		return;
-    	} else if (_operatorStick.getPOV() == 0){ //auto heights both
+    	}     	
+    	else if (_operatorStick.getPOV() == 0){ //auto heights both
 			armMove(AUTOHEIGHT);
 			return;
 		} else if (_operatorStick.getPOV() == 270) { //left

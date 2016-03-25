@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 
         _drive = new TankDrive(_driveStick);
         _intake = new Intake(_operatorStick);
-        _tatorCannon = new TatorCannon(_operatorStick,_driveStick, _intake);
+        _tatorCannon = new TatorCannon(_operatorStick, _driveStick, _intake);
         
         _imageProcessing = new ImageProcessing();
         //
@@ -127,6 +127,16 @@ public class Robot extends IterativeRobot {
 //	/*	
     	//PowerMonitoring.Monitor();
     	_imageProcessing.process();
+    	/*
+    	if (_operatorStick.getRawButton(99)) {
+    		if (_tatorCannon.armMove(TatorCannon.CLOSEFIRE) && _intake.intakeMove(Intake.HOME)) {
+    			if (_drive.visionCenter()){
+    				_tatorCannon.runAs(CannonMode.JUSTFIRE);
+    			}
+    		}
+    		return;
+    	}
+    	*/
   		_drive.manualDrive();
     	_intake.run(true);
     	_tatorCannon.run(false);	//Always last, has priority control over intake
@@ -141,6 +151,7 @@ public class Robot extends IterativeRobot {
         	_drive.visionCenter();
     		_tatorCannon.runAs(CannonMode.VISION);
     	}
+    	
 //	*/	
     }
     

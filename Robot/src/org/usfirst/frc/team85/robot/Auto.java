@@ -12,19 +12,18 @@ public class Auto {
 	for the switch cases, add run commands based on found values - conclude with 0,0,- and camera command
 	 */
 
-		Timer _autoTimer;	
+	Timer _autoTimer;	
 	private boolean timerInit;
 	private double whatTimeIsIt;
 
 	private double timerReference;
 	
-		private TankDrive _drive;
+	private TankDrive _drive;
+	private Intake _intake;
+	private TatorCannon _cannon;
+	
 	private final double DEFAULTRAMPRATE = 4.0;
-	
-		private Intake _intake;
-	
-		private TatorCannon _cannon;
-	
+
 	private int OBSTACLE = 0;
 	private boolean GOWITHOUTVISION = true;
 	private boolean SEEKLEFT = false;
@@ -332,7 +331,7 @@ public class Auto {
 	        	
 	        	break;
 	        	
-	        /*case 101://low mod
+	        case 101://low mod
 	        	switch (stage) {
 	        	
 	        	case 0:
@@ -355,32 +354,33 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 3:
+	        		_cannon.armMove(216);
 	        		if (autoDrive(0.9, 0.1, 4, 2.75)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 4:
-	        		if (autoDrive(0, 0, 8, 4)){
+	        		if (autoDrive(0, 0, 8, 1) & _cannon.armMove(216)){
 	        			rtns();
 	        		}
 	        		break;
 	        	case 5:
-	        		if (_cannon.armMove(216)){
+	        		if (_drive.visionCenter()) {
+						rtns();
+					}
+	        		break;
+	        	case 6:
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
 	        			rtns();
 	        		}
 	        		break;
-	      //  	case 6:
-	      //  		if (_drive.visionCenter()) {
-		//				rtns();
-		//			}
-	     //   		break;
-	        	case 6: //case 7:
-	        		_cannon.runAs(CannonMode.JUSTFIRE);
+	        	case 7:
+	        		_cannon.runAs(CannonMode.MANUAL);
 	        		break;
 	        	}
 	        	
 	        	break;
-	        */
+	        
 	        case 102:
 	        	switch (stage) {
 	        	case 0:

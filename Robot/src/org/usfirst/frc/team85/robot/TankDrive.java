@@ -86,7 +86,8 @@ public class TankDrive {
                                                                            
         turn = -1.15 * turnControlCubed +
                 0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified 0.8(-1.15x^3+0.38x^9)
-        if(_controller.getRawButton(2)) {
+        
+    	if(_controller.getRawButton(2)) {
         	//Auto aim
         	visionCenter();
         	return;
@@ -106,8 +107,6 @@ public class TankDrive {
         	turn *= 0.8;
         }
         
-        
-
         if (_controller.getRawButton(10)) {	
         	if (!LEDToggled){
         		LEDToggle = !LEDToggle;
