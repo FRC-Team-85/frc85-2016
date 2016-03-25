@@ -187,8 +187,9 @@ public class TankDrive {
     }
     
     double previousError = 0;
-    double Kp = 0.005;
-    double Kd = 0;
+    double Kp = 0.010; //  1/160;
+    double Kd = 0.001;
+    double Ki = 0.;
     double maxPower = 0.5, minPower = 0.32;
     
     public void initSafeCoding(){
@@ -212,12 +213,20 @@ public class TankDrive {
     	double error = ImageProcessing.xPixelsToTarget();
     	double changeInError = error - previousError;
     	previousError = error;
+    	
+    	if (ImageProcessing.isVisionGone()){
+    		setMotors(0, 0);
+    		return false;
+    	}
+    	   	
     	if (ImageProcessing.withinXTolerance()) {
     		setMotors(0, 0);
     		return true;
     	}
+    	
     	double power = Kp * error + Kd * changeInError;
     	System.out.println(error + " " + power);
+    	    	
     	if (Math.abs(power) > maxPower) {
     		if (power > 0) power = maxPower;
     		else power = -maxPower;

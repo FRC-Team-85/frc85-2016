@@ -170,7 +170,7 @@ public class Intake {
 			}
 		} else if(_encPos > target) {
 			if (Math.abs(_encPos-target) <= INTAKESLOWRANGE) {
-				setMotors(.2);//0.5);
+				setMotors(.3);//0.5);
 			} else {
 				setMotors(1);
 			}

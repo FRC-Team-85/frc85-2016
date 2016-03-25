@@ -14,7 +14,7 @@ public class TatorCannon {
 	public static final int YBUTTONHEIGHT = 175;
 	public static final int ALITTLEOFFTHEGROUND = 1;
 	public static final int AUTOHEIGHT = 100;
-	public static final int CORNERHEIGHT = 185;
+	public static final int CORNERHEIGHT = 187;
 	
 	private static final double DARTTOL = 1.25;		//auto angle tolerance
 	private static final double DARTSLOW = 15;
@@ -55,7 +55,7 @@ public class TatorCannon {
 	private boolean _spitInit, _loadInit, _loadComplete, _storageInit;
 	
 	private boolean _justFireInit;
-	private static final double JUSTFIREDELAY = 1.0, JUSTFIREALLDONE = 2.0;
+	private static final double JUSTFIREDELAY = 4.0, JUSTFIREALLDONE = 5.5;
 		
 	DigitalInput _topDartLimit;
 	DigitalInput _bottomDartLimit;
@@ -219,7 +219,7 @@ public class TatorCannon {
     
     public void setCannonMode() {
     	if (_driveStick.getRawButton(2)) {		//VISION
-    		MODE = CannonMode.VISION;
+    		//MODE = CannonMode.VISION;
     	} else if (_driveStick.getRawButton(7)) {		//Left bumper
     		MODE = CannonMode.CHARGE;
     	} else if (_operatorStick.getRawButton(7) && (WYATTSPRIVILEGE||!_bottomDartLimit.get())
