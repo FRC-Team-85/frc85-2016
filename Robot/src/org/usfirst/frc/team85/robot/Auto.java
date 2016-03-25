@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Auto {
 		
-	/*
+	/* 
 	for the switch cases, add run commands based on found values - conclude with 0,0,- and camera command
 	 */
 
