@@ -187,10 +187,10 @@ public class TankDrive {
     }
     
     double previousError = 0;
-    double Kp = 0.010; //  1/160;
-    double Kd = 0.001;
+    double Kp = 0.005; //  1/160;
+    double Kd = 0.000;
     double Ki = 0.;
-    double maxPower = 0.5, minPower = 0.32;
+    double maxPower = 0.95, minPower = 0.35;
     
     public void initSafeCoding(){
     	SmartDashboard.putNumber("ZZZ drive Kp", Kp);
