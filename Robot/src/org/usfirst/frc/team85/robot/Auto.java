@@ -335,6 +335,7 @@ public class Auto {
 	        	switch (stage) {
 	        	
 	        	case 0:
+	        		
 	            	boolean c1 = _intake.intakeMove(Intake.HORIZONTAL);
 	        		boolean c2 = (_intake.belowFortyFive()) ? 
 	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND) : false;
@@ -344,18 +345,19 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 1:
-	        		if (autoDrive(0.5, 0.5, 4, 4)) {
+	        		if (autoDrive(0.6, 0.6, 8, 3)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 2:
-	        		if (autoDrive(0, 0, 8, 1)) {
+	        		_cannon.armMove(216);
+	        		if (autoDrive(0, 0, 8, 0.4)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 3:
 	        		_cannon.armMove(216);
-	        		if (autoDrive(0.9, 0.1, 4, 2.75)) {
+	        		if (autoDrive(0.9, 0.1, 4, 1.5)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -365,6 +367,7 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 5:
+	        		_cannon.runAs(CannonMode.JUSTCHARGE);
 	        		if (_drive.visionCenter()) {
 						rtns();
 					}
