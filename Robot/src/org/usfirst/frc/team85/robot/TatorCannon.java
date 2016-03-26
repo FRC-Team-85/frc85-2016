@@ -168,10 +168,10 @@ public class TatorCannon {
     	} else if (_operatorStick.getRawButton(9)) {
     		
     		return;
-    	} else if (_operatorStick.getRawButton(2)) {
-    		
+    	} else if (_operatorStick.getRawButton(2)) { //a
+    		armMove(CORNERHEIGHT);
     		return;
-    	} else if (_operatorStick.getRawButton(1)) {
+    	} else if (_operatorStick.getRawButton(1)) { //x
     		if (armMove(CLOSEFIRE)) {
     			_intake.intakeMove(Intake.HOME);
     		} else {

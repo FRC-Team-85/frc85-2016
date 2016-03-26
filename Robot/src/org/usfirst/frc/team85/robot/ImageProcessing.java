@@ -55,10 +55,15 @@ public class ImageProcessing {
 	}
 	
 	double[] areaArray = {0}, heightArray = {1}, widthArray = {1}, centerXArray = {160}, centerYArray = {120};
+	boolean EverGotVision = false;
 	
 	public void process() {
 		
     	try {
+    		
+    		EverGotVision = (!isVisionGone()) ? true : EverGotVision;
+    		SmartDashboard.putBoolean("Vision", EverGotVision);
+    		
     		_table = NetworkTable.getTable("GRIP/contoursReport");
 			areaArray = _table.getNumberArray("area", areaArray);
 			heightArray = _table.getNumberArray("height", heightArray);	//avoid /0

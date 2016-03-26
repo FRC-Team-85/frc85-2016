@@ -355,9 +355,9 @@ public class Auto {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 3:
+	        	case 3: //turn
 	        		_cannon.armMove(216);
-	        		if (autoDrive(0.9, 0.1, 4, 1.5)) {
+	        		if (autoDrive(0.9, 0.1, 4, 1.75)) {
 	        			rtns();
 	        		}
 	        		break;
