@@ -296,6 +296,49 @@ public class Auto {
 	         */	
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	       
+	        case 16://SPYBOT SHOOT AND TURN THRU LOWBAR
+	        	switch (stage) {
+	        	case 0: //move the intake and arm
+	            	boolean d1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean d2 = _cannon.armMove(TatorCannon.CORNERHEIGHT);
+	        		if (d1 && d2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1: //fire the ball
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2: //small turn
+	        		if (autoDrive(1.0, -1.0, 4, .5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3: //STOP
+	        		if (autoDrive(0.0, 0.0, 4, .75)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 4: //big turn
+	        		if (autoDrive(1.0, -1.0, 4, .75)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 5: //forward
+	        		if (autoDrive(0.9, 0.9, 4, 3)) {
+	        			rtns();
+	        		}
+	        	case 6: //back up
+	        		if (autoDrive(-0.4, -0.4, 4, 3)) {
+	        			rtns();
+	        		}
+	        	case 7: //go thru
+	        		if (autoDrive(0.9, 0.9, 4, 3)) {
+	        			rtns();
+	        		}
+	        	break;
+	        	
 	        case 100://low
 	        	switch (stage) {
 	        	
@@ -598,7 +641,11 @@ public class Auto {
 	        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 	        	
 	        case -1:
+	        	switch (stage) {
+	        	case 1:
+	        	}
 	        	runSDB();
+	        	}
 	        	break;
 	        	
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
