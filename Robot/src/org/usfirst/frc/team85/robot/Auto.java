@@ -299,6 +299,7 @@ public class Auto {
 	        case 16://SPYBOT SHOOT AND TURN THRU LOWBAR
 	        	switch (stage) {
 	        	case 0: //move the intake and arm
+	        		_cannon.runAs(CannonMode.MANUAL);
 	            	boolean d1 = _intake.intakeMove(Intake.AUTOANGLE);
 	        		boolean d2 = _cannon.armMove(TatorCannon.CORNERHEIGHT);
 	        		if (d1 && d2) {
@@ -311,24 +312,101 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 2: //small turn
-	        		if (autoDrive(1.0, -1.0, 4, .5)) {
+	            	_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (_intake.belowFortyFive()){
+	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND);
+	        		}
+	        		if (autoDrive(1.0, 0.0, 20, 0.2)) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 3: //STOP
-	        		if (autoDrive(0.0, 0.0, 4, .75)) {
+	        	case 3: //small turn
+	            	_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (_intake.belowFortyFive()){
+	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND);
+	        		}
+	        		if (autoDrive(1.0, -1.0, 10, 1.0)) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 4: //big turn
-	        		if (autoDrive(1.0, -1.0, 4, .75)) {
+	        	case 4: //STOP
+	            	_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (_intake.belowFortyFive()){
+	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND);
+	        		}
+	        		if (autoDrive(0.0, 0.0, 8, .5)) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 5: //forward
-	        		if (autoDrive(0.9, 0.9, 4, 3)) {
+	        	case 5: //FORWARD
+	            	_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (_intake.belowFortyFive()){
+	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND);
+	        		}
+	        		if (autoDrive(0.0, 0.0, 4, 0.01)){
 	        			rtns();
 	        		}
+	        		break;
+	        	case 6: //STOP
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(0.0, 0.0, 8, .5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 7: //big turn
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(0.8, -1.0, 8, 0.2)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 8: //STOP
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(0.0, 0.0, 8, .75)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 9: //REVERSE
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(-1.0, -1.0, 8, 1.2)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 10: //STOP
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(0.0, 0.0, 8, .25)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 11: //FORWARD WITH TILT
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(1.0, 0.95, 4, .5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 12: //STOP
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(0.0, 0.0, 8, .75)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 13: //FORWARD OTHER WAY
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(0.75, 1.0, 4, .5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 14: //FORWARD
+	        		_intake.intakeMove(Intake.HORIZONTAL);
+	        		if (autoDrive(1.0, 1.0, 4, 0.5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 15: //STOP
+	        		if (autoDrive(0.0, 0.0, 8, .75)) {
+	        			rtns();
+	        		}
+	        		break;
+	        		/*
 	        	case 6: //back up
 	        		if (autoDrive(-0.4, -0.4, 4, 3)) {
 	        			rtns();
@@ -338,6 +416,7 @@ public class Auto {
 	        			rtns();
 	        		}
 	        	break;
+	        	*/
 	        	
 	        case 100://low
 	        	switch (stage) {

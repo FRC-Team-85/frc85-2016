@@ -157,8 +157,8 @@ public class TankDrive {
         _masterRightMotor.set(-rSpeed);
         SmartDashboard.putNumber("Lspeed.get(): ", lSpeed);
         SmartDashboard.putNumber("Lspeed.set(): ", getLeftSpeed());
-        SmartDashboard.putNumber("Rspeed.get(): ", rSpeed);
-        SmartDashboard.putNumber("Rspeed.set(): ", getRightSpeed());
+        SmartDashboard.putNumber("Rspeed.get(): ", -rSpeed);
+        SmartDashboard.putNumber("Rspeed.set(): ", -getRightSpeed());
     }
 
     public double getLeftSpeed() {
