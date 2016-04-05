@@ -20,8 +20,8 @@ public class Intake {
 	public static final int LIFTHEIGHT = 	-300000;//NOT TESTED//-744000;
 	public static final int FLOOR = 		-297000;//-690000;
 	public static final int HOME = 			   1000;
-	public static final int PORTDOWN =		0000000000000000; //down position
-	public static final int PORTUP =			0000000000000; //for portcolus
+	public static final int PORTDOWN =		0; //down position
+	public static final int PORTUP =		0; //for portcolus
 	public static final int HORIZONTAL = 	-220000;//-500000;
 	public static final int FORTYFIVE =  	-111000;//-250000;
 	public static final int AUTOANGLE =  	-150000;//-265000;//-330000
@@ -141,10 +141,30 @@ public class Intake {
 		} else if (intakeInit && _delayTimer.get() > INTAKEDELAY) {
 			loadMotor.set(1);
 		}
-		if (intakeMove(LOADPOS) && cannonReady) {
+		if (/*intakeMove(LOADPOS)*/chompa() && cannonReady) {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean chompa() {
+		_encPos = rightAngleMotor.getEncPosition();
+		SmartDashboard.putNumber("Intake Position", _encPos);
+		SmartDashboard.putNumber("Intake Position Target", LOADPOS);
+		if(_encPos <= LOADPOS) {
+			if (Math.abs(_encPos-LOADPOS) <= INTAKESLOWRANGE) {
+				setMotors(-0.4);//-0.8);
+			} else {
+				setMotors(-1);
+			}
+		} else if(_encPos > LOADPOS) {
+			if (Math.abs(_encPos-LOADPOS) <= INTAKESLOWRANGE) {
+				setMotors(.3);//0.5);
+			} else {
+				setMotors(1);
+			}
+		}
+		return (_encPos >= (LOADPOS-INTAKETOL) && _encPos <= LOADPOS) ? true : false;
 	}
 
 	public boolean intakeMove(double target) {	//setMotors(+) goes down, setMotors(-) goes up
