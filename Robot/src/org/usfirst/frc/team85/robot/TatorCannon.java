@@ -9,18 +9,18 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 public class TatorCannon {
 
 	public static final int LOADPOS = 0;		//auto load pos -- 
-	public static final int FIREPOS = 170;		//auto fire pos -- 
-	public static final int CLOSEFIRE = 247; //firing from right up to tower ramp
-	public static final int YBUTTONHEIGHT = 175;
+	public static final int FIREPOS = 170;		//auto fire pos --
+	public static final int CLOSEFIRE = 247; //firing from right up to tower ramp //240		//59 degrees
+	public static final int YBUTTONHEIGHT = 175;	//167 on practice bot after mods		//36 degrees
 	public static final int ALITTLEOFFTHEGROUND = 1;
 	public static final int AUTOHEIGHT = 100;
 	public static final int CORNERHEIGHT = 187;
 	
 	private static final double DARTTOL = 1.25;		//auto angle tolerance
 	private static final double DARTSLOW = 15;
-	private static final double DARTMIN = 0;
+	private static final double DARTMIN = 0;	//Normally 0, on Practice Bot is 7
 	private static final double DARTCAPSLOW = 45;
-	private static final double DARTMAX = 248;
+	private static final double DARTMAX = 248;												//64 degrees
 	private static final boolean WYATTSPRIVILEGE = false;
 	
 	private static boolean resetAtTop;
@@ -480,7 +480,7 @@ public class TatorCannon {
     }
     
     private double getEncoderValue() {
-    	return resetAtTop ? _dartEncoder.get() + DARTMAX : _dartEncoder.get();
+    	return resetAtTop ? _dartEncoder.get() + DARTMAX : _dartEncoder.get() + DARTMIN;
     }
     
 }
