@@ -68,9 +68,7 @@ public class Robot extends IterativeRobot {
         _imageProcessing.initSafeCoding();
         //_tatorCannon.initSafeCoding();
         //
-        
-        SmartDashboard.putNumber("autocase", 0);
-        
+                
         try {
         	_server = CameraServer.getInstance();
         	_server.startAutomaticCapture();
@@ -79,20 +77,18 @@ public class Robot extends IterativeRobot {
         	System.out.println(ex.toString());
         }
         
-        /*
-         public void presidentialElection() {
-         
-         if president.get("Donald Trump") {
-         	get(Popcorn);
-         }
-         else if president.get("Hillary Clinton) || president.get("Bernie Spenders") {
-         	move(Canada);
-         }
-         else {
-         
-         }
-         
-         */
+		if (true) {
+			SmartDashboard.putNumber("autocase", 0);
+			SmartDashboard.putBoolean("gwv", true);
+			SmartDashboard.putBoolean("seekleft", false);				
+		}
+		if (true) {
+			SmartDashboard.putNumber("autoMod 1", 0);
+			SmartDashboard.putNumber("autoMod 2", 0);
+			SmartDashboard.putNumber("autoMod 3", 0);
+			SmartDashboard.putNumber("autoMod 4", 0);
+			SmartDashboard.putNumber("autoMod 5", 0);
+		}
         
     }
 
@@ -115,8 +111,9 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         _drive.setVoltageRamp(0.0); //Removes voltage ramp limit
         _drive.setBrakeMode(false);
-        
-       
+        _tatorCannon.runAs(CannonMode.MANUAL);
+        _drive.manualDrive();
+               
     }
 
     /**

@@ -35,32 +35,12 @@ public class Auto {
         _drive = drive;
     	_drive.setVoltageRamp(DEFAULTRAMPRATE); //Limits controllers to _V/sec
         _drive.setBrakeMode(true);
+        _drive.setMotors(0.0, 0.0);
         _intake = intake;
         _cannon = cannon;
-//        OBSTACLE = (int) SmartDashboard.getNumber("AUTO/autocase", 0);
- //       GOWITHOUTVISION = SmartDashboard.getBoolean("AUTO/gowithoutvision", true);
-//        SEEKLEFT = SmartDashboard.getBoolean("AUTO/seekleft", false);
+        _cannon.runAs(CannonMode.MANUAL);
         _autoTimer = new Timer();
 	    _autoTimer.start();
-			if (true) {
-		        SmartDashboard.putString("AutoManual/case 0", "CASE 0: DEAD");
-		        SmartDashboard.putString("AutoManual/case 1", "CASE 1: Low Bar");
-		        SmartDashboard.putString("AutoManual/case 2", "CASE 2: DEAD");
-		        SmartDashboard.putString("AutoManual/case 3", "CASE 3: DEAD");
-		        SmartDashboard.putString("AutoManual/case 4", "CASE 4: Moat");
-		        SmartDashboard.putString("AutoManual/case 5", "CASE 5: Rampart");
-		        SmartDashboard.putString("AutoManual/case 6", "CASE 6: DEAD");
-		        SmartDashboard.putString("AutoManual/case 7", "CASE 7: DEAD");
-		        SmartDashboard.putString("AutoManual/case 8", "CASE 8: Rock Wall");
-		        SmartDashboard.putString("AutoManual/case 9", "CASE 9: Rough Terrain");
-	        }
-			if (true) {
-				SmartDashboard.putNumber("autoMod 1", 4);
-				SmartDashboard.putNumber("autoMod 2", 0);
-				SmartDashboard.putNumber("autoMod 3", 0);
-				SmartDashboard.putNumber("autoMod 4", 0);
-				SmartDashboard.putNumber("autoMod 5", 0);
-			}
 	}
         
 	public void run() {
@@ -71,8 +51,8 @@ public class Auto {
 		}
 
         OBSTACLE = (int) SmartDashboard.getNumber("autocase", OBSTACLE);
-        GOWITHOUTVISION = true;//SmartDashboard.getBoolean("AUTO/gowithoutvision", true);
-        SEEKLEFT = false;//SmartDashboard.getBoolean("AUTO/seekleft", false);
+        GOWITHOUTVISION = SmartDashboard.getBoolean("gwv", GOWITHOUTVISION);
+        SEEKLEFT = SmartDashboard.getBoolean("seekleft", SEEKLEFT);
 		
 		whatTimeIsIt = _autoTimer.get();
 		SmartDashboard.putString("DB/String 0", whatTimeIsIt + "sec");
@@ -411,12 +391,16 @@ public class Auto {
 	        		if (autoDrive(-0.4, -0.4, 4, 3)) {
 	        			rtns();
 	        		}
+	        		break;
 	        	case 7: //go thru
 	        		if (autoDrive(0.9, 0.9, 4, 3)) {
 	        			rtns();
 	        		}
-	        	break;
+	        		break;
+	    
 	        	*/
+	        	}
+	        	break;
 	        	
 	        case 100://low
 	        	switch (stage) {
@@ -455,9 +439,7 @@ public class Auto {
 	        	
 	        case 101://low mod
 	        	switch (stage) {
-	        	
 	        	case 0:
-	        		
 	            	boolean c1 = _intake.intakeMove(Intake.HORIZONTAL);
 	        		boolean c2 = (_intake.belowFortyFive()) ? 
 	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND) : false;
@@ -472,25 +454,25 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 2:
-	        		_cannon.armMove(216);
+	        		_cannon.armMove(225);
 	        		if (autoDrive(0, 0, 8, 0.4)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 3: //turn
-	        		_cannon.armMove(216);
-	        		if (autoDrive(0.9, 0.1, 4, 1.75)) {
+	        		_cannon.armMove(225);
+	        		if (autoDrive(0.9, 0.1, 4, 1.625)) {//1.75
 	        			rtns();
 	        		}
 	        		break;
 	        	case 4:
-	        		if (autoDrive(0, 0, 8, 1) & _cannon.armMove(216)){
+	        		if (autoDrive(0, 0, 8, 1) & _cannon.armMove(225)){
 	        			rtns();
 	        		}
 	        		break;
 	        	case 5:
-	        		_cannon.runAs(CannonMode.JUSTCHARGE);
-	        		if (_drive.visionCenter()) {
+//	        		_cannon.runAs(CannonMode.JUSTCHARGE);
+	        		if (_drive.visionCenter()/* || _autoTimer.get() > 4*/) {
 						rtns();
 					}
 	        		break;
@@ -501,10 +483,24 @@ public class Auto {
 	        		break;
 	        	case 7:
 	        		_cannon.runAs(CannonMode.MANUAL);
+	        		rtns();
 	        		break;
-	        	}
-	        	
-	        	break;
+	        	case 8:
+	        		if (_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 9:
+	        		_intake.chompa();
+	        		if (_autoTimer.get() > 1) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 10:
+	        		_intake.intakeMove(Intake.HOME);
+	        		break;
+	        }
+	        break;
 	        
 	        case 102:
 	        	switch (stage) {
@@ -717,13 +713,56 @@ public class Auto {
 	        			break;
 	        	}
 	        	break;
+	        	
+	        case 125://
+	        	switch (stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.PORTDOWN);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(0.4, 0.4, 4, 1.5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if (autoDrive(1.0, 1.0, 4, 2.5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:
+	        		_intake.intakeMove(Intake.AUTOANGLE);
+	        		if (_intake.belowFortyFive()) {
+	        			_cannon.armMove(160);
+	        		}
+	        		if (autoDrive(0.0, 0.0, 8, 1)) {
+	        			rtns();
+	        		}
+	        		break;
+	        		
+	        	}
+	        	break;
 	        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 	        	
-	        case -1:
+	        case 15:
 	        	switch (stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(180) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
 	        	case 1:
-	        	}
-	        	runSDB();
+	        		goVision();
+	        		break;
 	        	}
 	        	break;
 	        	
@@ -742,14 +781,26 @@ public class Auto {
 	         */
 			if (!GOWITHOUTVISION) {
 				_drive.ledToggle(true);
-				if (!ImageProcessing.isVisionGone()) {
-					if (_cannon.runAs(CannonMode.VISION) && _drive.visionCenter()) {
-						
-					}
+				_cannon.armMove(180);
+				if (stage == -1) {
+					_drive.setMotors(0.0, 0.0);
+					_cannon.runAs(CannonMode.JUSTFIRE);
+					return;
+				} else if (_drive.visionCenter()) {
+					stage = -1;
+					_drive.setMotors(0.0, 0.0);
+					return;
 				} else if (ImageProcessing.isVisionGone() && SEEKLEFT){
-					autoDrive(-0.6, 0.6, 15);
+//					_drive.setMotors(0.4, -0.4);
+					autoDrive(-0.4, 0.4, 4, 15);
+					return;
 				} else if (ImageProcessing.isVisionGone() && !SEEKLEFT){
-					autoDrive(0.6, -0.6, 15);
+//					_drive.setMotors(-0.4, 0.4);
+					autoDrive(0.4, -0.4, 4, 15);
+					return;
+				} else {
+					_drive.setMotors(0.0, 0.0);
+					return;
 				}
 			} else {
 				autoDrive(0, 0, 10, 15);

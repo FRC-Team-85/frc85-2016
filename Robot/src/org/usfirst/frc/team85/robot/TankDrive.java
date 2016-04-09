@@ -189,7 +189,7 @@ public class TankDrive {
     double Kp = 0.005; //  1/160;
     double Kd = 0.000;
     double Ki = 0.;
-    double maxPower = 0.95, minPower = 0.35;
+    double maxPower = 0.95, minPower = 0.35;//.95,.35
     
     public void initSafeCoding(){
     	SmartDashboard.putNumber("ZZZ drive Kp", Kp);
@@ -209,6 +209,8 @@ public class TankDrive {
     public boolean visionCenter() {
     	ledToggle(true);    	
     	
+    	this.setVoltageRamp(16);
+    	
     	double error = ImageProcessing.xPixelsToTarget();
     	double changeInError = error - previousError;
     	previousError = error;
@@ -220,6 +222,7 @@ public class TankDrive {
     	   	
     	if (ImageProcessing.withinXTolerance()) {
     		setMotors(0, 0);
+    		SmartDashboard.putBoolean("ALIGNED", true);
     		return true;
     	}
     	
@@ -235,6 +238,7 @@ public class TankDrive {
     		else power = -minPower;
     	}
     	setMotors(power, -power);
+		SmartDashboard.putBoolean("ALIGNED", false);
     	return false;
     }    
 }

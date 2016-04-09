@@ -7,21 +7,21 @@ import org.usfirst.frc.team85.robot.Addresses.*;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class TatorCannon {
-
-	public static final int LOADPOS = 0;		//auto load pos -- 
-	public static final int FIREPOS = 170;		//auto fire pos --
-	public static final int CLOSEFIRE = 247; //firing from right up to tower ramp //240		//59 degrees
-	public static final int YBUTTONHEIGHT = 175;	//167 on practice bot after mods		//36 degrees
-	public static final int ALITTLEOFFTHEGROUND = 1;
-	public static final int AUTOHEIGHT = 100;
-	public static final int CORNERHEIGHT = 187;
 	
 	private static final double DARTTOL = 1.25;		//auto angle tolerance
 	private static final double DARTSLOW = 15;
-	private static final double DARTMIN = 0;	//Normally 0, on Practice Bot is 7
+	private static final double DARTMIN = 0;	//Normally 0, on Practice Bot is 10 ~ ORIGIN REFERENCE POINT
 	private static final double DARTCAPSLOW = 45;
 	private static final double DARTMAX = 248;												//64 degrees
 	private static final boolean WYATTSPRIVILEGE = false;
+	
+	public static final double LOADPOS = DARTMIN;		//auto load pos -- negative because DARTMIN may increase the origin, usually 0
+	public static final double FIREPOS = 170;		//auto fire pos --
+	public static final double CLOSEFIRE = 247; //firing from right up to tower ramp //240		//59 degrees
+	public static final double YBUTTONHEIGHT = 175;	//167 on practice bot after mods		//36 degrees
+	public static final double ALITTLEOFFTHEGROUND = DARTMIN + 1;	//should be 1 ~ reletive to minimum NOT ORIGIN
+	public static final double AUTOHEIGHT = 100;
+	public static final double CORNERHEIGHT = 187;
 	
 	private static boolean resetAtTop;
 	
@@ -410,6 +410,10 @@ public class TatorCannon {
     					setOuter(FIRERPM);
     				}
     			}
+    			break;
+    		case BARF:
+    			indexOut();
+    			setOuter(FIRERPM);
     			break;
     	}
     	return false;

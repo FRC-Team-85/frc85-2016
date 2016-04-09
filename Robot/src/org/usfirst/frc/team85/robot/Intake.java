@@ -20,7 +20,7 @@ public class Intake {
 	public static final int LIFTHEIGHT = 	-300000;//NOT TESTED//-744000;
 	public static final int FLOOR = 		-297000;//-690000;
 	public static final int HOME = 			   1000;
-	public static final int PORTDOWN =		0; //down position
+	public static final int PORTDOWN =		-297000; //down position
 	public static final int PORTUP =		0; //for portcolus
 	public static final int HORIZONTAL = 	-220000;//-500000;
 	public static final int FORTYFIVE =  	-111000;//-250000;
