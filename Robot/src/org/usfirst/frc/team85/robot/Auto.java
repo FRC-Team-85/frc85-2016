@@ -749,6 +749,165 @@ public class Auto {
 	        	break;
 	        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 	        	
+	        case 201: //ROUGH TERRAIN CROSS AND FIRE
+	        	switch (stage) {
+	        	case 0: //Set intake and cannon heights
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1: //Drive forward
+	        		if (autoDrive(1, 1, 4, 3.25)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2: //Stop
+	        		if (autoDrive(0, 0, 0, 1)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3: //Vision track align to center
+	        		if (_drive.visionCenter()/* || _autoTimer.get() > 4*/) {
+						rtns();
+					}
+	        		break;
+	        	case 4: //Move arm to firing position
+	        		if (_cannon.armMove(OBSTACLE)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 5: //Fire
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 6: //Stop shooter
+	        		_cannon.runAs(CannonMode.MANUAL);
+	        		rtns();
+	        		break;
+	        	case 7: //Drive forward a bit
+	        		if (autoDrive(.5, .5, 4, .5)) {
+	        			rtns();
+	        		}
+	        	}
+	        	break;
+	        	
+	        case 202: //ROCKWALL CROSS AND FIRE
+	        	switch (stage) {
+	        	case 0: //Set intake and cannon heights
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1: //Drive forward so wheels get right up to it
+	        		if (autoDrive(1, 1, 4, 2.25)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2: //Stop
+	        		if (autoDrive(0, 0, 0, .25)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3: //Brute force over
+	        		if (autoDrive(1, 1, 4, 3.1)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 4: //Stop, move intake down, move shooter up
+	        		if (autoDrive(0, 0, 0, 1) && _intake.intakeMove(Intake.LOADPOS) && _cannon.armMove(120)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 5: //If target can't be seen, seek right
+	        		if (ImageProcessing.isVisionGone()){
+	        			_drive.ledToggle(true);
+						autoDrive(0.4, -0.4, 4, 15);
+	        		}
+	        		else if (!ImageProcessing.isVisionGone()){                //SKIPS CASE 6 AFTER COMPLETING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	        			autoDrive(0, 0, 4, .5);
+	        			rtns();
+	        		}
+	        		break;
+	        	case 6: //Vision track align to center
+	        		if (_drive.visionCenter()/* || _autoTimer.get() > 4*/) {
+						rtns();
+					}
+	        		break;
+	        	case 7: //Move arm to firing position
+	        		if (_cannon.armMove(OBSTACLE)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 8: //Fire
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 9: //Stop shooter
+	        		_cannon.runAs(CannonMode.MANUAL);
+	        		rtns();
+	        		break;
+	        	case 10: //Drive forward a bit
+	        		if (autoDrive(.5, .5, 4, .5)) {
+	        			rtns();
+	        		}
+	        	}
+	        	break;
+	        	
+	        case 203: //SHOVEL THE FRIES AND FIRE
+	        	switch (stage) {
+	        	case 0: //Set intake and cannon heights
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(180) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1: //Drive forward
+	        		if (autoDrive(1, 1, 4, 1.52)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2: //Stop
+	        		if (autoDrive(0, 0, 4, 1.5)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3: //Back up
+	        		if (autoDrive(1, 1, 4, 1)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 4: //Drive forward while moving intake down
+	        		if (_intake.intakeMove(Intake.FLOOR)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 5: //Drive forward
+	        		if (autoDrive(1, 1, 4, 2)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 6: //Back up
+	        		if (autoDrive(-0.5, -0.5, 4, 1)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	}
+	        	break;
+	        	
+	        
 	        case 15:
 	        	switch (stage) {
 	        	case 0:
