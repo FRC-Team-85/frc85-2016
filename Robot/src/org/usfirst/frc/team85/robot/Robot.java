@@ -43,11 +43,9 @@ public class Robot extends IterativeRobot {
 
     private ImageProcessing _imageProcessing;
     
+    private boolean _visionCentered;
+    
     private CameraServer _server;
-
-    private final static String[] GRIP_ARGS = new String[] {
-            "/usr/local/frc/JRE/bin/java", "-jar",
-            "/home/lvuser/grip.jar", "/home/lvuser/project.grip" };
 
     
     /**
@@ -134,20 +132,31 @@ public class Robot extends IterativeRobot {
     		return;
     	}
     	*/
-  		_drive.manualDrive();
-    	_intake.run(true);
-    	_tatorCannon.run(false);	//Always last, has priority control over intake
     	
+    	if(_driveStick.getRawButton(2)) {
+        	//Auto aim
+        	if (_visionCentered || _drive.visionCenter()) {
+        		_visionCentered = true;
+        		_tatorCannon.runAs(CannonMode.JUSTFIRE);
+        	} else {
+        		_tatorCannon.runAs(CannonMode.MANUAL);
+        	}
+        } else  {
+        	_visionCentered = false;
+        	_drive.manualDrive();
+        	_intake.run(true);
+        	_tatorCannon.run(false);	//Always last, has priority control over intake
+        }
     	
 
 		_imageProcessing.muchSafeCoding();
     	_drive.muchSafeCoding();
     	_tatorCannon.muchSafeCoding();
     	
-    	if (_driveStick.getRawButton(9)) {
+    	/*if (_driveStick.getRawButton(9)) {
         	_drive.visionCenter();
     		_tatorCannon.runAs(CannonMode.VISION);
-    	}
+    	}*/
     	
 //	*/	
     }

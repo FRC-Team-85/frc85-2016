@@ -440,6 +440,7 @@ public class Auto {
 	        case 101://low mod
 	        	switch (stage) {
 	        	case 0:
+	        		_drive.ledToggle(true);
 	            	boolean c1 = _intake.intakeMove(Intake.HORIZONTAL);
 	        		boolean c2 = (_intake.belowFortyFive()) ? 
 	        				_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND) : false;
@@ -782,17 +783,20 @@ public class Auto {
 	        		break;
 	        	case 5: //Fire
 	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
+		        		_cannon.runAs(CannonMode.MANUAL);
 	        			rtns();
 	        		}
 	        		break;
-	        	case 6: //Stop shooter
-	        		_cannon.runAs(CannonMode.MANUAL);
-	        		rtns();
-	        		break;
-	        	case 7: //Drive forward a bit
-	        		if (autoDrive(.5, .5, 4, .5)) {
+	        	case 6:
+	        		if (autoDrive(.5, .5, 4, 1.5)) {
 	        			rtns();
 	        		}
+	        		break;
+	        	case 7:
+	        		if (autoDrive(0, 0, 4, .5)) {
+	        			rtns();
+	        		}
+	        		break;
 	        	}
 	        	break;
 	        	
@@ -827,15 +831,14 @@ public class Auto {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 5: //If target can't be seen, seek right
-	        		if (ImageProcessing.isVisionGone()){
-	        			_drive.ledToggle(true);
+	        	case 5: //If target can't be seen, seek
+	        		if (ImageProcessing.isVisionGone() && SEEKLEFT){
+						autoDrive(-0.4, 0.4, 4, 15);
+					} else if (ImageProcessing.isVisionGone() && !SEEKLEFT){
 						autoDrive(0.4, -0.4, 4, 15);
-	        		}
-	        		else if (!ImageProcessing.isVisionGone()){                //SKIPS CASE 6 AFTER COMPLETING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	        			autoDrive(0, 0, 4, .5);
-	        			rtns();
-	        		}
+					} else {
+						rtns();
+					}
 	        		break;
 	        	case 6: //Vision track align to center
 	        		if (_drive.visionCenter()/* || _autoTimer.get() > 4*/) {
@@ -849,14 +852,16 @@ public class Auto {
 	        		break;
 	        	case 8: //Fire
 	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
+		        		_cannon.runAs(CannonMode.MANUAL);
 	        			rtns();
 	        		}
 	        		break;
-	        	case 9: //Stop shooter
-	        		_cannon.runAs(CannonMode.MANUAL);
-	        		rtns();
+	        	case 9: //Drive forward a bit
+	        		if (autoDrive(.5, .5, 4, 1.5)) {
+	        			rtns();
+	        		}
 	        		break;
-	        	case 10: //Drive forward a bit
+	        	case 10:
 	        		if (autoDrive(.5, .5, 4, .5)) {
 	        			rtns();
 	        		}

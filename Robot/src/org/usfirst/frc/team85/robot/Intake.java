@@ -22,7 +22,7 @@ public class Intake {
 	public static final int HOME = 			   1000;
 	public static final int PORTDOWN =		-297000; //down position
 	public static final int PORTUP =		0; //for portcolus
-	public static final int HORIZONTAL = 	-220000;//-500000;
+	public static final int HORIZONTAL = 	-240000;//-500000;
 	public static final int FORTYFIVE =  	-111000;//-250000;
 	public static final int AUTOANGLE =  	-150000;//-265000;//-330000
 	

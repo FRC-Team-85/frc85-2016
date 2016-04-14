@@ -47,7 +47,7 @@ public class TankDrive {
         _slaveRightMotorB.changeControlMode(TalonControlMode.Follower);
         _slaveRightMotorB.set(DRIVE.RIGHT_FRONT_MOTOR);
 
-        setVoltageRamp(0.5);
+        //setVoltageRamp(0.5);
         System.out.println("TankDrive Init Done");
         
     }
@@ -79,6 +79,7 @@ public class TankDrive {
     private boolean centered;
 
     public void manualDrive() {
+    	setVoltageRamp(0);
         double thrust = _controller.getY();
         double turn;
         double turnControl = _controller.getZ();
@@ -87,11 +88,7 @@ public class TankDrive {
         turn = -1.15 * turnControlCubed +
                 0.38 * (turnControlCubed * turnControlCubed * turnControlCubed); //Brian's dumb curve, fastified 0.8(-1.15x^3+0.38x^9)
         
-    	if(_controller.getRawButton(2)) {
-        	//Auto aim
-        	visionCenter();
-        	return;
-        } else if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
+    	if (_controller.getRawButton(5) && _controller.getRawButton(6)) {
       //  	thrust *= 1;
        // 	turn *= 1;
         } else if (_controller.getRawButton(5)) {
@@ -186,8 +183,8 @@ public class TankDrive {
     }
     
     double previousError = 0;
-    double Kp = 0.005; //  1/160;
-    double Kd = 0.000;
+    double Kp = 0.0005; //  1/160;
+    double Kd = 0.020;
     double Ki = 0.;
     double maxPower = 0.95, minPower = 0.35;//.95,.35
     

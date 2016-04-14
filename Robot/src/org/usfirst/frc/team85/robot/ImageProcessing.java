@@ -100,6 +100,7 @@ public class ImageProcessing {
 		contourFound = (area>0) ? true : false;
 //			centerX = SmartDashboard.getNumber("GRIP/contoursReport/centerX", 160) - 160;
 //			centerY = SmartDashboard.getNumber("GRIP/contoursReport/centerY", 120) - 120;
+	    SmartDashboard.putBoolean("Target Found", contourFound);
 	    SmartDashboard.putBoolean("Vision/Target Found", contourFound);
 	    SmartDashboard.putNumber("Vision/Area", area);
 	    SmartDashboard.putNumber("Vision/Height", height);

@@ -10,7 +10,9 @@ public class TatorCannon {
 	
 	private static final double DARTTOL = 1.25;		//auto angle tolerance
 	private static final double DARTSLOW = 15;
+	
 	private static final double DARTMIN = 0;	//Normally 0, on Practice Bot is 10 ~ ORIGIN REFERENCE POINT
+	
 	private static final double DARTCAPSLOW = 45;
 	private static final double DARTMAX = 248;												//64 degrees
 	private static final boolean WYATTSPRIVILEGE = false;
