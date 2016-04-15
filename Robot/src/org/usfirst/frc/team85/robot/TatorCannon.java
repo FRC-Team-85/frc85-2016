@@ -20,7 +20,7 @@ public class TatorCannon {
 	public static final double LOADPOS = DARTMIN;		//auto load pos -- negative because DARTMIN may increase the origin, usually 0
 	public static final double FIREPOS = 170;		//auto fire pos --
 	public static final double CLOSEFIRE = 247; //firing from right up to tower ramp //240		//59 degrees
-	public static final double YBUTTONHEIGHT = 175;	//167 on practice bot after mods		//36 degrees
+	public static final double YBUTTONHEIGHT = 182;	//167 on practice bot after mods		//36 degrees
 	public static final double ALITTLEOFFTHEGROUND = DARTMIN + 1;	//should be 1 ~ reletive to minimum NOT ORIGIN
 	public static final double AUTOHEIGHT = 100;
 	public static final double CORNERHEIGHT = 187;

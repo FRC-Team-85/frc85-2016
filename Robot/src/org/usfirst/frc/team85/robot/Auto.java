@@ -753,6 +753,7 @@ public class Auto {
 	        case 201: //ROUGH TERRAIN CROSS AND FIRE
 	        	switch (stage) {
 	        	case 0: //Set intake and cannon heights
+	        		_drive.ledToggle(true);
 	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
 	        		boolean c2 = (_intake.belowFortyFive()) ? 
 	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
@@ -767,32 +768,41 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 2: //Stop
-	        		if (autoDrive(0, 0, 0, 1)) {
+	        		if (autoDrive(0, 0, 0, 1) && _intake.intakeMove(Intake.LOADPOS) && _cannon.armMove(OBSTACLE)) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 3: //Vision track align to center
+	        	case 3: //If target can't be seen, seek
+	        		if (ImageProcessing.isVisionGone() && SEEKLEFT){
+						autoDrive(-0.5, 0.5, 4, 15);
+					} else if (ImageProcessing.isVisionGone() && !SEEKLEFT){
+						autoDrive(0.5, -0.5, 4, 15);
+					} else {
+						rtns();
+					}
+	        		break;
+	        	case 4: //Vision track align to center
 	        		if (_drive.visionCenter()/* || _autoTimer.get() > 4*/) {
 						rtns();
 					}
 	        		break;
-	        	case 4: //Move arm to firing position
+	        	case 5: //Move arm to firing position
 	        		if (_cannon.armMove(OBSTACLE)) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 5: //Fire
+	        	case 6: //Fire
 	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
 		        		_cannon.runAs(CannonMode.MANUAL);
 	        			rtns();
 	        		}
 	        		break;
-	        	case 6:
+	        	case 7:
 	        		if (autoDrive(.5, .5, 4, 1.5)) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 7:
+	        	case 8:
 	        		if (autoDrive(0, 0, 4, .5)) {
 	        			rtns();
 	        		}
@@ -803,6 +813,7 @@ public class Auto {
 	        case 202: //ROCKWALL CROSS AND FIRE
 	        	switch (stage) {
 	        	case 0: //Set intake and cannon heights
+	        		_drive.ledToggle(true);
 	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
 	        		boolean c2 = (_intake.belowFortyFive()) ? 
 	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
@@ -827,15 +838,15 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 4: //Stop, move intake down, move shooter up
-	        		if (autoDrive(0, 0, 0, 1) && _intake.intakeMove(Intake.LOADPOS) && _cannon.armMove(120)) {
+	        		if (autoDrive(0, 0, 0, 1) && _intake.intakeMove(Intake.LOADPOS) && _cannon.armMove(OBSTACLE)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 5: //If target can't be seen, seek
 	        		if (ImageProcessing.isVisionGone() && SEEKLEFT){
-						autoDrive(-0.4, 0.4, 4, 15);
+						autoDrive(-0.5, 0.5, 4, 15);
 					} else if (ImageProcessing.isVisionGone() && !SEEKLEFT){
-						autoDrive(0.4, -0.4, 4, 15);
+						autoDrive(0.5, -0.5, 4, 15);
 					} else {
 						rtns();
 					}
@@ -856,19 +867,11 @@ public class Auto {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 9: //Drive forward a bit
-	        		if (autoDrive(.5, .5, 4, 1.5)) {
-	        			rtns();
-	        		}
-	        		break;
-	        	case 10:
-	        		if (autoDrive(.5, .5, 4, .5)) {
-	        			rtns();
-	        		}
 	        	}
 	        	break;
 	        	
 	        case 203: //SHOVEL THE FRIES AND FIRE
+	        	_drive.ledToggle(true);
 	        	switch (stage) {
 	        	case 0: //Set intake and cannon heights
 	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);

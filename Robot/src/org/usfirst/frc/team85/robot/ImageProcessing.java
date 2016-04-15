@@ -12,7 +12,7 @@ public class ImageProcessing {
 	
 	private static double area, height, width, centerX, centerY, aspectRatio;
 
-	private static int IMGXOFFSET = -20, IMGXTOL = 10;	//-20,10 to far right
+	private static int IMGXOFFSET = -35, IMGXTOL = 4;	//-20,10 to far right
 	private static int IMGYOFFSET = 50, IMGYTOL = 10;
 	
 	private static final double TARGETASPECTRATIO = 2.0; //	width/height
@@ -84,7 +84,7 @@ public class ImageProcessing {
 				}
 			}
 
-			if (areaArray[bestIndex] > 0) {
+			if (areaArray.length > 0 && areaArray[bestIndex] > 0) {
 				_visionUpdateTimer.reset();
 				area = areaArray[bestIndex];
 				height = heightArray[bestIndex];
