@@ -25,8 +25,11 @@ public class Auto {
 	private final double DEFAULTRAMPRATE = 4.0;
 
 	private int OBSTACLE = 0;
+	private int AUTOHEIGHT = 185;
 	private boolean GOWITHOUTVISION = true;
 	private boolean SEEKLEFT = false;
+	private double SEEKSPEED = .475;
+	private double SEEKRAMP = 8;
 	
 	boolean readyForVision;
 	private int stage = 0;
@@ -462,7 +465,7 @@ public class Auto {
 	        		break;
 	        	case 3: //turn
 	        		_cannon.armMove(225);
-	        		if (autoDrive(0.9, 0.1, 4, 1.625)) {//1.75
+	        		if (autoDrive(0.9, 0.1, 4, 1.45)) {//1.75
 	        			rtns();
 	        		}
 	        		break;
@@ -471,33 +474,38 @@ public class Auto {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 5:
+	        	case 5: //If target can't be seen, seek
+	        		if (seek()) {
+						rtns();
+					}
+	        		break;
+	        	case 6:
 //	        		_cannon.runAs(CannonMode.JUSTCHARGE);
 	        		if (_drive.visionCenter()/* || _autoTimer.get() > 4*/) {
 						rtns();
 					}
 	        		break;
-	        	case 6:
+	        	case 7:
 	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
 	        			rtns();
 	        		}
 	        		break;
-	        	case 7:
+	        	case 8:
 	        		_cannon.runAs(CannonMode.MANUAL);
 	        		rtns();
 	        		break;
-	        	case 8:
+	        	case 9:
 	        		if (_cannon.armMove(TatorCannon.ALITTLEOFFTHEGROUND)) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 9:
+	        	case 10:
 	        		_intake.chompa();
 	        		if (_autoTimer.get() > 1) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 10:
+	        	case 11:
 	        		_intake.intakeMove(Intake.HOME);
 	        		break;
 	        }
@@ -763,21 +771,17 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 1: //Drive forward
-	        		if (autoDrive(1, 1, 4, 3.25)) {
+	        		if (autoDrive(1, 1, 4, 3.4)) {//3.75
 	        			rtns();
 	        		}
 	        		break;
 	        	case 2: //Stop
-	        		if (autoDrive(0, 0, 0, 1) && _intake.intakeMove(Intake.LOADPOS) && _cannon.armMove(OBSTACLE)) {
+	        		if (autoDrive(0, 0, 0, 1) && (_intake.intakeMove(Intake.LOADPOS) & _cannon.armMove(AUTOHEIGHT))) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 3: //If target can't be seen, seek
-	        		if (ImageProcessing.isVisionGone() && SEEKLEFT){
-						autoDrive(-0.5, 0.5, 4, 15);
-					} else if (ImageProcessing.isVisionGone() && !SEEKLEFT){
-						autoDrive(0.5, -0.5, 4, 15);
-					} else {
+	        		if (seek()) {
 						rtns();
 					}
 	        		break;
@@ -787,7 +791,7 @@ public class Auto {
 					}
 	        		break;
 	        	case 5: //Move arm to firing position
-	        		if (_cannon.armMove(OBSTACLE)) {
+	        		if (_cannon.armMove(AUTOHEIGHT)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -823,7 +827,7 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 1: //Drive forward so wheels get right up to it
-	        		if (autoDrive(1, 1, 4, 2.25)) {
+	        		if (autoDrive(1, 1, 4, 2.2)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -838,16 +842,12 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 4: //Stop, move intake down, move shooter up
-	        		if (autoDrive(0, 0, 0, 1) && _intake.intakeMove(Intake.LOADPOS) && _cannon.armMove(OBSTACLE)) {
+	        		if (autoDrive(0, 0, 0, 0.1) && (_intake.intakeMove(Intake.LOADPOS) & _cannon.armMove(AUTOHEIGHT))) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 5: //If target can't be seen, seek
-	        		if (ImageProcessing.isVisionGone() && SEEKLEFT){
-						autoDrive(-0.5, 0.5, 4, 15);
-					} else if (ImageProcessing.isVisionGone() && !SEEKLEFT){
-						autoDrive(0.5, -0.5, 4, 15);
-					} else {
+	        		if (seek()) {
 						rtns();
 					}
 	        		break;
@@ -857,7 +857,7 @@ public class Auto {
 					}
 	        		break;
 	        	case 7: //Move arm to firing position
-	        		if (_cannon.armMove(OBSTACLE)) {
+	        		if (_cannon.armMove(AUTOHEIGHT)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -987,6 +987,19 @@ public class Auto {
 	private void goVision() {
 		setChronicReferencePoint();
 		readyForVision = true;
+	}
+	
+	private boolean seek()
+	{
+		if (!ImageProcessing.isVisionGone()) {
+			return true;
+		} else if (SEEKLEFT){
+			autoDrive(-SEEKSPEED, SEEKSPEED, SEEKRAMP, 15);
+		} else {
+			autoDrive(SEEKSPEED, -SEEKSPEED, SEEKRAMP, 15);
+		}
+		
+		return false;
 	}
 
 	private boolean autoDrive(double lTarget, double rTarget, double time) {
