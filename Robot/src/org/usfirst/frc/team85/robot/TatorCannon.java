@@ -10,8 +10,10 @@ public class TatorCannon {
 	
 	private static final double DARTTOL = 1.25;		//auto angle tolerance
 	private static final double DARTSLOW = 15;
-	
+
 	private static final double DARTMIN = 0;	//Normally 0, on Practice Bot is 10 ~ ORIGIN REFERENCE POINT
+
+	private static double cannonAdjustment = 0;	//Normally 0, on Practice Bot is 10 ~ ORIGIN REFERENCE POINT
 	
 	private static final double DARTCAPSLOW = 45;
 	private static final double DARTMAX = 248;												//64 degrees
@@ -20,7 +22,7 @@ public class TatorCannon {
 	public static final double LOADPOS = DARTMIN;		//auto load pos -- negative because DARTMIN may increase the origin, usually 0
 	public static final double FIREPOS = 170;		//auto fire pos --
 	public static final double CLOSEFIRE = 247; //firing from right up to tower ramp //240		//59 degrees
-	public static final double YBUTTONHEIGHT = 182;	//167 on practice bot after mods		//36 degrees
+	public static final double YBUTTONHEIGHT = 179;	//167 on practice bot after mods		//36 degrees
 	public static final double ALITTLEOFFTHEGROUND = DARTMIN + 1;	//should be 1 ~ reletive to minimum NOT ORIGIN
 	public static final double AUTOHEIGHT = 100;
 	public static final double CORNERHEIGHT = 187;
@@ -146,6 +148,8 @@ public class TatorCannon {
 
     public void run(boolean Autonomous) {	//main method
     	AutoOR = Autonomous;
+		
+    	cannonAdjustment = SmartDashboard.getNumber("Cannon Adjustment", cannonAdjustment);
     	    	
     	if (!AutoOR) {
     		setCannonMode();
@@ -197,7 +201,8 @@ public class TatorCannon {
     	return (Math.abs(_dartMotor.get() - LOADPOS) <= DARTTOL);
     }
 
-    public boolean armMove(double target) {
+    public boolean armMove(double heightTarget) {
+    	double target = heightTarget + cannonAdjustment;
     	if (hasBeenInit) {
     		if ( Math.abs(getEncoderValue() - target) <= DARTTOL) {
     			manualArmMotor(0);

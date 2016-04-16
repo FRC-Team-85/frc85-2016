@@ -76,6 +76,7 @@ public class Robot extends IterativeRobot {
         }
         
 		if (true) {
+			SmartDashboard.putNumber("Cannon Adjustment", 0);
 			SmartDashboard.putNumber("autocase", 0);
 			SmartDashboard.putBoolean("gwv", true);
 			SmartDashboard.putBoolean("seekleft", false);				

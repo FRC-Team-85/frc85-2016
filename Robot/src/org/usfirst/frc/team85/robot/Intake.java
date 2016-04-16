@@ -39,6 +39,7 @@ public class Intake {
 	private Timer _delayTimer;
 	private boolean intakeInit;
 	private double INTAKEDELAY = 0.5;
+	private boolean _startChompa = false;
 	
 	//private DigitalInput upIntakeLimit = new DigitalInput(1);
 
@@ -105,7 +106,14 @@ public class Intake {
 		SmartDashboard.putNumber("Intake Position", _encPos);
 
 		if(opStick.getRawButton(3) && hasBeenInit) { //Uses button B, loads the cannon
-			return loadCannon(cannonReady);
+			if (_startChompa) {
+				return loadCannon(cannonReady);
+			}
+			else if (intakeMove(LOADPOS))
+			{
+				_startChompa = true;
+				return false;
+			}
 		}
 		else if (opStick.getPOV() == 0 && hasBeenInit){ //auto heights both
 			intakeMove(AUTOANGLE);
@@ -121,6 +129,7 @@ public class Intake {
 		}
 		else {
 			setMotors(opStick.getRawAxis(1));
+			_startChompa = false;
 		}		
 		
 		if (opStick.getRawButton(5)) {
