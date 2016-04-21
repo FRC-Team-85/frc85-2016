@@ -104,6 +104,7 @@ public class Robot extends IterativeRobot {
     	if (_tatorCannon.init() && _intake.init()) {
     		_imageProcessing.process();
     		_auto.run();
+    		_drive.showEncoderStuff();
     	}
     }
 
@@ -148,7 +149,8 @@ public class Robot extends IterativeRobot {
         	_intake.run(true);
         	_tatorCannon.run(false);	//Always last, has priority control over intake
         }
-    	
+
+		_drive.showEncoderStuff();
 
 		_imageProcessing.muchSafeCoding();
     	_drive.muchSafeCoding();

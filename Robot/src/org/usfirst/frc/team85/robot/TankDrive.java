@@ -238,5 +238,42 @@ public class TankDrive {
 		SmartDashboard.putBoolean("ALIGNED", false);
     	return false;
     }    
-}
 
+    public double getLeftEncoderPos(){
+    	return _masterLeftMotor.getEncPosition();
+    }
+    
+    public double getRightEncoderPos(){
+    	return _masterRightMotor.getEncPosition();
+    }
+
+    public double getLeftEncoderVel(){
+    	return _masterLeftMotor.getEncVelocity();
+    }
+
+    public double getRightEncoderVel(){
+    	return _masterRightMotor.getEncVelocity();
+    }
+
+    public void resetLeftEncoder(){
+    	_masterLeftMotor.setEncPosition(0);
+    }
+
+    public void resetRightEncoder(){
+    	_masterRightMotor.setEncPosition(0);
+    }
+    
+    public static final double k_countToFeet = Math.PI*8192/3;//4096*8*Math.PI/12
+    
+    public void showEncoderStuff(){
+    	SmartDashboard.putNumber("LeftPos", k_countToFeet * getLeftEncoderPos());
+    	SmartDashboard.putNumber("RightPos", k_countToFeet * getRightEncoderPos());
+    	SmartDashboard.putNumber("LeftVel", k_countToFeet * 10 * getLeftEncoderVel());
+    	SmartDashboard.putNumber("RightVel", k_countToFeet * 10 * getRightEncoderVel());
+    }
+    
+    public void resetBothEncoders(){
+    	resetLeftEncoder(); resetRightEncoder();
+    }
+    
+}

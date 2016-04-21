@@ -933,6 +933,19 @@ public class Auto {
 	        	}
 	        	break;
 	        	
+	        	
+	        case 205:
+	        	switch(stage){
+	        	case 0:
+	        		if(autoDrive(0.5,0.25,4,0.5)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		autoDrive(0,0,0,15);
+	        		break;
+	        	}
+	        	break;
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	        /*	
 				CCCC	 AA 	SSSS	EEEE		CCCC	L		OOOO	SSSS	EEEE	DDD	
