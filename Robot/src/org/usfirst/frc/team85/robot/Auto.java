@@ -265,9 +265,7 @@ public class Auto {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 2:
-	        		
-	        		break;
+	        	
 	        	}
 	        	break;
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -937,15 +935,75 @@ public class Auto {
 	        case 205:
 	        	switch(stage){
 	        	case 0:
-	        		if(autoDrive(0.5,0.25,4,0.5)){
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = _cannon.armMove(TatorCannon.CORNERHEIGHT);
+	        		if (c1 && c2) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 1:
-	        		autoDrive(0,0,0,15);
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if(autoDrive(1.0, -0.3, 0, 0.8)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:
+	        		if(autoDrive(-0.4, -0.8, 0, 1.5)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 4:
+	        		if(autoDrive(0.4, 0, 0, .2)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 5:
+	        		if(autoDrive(-0.8, -0.8, 0, 0.1)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 6:
+	        		if(autoDrive(0, 0, 0, .25)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 7: //thru bar
+	        		if(autoDrive(0.5, 0.5, 0, 4.5)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 8:
+	        		if(autoDrive(0, 0, 0, .25)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 9: //back up
+	        		if(autoDrive(-0.5, -0.5, 0, 2.5)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 10:
+	        		if(autoDrive(0, 0, 0, .25)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 11: //back thru
+	        		if(autoDrive(0.5, 0.5, 0, 2.2)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 12:
+	        		if(autoDrive(0,0,0,15)){
+	        			rtns();
+	        		}
 	        		break;
 	        	}
 	        	break;
+	        	
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	        /*	
 				CCCC	 AA 	SSSS	EEEE		CCCC	L		OOOO	SSSS	EEEE	DDD	
