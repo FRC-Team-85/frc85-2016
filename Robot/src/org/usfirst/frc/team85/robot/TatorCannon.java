@@ -59,7 +59,7 @@ public class TatorCannon {
 	private boolean _spitInit, _loadInit, _loadComplete, _storageInit;
 	
 	private boolean _justFireInit;
-	private static final double JUSTFIREDELAY = 2.0, JUSTFIREALLDONE = 2.5;
+	public static final double JUSTFIREDELAY = 2.0, JUSTFIREALLDONE = 2.5;
 		
 	DigitalInput _topDartLimit;
 	DigitalInput _bottomDartLimit;
