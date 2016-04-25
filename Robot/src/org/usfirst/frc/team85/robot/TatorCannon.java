@@ -26,6 +26,7 @@ public class TatorCannon {
 	public static final double ALITTLEOFFTHEGROUND = DARTMIN + 1;	//should be 1 ~ reletive to minimum NOT ORIGIN
 	public static final double AUTOHEIGHT = 100;
 	public static final double CORNERHEIGHT = 187;
+	public static final double ZERO = 0;
 	
 	private static boolean resetAtTop;
 	

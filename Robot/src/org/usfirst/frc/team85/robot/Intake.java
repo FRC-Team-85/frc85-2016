@@ -25,6 +25,7 @@ public class Intake {
 	public static final int HORIZONTAL = 	-250000;//-500000;
 	public static final int FORTYFIVE =  	-111000;//-250000;
 	public static final int AUTOANGLE =  	-150000;//-265000;//-330000
+	public static final int ZERO =  	0;
 	
 	int _encPos;
 	

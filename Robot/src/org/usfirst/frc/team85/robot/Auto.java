@@ -271,7 +271,7 @@ public class Auto {
 	         */	
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	       
-	        case 16://SPYBOT SHOOT AND TURN THRU LOWBAR
+	        case 16://DONT USE
 	        	switch (stage) {
 	        	case 0: //move the intake and arm
 	        		_cannon.runAs(CannonMode.MANUAL);
@@ -928,45 +928,49 @@ public class Auto {
 	        	
 	        case 205:
 	        	switch(stage){
-	        	case 0:
+	        	case 0: //move intake and cannon to fire pos
 	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
 	        		boolean c2 = _cannon.armMove(TatorCannon.CORNERHEIGHT);
+
 	        		if (c1 && c2) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 1:
+	        	case 1: //fire
+
 	        		if (_cannon.runAs(CannonMode.JUSTFIRE)) {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 2:
+	        	case 2: //move cannon to positions for moving back
+	        		boolean d2 = _cannon.armMove(TatorCannon.ZERO);
+	        		if (d2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3: //move intake to positions for moving back
+	            	boolean d1 = _intake.intakeMove(Intake.ZERO);
+	        		if (d1) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 4: 
 	        		if(autoDrive(1.0, -0.3, 0, 0.8)){
 	        			rtns();
 	        		}
 	        		break;
-	        	case 3:
+	        	case 5: //move back
 	        		if(autoDrive(-0.4, -0.8, 0, 1.5)){
 	        			rtns();
 	        		}
 	        		break;
-	        	case 4:
+	        	case 6:
 	        		if(autoDrive(0.4, 0, 0, .2)){
 	        			rtns();
 	        		}
 	        		break;
-	        	case 5:
-	        		if(autoDrive(-0.8, -0.8, 0, 0.1)){
-	        			rtns();
-	        		}
-	        		break;
-	        	case 6:
-	        		if(autoDrive(0, 0, 0, .25)){
-	        			rtns();
-	        		}
-	        		break;
-	        	case 7: //thru bar
-	        		if(autoDrive(0.5, 0.5, 0, 4.5)){
+	        	case 7:
+	        		if(autoDrive(-0.8, -0.8, 0, 0.28)){
 	        			rtns();
 	        		}
 	        		break;
@@ -975,22 +979,38 @@ public class Auto {
 	        			rtns();
 	        		}
 	        		break;
-	        	case 9: //back up
-	        		if(autoDrive(-0.5, -0.5, 0, 2.5)){
+	        	case 9: //move intake to positions for lowbar
+	            	//boolean f1 = _intake.intakeMove(Intake.HORIZONTAL);
+	        		//if (f1) {
+	        			rtns();
+	        		//}
+	        		break;
+	        	case 10: //thru bar
+	        		if(_intake.intakeMove(Intake.HORIZONTAL) & autoDrive(0.6, 0.6, 0, 3.7)){
 	        			rtns();
 	        		}
 	        		break;
-	        	case 10:
+	        	case 11:
+	        		if(autoDrive(0, 0, 0, .45)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 12: //back up
+	        		if(autoDrive(-0.5, -0.5, 0, 2.4)){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 13:
 	        		if(autoDrive(0, 0, 0, .25)){
 	        			rtns();
 	        		}
 	        		break;
-	        	case 11: //back thru
+	        	case 14: //back thru
 	        		if(autoDrive(0.5, 0.5, 0, 2.2)){
 	        			rtns();
 	        		}
 	        		break;
-	        	case 12:
+	        	case 15:
 	        		if(autoDrive(0,0,0,15)){
 	        			rtns();
 	        		}
