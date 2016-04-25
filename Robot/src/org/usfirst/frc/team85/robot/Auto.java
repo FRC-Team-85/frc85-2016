@@ -12,6 +12,8 @@ public class Auto {
 	for the switch cases, add run commands based on found values - conclude with 0,0,- and camera command
 	 */
 
+	private boolean finished = false;
+
 	Timer _autoTimer;	
 	private boolean timerInit;
 	private double whatTimeIsIt;
@@ -73,6 +75,7 @@ public class Auto {
 	        switch (OBSTACLE) {
 	        //=====================================================================================
 	        case 0: //DEAD
+	        	done();
 	        	break;
 	        //=====================================================================================
 	        case 1: //LowBar =better code below
@@ -97,7 +100,7 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 3:
-	        		autoDrive(0, 0, 15);
+	        		done();
 	        		break;
 	        	}
 	        	break;
@@ -113,12 +116,9 @@ public class Auto {
 		    //=====================================================================================
 	        case 4://Moat =needs stop before vision
 	        	switch(stage) {
-	        	case 0:
-	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
-	        		boolean c2 = (_intake.belowFortyFive()) ? 
-	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
-	        			        		
-	        		if (c1 && c2) {
+	        	case 0:	        		
+	        		if (_intake.intakeMove(Intake.AUTOANGLE) & (_intake.belowFortyFive() ? 
+	        			_cannon.armMove(TatorCannon.AUTOHEIGHT) : false)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -133,19 +133,16 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 2:
-	        		autoDrive(0, 0, 15);
+	        		done();
 	        		break;
 	        	}
 	        	break;
 		    //=====================================================================================
 	        case 5://rampart =TOTALY DONE
 	        	switch (stage) {
-	        	case 0:
-	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
-	        		boolean c2 = (_intake.belowFortyFive()) ? 
-	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
-	        			        		
-	        		if (c1 && c2) {
+	        	case 0:		
+	        		if (_intake.intakeMove(Intake.AUTOANGLE) & (_intake.belowFortyFive() ? 
+	        			_cannon.armMove(TatorCannon.AUTOHEIGHT) : false)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -174,7 +171,7 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 5:
-	        		autoDrive(0, 0, 15);
+	        		done();
 	        		break;
 	        	}
 	        	break;
@@ -192,11 +189,8 @@ public class Auto {
 	        case 8://Rock Wall
 	        	switch(stage) {
 	        	case 0:
-	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
-	        		boolean c2 = (_intake.belowFortyFive()) ? 
-	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
-	        			        		
-	        		if (c1 && c2) {
+	        		if (_intake.intakeMove(Intake.AUTOANGLE) & (_intake.belowFortyFive() ? 
+	        			_cannon.armMove(TatorCannon.AUTOHEIGHT)) : false) {
 	        			rtns();
 	        		}
 	        		break;
@@ -220,7 +214,7 @@ public class Auto {
 		        	}
 		        	break;
 		       	case 4:
-		       		autoDrive(0, 0, 15);
+		       		done();
 		       		break;
 	        	}
 	        	break;
@@ -228,11 +222,8 @@ public class Auto {
 	        case 9://Rough Terrain =may need stop b vision
 	        	switch(stage) {
 	        	case 0:
-	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
-	        		boolean c2 = (_intake.belowFortyFive()) ? 
-	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
-	        			        		
-	        		if (c1 && c2) {
+	        		if (_intake.intakeMove(Intake.AUTOANGLE) & (_intake.belowFortyFive() ? 
+	        			_cannon.armMove(TatorCannon.AUTOHEIGHT) : false)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -246,7 +237,7 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 2:
-	        		autoDrive(0, 0, 15);
+	        		done();
 	        		break;
 	        	}
 	        	break;
@@ -254,18 +245,21 @@ public class Auto {
 	        case 10://SPYBOT
 	        	switch (stage) {
 	        	case 0:
-	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
-	        		boolean c2 = _cannon.armMove(TatorCannon.CORNERHEIGHT);
-	        		if (c1 && c2) {
-	        			rtns();
+	        		_cannon.runAs(CannonMode.JUSTCHARGE);
+	            		if (_intake.intakeMove(Intake.AUTOANGLE) & (_intake.belowFortyFive() ? 
+	            			_cannon.armMove(TatorCannon.CORNERHEIGHT) : false) & _autoTimer.get() > TatorCannon.JUSTFIREDELAY) {
+	        			stage++;
 	        		}
 	        		break;
 	        	case 1:
-	        		if (_cannon.runAs(CannonMode.JUSTFIRE)) {
-	        			rtns();
+	        		_cannon.runAs(CannonMode.BARF);
+	        		if (_autoTimer.get() > TatorCannon.JUSTFIREALLDONE){
+	        			stage++;
 	        		}
 	        		break;
-	        	
+	        	case 2:
+	        		done();
+	        		break;
 	        	}
 	        	break;
 	        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1090,6 +1084,15 @@ public class Auto {
 			return false;
 		} else {
 			return true;
+		}
+	}
+	
+	
+	private boolean done(){
+		if (!finished) {
+			_drive.setMotors(0.0, 0.0);
+			_cannon.runAs(CannonMode.MANUAL);
+			finished = true;
 		}
 	}
 	
