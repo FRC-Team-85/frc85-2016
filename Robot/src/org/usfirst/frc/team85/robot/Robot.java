@@ -95,6 +95,7 @@ public class Robot extends IterativeRobot {
     	_auto = new Auto(_drive, _intake, _tatorCannon);
     	_intake.bootInit();
     	_tatorCannon.bootInit();
+    	_drive.resetBothEncoders();
     }
 
     /**
@@ -113,7 +114,7 @@ public class Robot extends IterativeRobot {
         _drive.setBrakeMode(false);
         _tatorCannon.runAs(CannonMode.MANUAL);
         _drive.manualDrive();
-               
+        _drive.resetBothEncoders();
     }
 
     /**

@@ -240,7 +240,7 @@ public class TankDrive {
     }    
 
     public double getLeftEncoderPos(){
-    	return _masterLeftMotor.getEncPosition();
+    	return -_masterLeftMotor.getEncPosition();
     }
     
     public double getRightEncoderPos(){
@@ -248,7 +248,7 @@ public class TankDrive {
     }
 
     public double getLeftEncoderVel(){
-    	return _masterLeftMotor.getEncVelocity();
+    	return -_masterLeftMotor.getEncVelocity();
     }
 
     public double getRightEncoderVel(){
@@ -266,10 +266,10 @@ public class TankDrive {
     public static final double k_countToFeet = Math.PI*8192/3;//4096*8*Math.PI/12
     
     public void showEncoderStuff(){
-    	SmartDashboard.putNumber("LeftPos", k_countToFeet * getLeftEncoderPos());
-    	SmartDashboard.putNumber("RightPos", k_countToFeet * getRightEncoderPos());
-    	SmartDashboard.putNumber("LeftVel", k_countToFeet * 10 * getLeftEncoderVel());
-    	SmartDashboard.putNumber("RightVel", k_countToFeet * 10 * getRightEncoderVel());
+    	SmartDashboard.putNumber("LeftPos", getLeftEncoderPos());
+    	SmartDashboard.putNumber("RightPos", getRightEncoderPos());
+    	SmartDashboard.putNumber("LeftVel", 10 * getLeftEncoderVel());
+    	SmartDashboard.putNumber("RightVel", 10 * getRightEncoderVel());
     }
     
     public void resetBothEncoders(){

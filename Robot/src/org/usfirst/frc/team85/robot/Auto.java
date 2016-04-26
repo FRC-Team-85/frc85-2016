@@ -190,7 +190,7 @@ public class Auto {
 	        	switch(stage) {
 	        	case 0:
 	        		if (_intake.intakeMove(Intake.AUTOANGLE) & (_intake.belowFortyFive() ? 
-	        			_cannon.armMove(TatorCannon.AUTOHEIGHT)) : false) {
+	        			_cannon.armMove(TatorCannon.AUTOHEIGHT) : false)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -615,6 +615,42 @@ public class Auto {
 	        		break;
 	        	}
 	        	break;
+	        	
+	        case 155:
+	        	switch(stage) {
+	        	case 0:
+	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
+	        		boolean c2 = (_intake.belowFortyFive()) ? 
+	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
+	        			        		
+	        		if (c1 && c2) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 1:
+	        		if (autoDrive(.3, .3, 4, 20150, 20150)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:
+	        		if (_intake.intakeMove(Intake.FLOOR) || _autoTimer.get() >= .8){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 3:        		
+	        		if (autoDrive(.5, .5, 4, 35000, 35000)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 4:
+	        		_intake.intakeMove(Intake.FORTYFIVE);
+	        		
+	        		if (autoDrive(.3, .3, 4, 65000, 65000)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	}
+	        	break;
 
 	        case 140://moat
 	        	switch(stage) {
@@ -817,8 +853,7 @@ public class Auto {
 	        		if (c1 && c2) {
 	        			rtns();
 	        		}
-	        		break;
-	        	case 1: //Drive forward so wheels get right up to it
+	        		break;	        	case 1: //Drive forward so wheels get right up to it
 	        		if (autoDrive(1, 1, 4, 2.2)) {
 	        			rtns();
 	        		}
@@ -929,28 +964,23 @@ public class Auto {
 	        case 205:
 	        	switch(stage){
 	        	case 0: //move intake and cannon to fire pos
-	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
-	        		boolean c2 = _cannon.armMove(TatorCannon.CORNERHEIGHT);
-
-	        		if (c1 && c2) {
+	            	if (_intake.intakeMove(Intake.AUTOANGLE) & 
+	            			(_intake.belowFortyFive() ? _cannon.armMove(TatorCannon.CORNERHEIGHT) : false)){
 	        			rtns();
 	        		}
 	        		break;
 	        	case 1: //fire
-
 	        		if (_cannon.runAs(CannonMode.JUSTFIRE)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 2: //move cannon to positions for moving back
-	        		boolean d2 = _cannon.armMove(TatorCannon.ZERO);
-	        		if (d2) {
+	        		if (_cannon.armMove(TatorCannon.ZERO)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 3: //move intake to positions for moving back
-	            	boolean d1 = _intake.intakeMove(Intake.ZERO);
-	        		if (d1) {
+	        		if (_intake.intakeMove(Intake.ZERO)) {
 	        			rtns();
 	        		}
 	        		break;
@@ -970,12 +1000,13 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 7:
-	        		if(autoDrive(-0.8, -0.8, 0, 0.28)){
+	        		if(autoDrive(-0.8, -0.8, 0, 0.32)){
 	        			rtns();
 	        		}
 	        		break;
 	        	case 8:
 	        		if(autoDrive(0, 0, 0, .25)){
+	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;
@@ -986,27 +1017,29 @@ public class Auto {
 	        		//}
 	        		break;
 	        	case 10: //thru bar
-	        		if(_intake.intakeMove(Intake.HORIZONTAL) & autoDrive(0.6, 0.6, 0, 3.7)){
+	        		if(_intake.intakeMove(Intake.HORIZONTAL) & autoDrive(0.6, 0.6, 0, 135000, 135000)){
 	        			rtns();
 	        		}
 	        		break;
 	        	case 11:
 	        		if(autoDrive(0, 0, 0, .45)){
+	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;
 	        	case 12: //back up
-	        		if(autoDrive(-0.5, -0.5, 0, 2.4)){
+	        		if(autoDrive(-0.5, -0.5, 0, 58000, 58000)){
 	        			rtns();
 	        		}
 	        		break;
 	        	case 13:
 	        		if(autoDrive(0, 0, 0, .25)){
+	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;
 	        	case 14: //back thru
-	        		if(autoDrive(0.5, 0.5, 0, 2.2)){
+	        		if(autoDrive(0.5, 0.5, 0, 58000, 58000)){
 	        			rtns();
 	        		}
 	        		break;
@@ -1088,13 +1121,7 @@ public class Auto {
 	}
 
 	private boolean autoDrive(double lTarget, double rTarget, double time) {
-		_drive.setVoltageRamp(DEFAULTRAMPRATE);
-		if (whatTimeIsIt >= timerReference && whatTimeIsIt < (timerReference + time)) {
-			_drive.setMotors(-lTarget, -rTarget);
-			return false;
-		} else {
-			return true;
-		}
+		return autoDrive(lTarget, rTarget, DEFAULTRAMPRATE, time);
 	}
 	
 	private boolean autoDrive(double lTarget, double rTarget, double rampRate, double time) {
@@ -1108,14 +1135,35 @@ public class Auto {
 	}
 	
 	
-	private boolean done(){
+	private boolean autoDrive(double lTarget, double rTarget, double rampRate, int leftCounts, int rightCounts) {
+		_drive.setVoltageRamp(rampRate);
+		
+		if (Math.abs(_drive.getLeftEncoderPos()) >= leftCounts) {
+			lTarget = 0;
+		}
+		
+		if (Math.abs(_drive.getRightEncoderPos()) >= rightCounts) {
+			rTarget = 0;
+		}
+
+		if (lTarget == 0 && rTarget == 0) {
+			_drive.setVoltageRamp(0);
+			_drive.setMotors(0, 0);
+			return true;
+		} else {
+			_drive.setMotors(-lTarget, -rTarget);			
+			return false;
+		} 
+	}
+	
+	
+	private void done(){
 		if (!finished) {
 			_drive.setMotors(0.0, 0.0);
 			_cannon.runAs(CannonMode.MANUAL);
 			finished = true;
 		}
 	}
-	
 	
 	//============================================================================
 
