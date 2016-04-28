@@ -450,19 +450,19 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 2:
-	        		_cannon.armMove(225);
+	        		_cannon.armMove(193);
 	        		if (autoDrive(0, 0, 8, 0.4)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 3: //turn
-	        		_cannon.armMove(225);
+	        		_cannon.armMove(193);
 	        		if (autoDrive(0.9, 0.1, 4, 1.45)) {//1.75
 	        			rtns();
 	        		}
 	        		break;
 	        	case 4:
-	        		if (autoDrive(0, 0, 8, 1) & _cannon.armMove(225)){
+	        		if (autoDrive(0, 0, 8, 1) & _cannon.armMove(193)){
 	        			rtns();
 	        		}
 	        		break;
@@ -1001,12 +1001,12 @@ public class Auto {
 	        		break;
 	        	case 7:
 	        		if(autoDrive(-0.8, -0.8, 0, 0.32)){
+	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;
 	        	case 8:
 	        		if(autoDrive(0, 0, 0, .25)){
-	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;
@@ -1018,23 +1018,23 @@ public class Auto {
 	        		break;
 	        	case 10: //thru bar
 	        		if(_intake.intakeMove(Intake.HORIZONTAL) & autoDrive(0.6, 0.6, 0, 135000, 135000)){
+	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;
 	        	case 11:
 	        		if(autoDrive(0, 0, 0, .45)){
-	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;
 	        	case 12: //back up
 	        		if(autoDrive(-0.5, -0.5, 0, 58000, 58000)){
+	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;
 	        	case 13:
 	        		if(autoDrive(0, 0, 0, .25)){
-	        			_drive.resetBothEncoders();
 	        			rtns();
 	        		}
 	        		break;

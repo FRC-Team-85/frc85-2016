@@ -1,7 +1,7 @@
 <grip:Pipeline>
   <sources>
     <grip:Camera>
-      <property name="address" value="http://raspberrypi.local:1180/?action=stream"/>
+      <property name="address" value="http://10.0.85.20:1180/?action=stream"/>
     </grip:Camera>
   </sources>
   <steps>
@@ -9,13 +9,13 @@
       <grip:Input step="0" socket="0"/>
       <grip:Input step="0" socket="1">
         <value>
-          <double>72.84172661870504</double>
-          <double>98.60068259385666</double>
+          <double>55.03597122302159</double>
+          <double>90.92150170648466</double>
         </value>
       </grip:Input>
       <grip:Input step="0" socket="2">
         <value>
-          <double>87.1402877697842</double>
+          <double>73.3812949640288</double>
           <double>255.0</double>
         </value>
       </grip:Input>
@@ -98,16 +98,16 @@
   </steps>
   <connections>
     <grip:Connection>
-      <grip:Output source="0" socket="1" previewed="false"/>
-      <grip:Input step="4" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
       <grip:Output step="2" socket="0" previewed="true"/>
       <grip:Input step="3" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output source="0" socket="0" previewed="true"/>
       <grip:Input step="0" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="0" socket="1" previewed="false"/>
+      <grip:Input step="4" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="0" socket="0" previewed="false"/>

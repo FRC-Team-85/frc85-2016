@@ -62,49 +62,8 @@
       </grip:Input>
       <grip:Output step="2" socket="0" previewed="true"/>
     </grip:Step>
-    <grip:Step name="Publish ContoursReport">
-      <grip:Input step="3" socket="0"/>
-      <grip:Input step="3" socket="1">
-        <value>contoursReport</value>
-      </grip:Input>
-      <grip:Input step="3" socket="2">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="3" socket="3">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="3" socket="4">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="3" socket="5">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="3" socket="6">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="3" socket="7">
-        <value>true</value>
-      </grip:Input>
-    </grip:Step>
-    <grip:Step name="Publish Number">
-      <grip:Input step="4" socket="0"/>
-      <grip:Input step="4" socket="1">
-        <value>ISGRIPWORKING????????????????????????</value>
-      </grip:Input>
-      <grip:Input step="4" socket="2">
-        <value>true</value>
-      </grip:Input>
-    </grip:Step>
   </steps>
   <connections>
-    <grip:Connection>
-      <grip:Output source="0" socket="1" previewed="false"/>
-      <grip:Input step="4" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output step="2" socket="0" previewed="true"/>
-      <grip:Input step="3" socket="0"/>
-    </grip:Connection>
     <grip:Connection>
       <grip:Output source="0" socket="0" previewed="true"/>
       <grip:Input step="0" socket="0"/>

@@ -123,7 +123,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
 //    	_auto.checkSDB();
 //	/*	
-    	//PowerMonitoring.Monitor();
+    	PowerMonitoring.Monitor();
     	_imageProcessing.process();
     	/*
     	if (_operatorStick.getRawButton(99)) {
