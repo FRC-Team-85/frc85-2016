@@ -28,6 +28,7 @@ public class Auto {
 
 	private int OBSTACLE = 0;
 	private int AUTOHEIGHT = 185;
+	private final int LOWBARAUTOHEIGHT = 194;
 	private boolean GOWITHOUTVISION = true;
 	private boolean SEEKLEFT = false;
 	private double SEEKSPEED = .475;
@@ -450,19 +451,19 @@ public class Auto {
 	        		}
 	        		break;
 	        	case 2:
-	        		_cannon.armMove(193);
+	        		_cannon.armMove(LOWBARAUTOHEIGHT);
 	        		if (autoDrive(0, 0, 8, 0.4)) {
 	        			rtns();
 	        		}
 	        		break;
 	        	case 3: //turn
-	        		_cannon.armMove(193);
+	        		_cannon.armMove(LOWBARAUTOHEIGHT);
 	        		if (autoDrive(0.9, 0.1, 4, 1.45)) {//1.75
 	        			rtns();
 	        		}
 	        		break;
 	        	case 4:
-	        		if (autoDrive(0, 0, 8, 1) & _cannon.armMove(193)){
+	        		if (autoDrive(0, 0, 8, 1) & _cannon.armMove(LOWBARAUTOHEIGHT)){
 	        			rtns();
 	        		}
 	        		break;
@@ -616,9 +617,10 @@ public class Auto {
 	        	}
 	        	break;
 	        	
-	        case 155:
+	        case 155: //dat chili fry doe
 	        	switch(stage) {
 	        	case 0:
+	        		_drive.ledToggle(true);
 	            	boolean c1 = _intake.intakeMove(Intake.AUTOANGLE);
 	        		boolean c2 = (_intake.belowFortyFive()) ? 
 	        				_cannon.armMove(TatorCannon.AUTOHEIGHT) : false;
@@ -646,6 +648,77 @@ public class Auto {
 	        		_intake.intakeMove(Intake.FORTYFIVE);
 	        		
 	        		if (autoDrive(.3, .3, 4, 65000, 65000)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 5: //If target can't be seen, seek
+	        		
+	        		if (_intake.intakeMove(Intake.HORIZONTAL) & _cannon.armMove(AUTOHEIGHT) && seek()) {
+						rtns();
+					}
+	        		break;
+	        	case 6: //Vision track align to center
+	        		if (_drive.visionCenter()/* || _autoTimer.get() > 4*/) {
+						rtns();
+					}
+	        		break;
+	        	case 7: //Move arm to firing position
+	        		if (_cannon.armMove(AUTOHEIGHT)) {
+	        			rtns();
+	        		}
+	        		break;
+	        	case 8: //Fire
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
+		        		_cannon.runAs(CannonMode.MANUAL);
+	        			rtns();
+	        		}
+	        		break;
+	        	}
+	        	break;
+	        	
+	        case 156: //port and fire
+	        	switch(stage) {
+	        	case 0:
+	        		_drive.ledToggle(true);
+	        		rtns();
+	        		break;
+	        	case 1:
+	        		if (_intake.intakeMove(Intake.FLOOR) || _autoTimer.get() >= .8){
+	        			rtns();
+	        		}
+	        		break;
+	        	case 2:        		
+	        		if (autoDrive(.5, .5, 4, 35000, 35000)) {
+	        			rtns();
+	        		}
+	        		break;
+	        		
+	        	case 3:	        		
+	        		if (autoDrive(.3, .3, 4, 65000, 65000)) {
+	        			rtns();
+	        		}
+	        		break;
+	        		
+	        	case 4: //If target can't be seen, seek
+	        		if (_intake.intakeMove(Intake.HORIZONTAL) & _cannon.armMove(AUTOHEIGHT) && seek()) {
+	        			rtns();
+	        		}
+	        		break;
+	        		
+	        	case 5: //Vision track align to center
+	        		if (_drive.visionCenter()/* || _autoTimer.get() > 4*/) {
+	        			rtns();
+	        		}
+        		break;
+	        		case 6: //Move arm to firing position
+	        		if (_cannon.armMove(AUTOHEIGHT)) {
+	        			rtns();
+	        		}
+	        		break;
+	        		
+	        	case 7: //Fire
+	        		if (_cannon.runAs(CannonMode.JUSTFIRE)){
+	        			_cannon.runAs(CannonMode.MANUAL);
 	        			rtns();
 	        		}
 	        		break;
