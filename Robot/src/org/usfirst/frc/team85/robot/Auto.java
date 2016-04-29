@@ -28,7 +28,7 @@ public class Auto {
 
 	private int OBSTACLE = 0;
 	private int AUTOHEIGHT = 185;
-	private final int LOWBARAUTOHEIGHT = 194;
+	private final int LOWBARAUTOHEIGHT = 197;
 	private boolean GOWITHOUTVISION = true;
 	private boolean SEEKLEFT = false;
 	private double SEEKSPEED = .475;

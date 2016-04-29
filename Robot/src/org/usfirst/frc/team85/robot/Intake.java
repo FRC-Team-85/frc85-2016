@@ -107,28 +107,16 @@ public class Intake {
 		SmartDashboard.putNumber("Intake Position", _encPos);
 
 		if(opStick.getRawButton(3) && hasBeenInit) { //Uses button B, loads the cannon
-			if (_startChompa) {
-				return loadCannon(cannonReady);
-			}
-			else if (intakeMove(LOADPOS))
-			{
-				_startChompa = true;
-				return false;
-			}
-		}
-		else if (opStick.getPOV() == 0 && hasBeenInit){ //auto heights both
+			return loadCannon(cannonReady);
+		} else if (opStick.getPOV() == 0 && hasBeenInit){ //auto heights both
 			intakeMove(AUTOANGLE);
-		} 
-		else if (opStick.getPOV() == 180 && hasBeenInit) { // on tower ramp
+		} else if (opStick.getPOV() == 180 && hasBeenInit) { // on tower ramp
 			intakeMove(LIFTHEIGHT);
-		}
-		else if (opStick.getPOV() == 90 && hasBeenInit) { //right
+		} else if (opStick.getPOV() == 90 && hasBeenInit) { //right
 			intakeMove(FLOOR);
-		}
-		else if (opStick.getPOV() == 270 && hasBeenInit) { //left
+		} else if (opStick.getPOV() == 270 && hasBeenInit) { //left
 			intakeMove(LOADPOS);
-		}
-		else {
+		} else {
 			setMotors(opStick.getRawAxis(1));
 			_startChompa = false;
 		}		
