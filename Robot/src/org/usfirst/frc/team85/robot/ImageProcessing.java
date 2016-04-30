@@ -12,7 +12,7 @@ public class ImageProcessing {
 	
 	private static double area, height, width, centerX, centerY, aspectRatio;
 
-	private static int IMGXOFFSET = -35, IMGXTOL = 4;	//-20,10 to far right
+	private static int IMGXOFFSET = -35, IMGXTOL = 3;	//-20,10 to far right
 	private static int IMGYOFFSET = 50, IMGYTOL = 10;
 	
 	private static final double TARGETASPECTRATIO = 2.0; //	width/height
@@ -52,6 +52,13 @@ public class ImageProcessing {
         
         widthTimer = new Timer();
         widthTimer.start();
+	}
+	
+	public static double getOffset(double width) {
+		double a = 0;
+		double b = 0;
+		double c = IMGXOFFSET;
+		return a * width * width + b * width + c;
 	}
 	
 	double[] areaArray = {0}, heightArray = {1}, widthArray = {1}, centerXArray = {160}, centerYArray = {120};
